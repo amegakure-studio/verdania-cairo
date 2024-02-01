@@ -1,6 +1,8 @@
 #[derive(Model, Copy, Drop, Serde)]
 struct Tile {
     #[key]
+    map_id: u64,
+    #[key]
     id: u64,
     x: u64,
     y: u64,

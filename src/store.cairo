@@ -49,7 +49,9 @@ trait StoreTrait {
     // State
     fn get_world_config(ref self: Store, id: u64) -> WorldConfig;
     fn set_world_config(ref self: Store, world_config: WorldConfig);
-    fn get_player_farm_state(ref self: Store, map_id: u64, player: ContractAddress) -> PlayerFarmState;
+    fn get_player_farm_state(
+        ref self: Store, map_id: u64, player: ContractAddress
+    ) -> PlayerFarmState;
     fn set_player_farm_state(ref self: Store, player_farm_state: PlayerFarmState);
     fn get_crop_state(ref self: Store, farm_id: u64, index: u64) -> CropState;
     fn set_crop_state(ref self: Store, crop_state: CropState);
@@ -126,7 +128,9 @@ impl StoreImpl of StoreTrait {
         set!(self.world, (world_config));
     }
 
-    fn get_player_farm_state(ref self: Store, map_id: u64, player: ContractAddress) -> PlayerFarmState {
+    fn get_player_farm_state(
+        ref self: Store, map_id: u64, player: ContractAddress
+    ) -> PlayerFarmState {
         let player_farm_state_key = (map_id, player);
         get!(self.world, player_farm_state_key.into(), (PlayerFarmState))
     }
@@ -170,7 +174,9 @@ impl StoreImpl of StoreTrait {
         set!(self.world, (player_state));
     }
 
-    fn get_player_inventory_state(ref self: Store, player: ContractAddress) -> PlayerInventoryState {
+    fn get_player_inventory_state(
+        ref self: Store, player: ContractAddress
+    ) -> PlayerInventoryState {
         get!(self.world, player, (PlayerInventoryState))
     }
 

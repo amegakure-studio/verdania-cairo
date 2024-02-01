@@ -1,7 +1,3 @@
-mod systems {
-    // mod actions;
-}
-
 mod models {
     mod data {
         mod world_config;
@@ -28,8 +24,11 @@ mod models {
     }
 }
 
-mod tests {
-    // mod test_world;
+mod systems {
+    mod map_system;
+}
+
+mod tests {// mod test_world;
 }
 
 mod store;
