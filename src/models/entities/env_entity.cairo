@@ -5,4 +5,5 @@ struct EnvEntity {
     name: felt252,
     drop_item_id: u64,
     quantity: u64,
+    durability: u8
 }
