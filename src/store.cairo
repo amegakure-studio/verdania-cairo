@@ -7,6 +7,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 // Components imports
 use verdania::models::data::world_config::WorldConfig;
 
+use verdania::models::data::game::FarmCount;
+
 use verdania::models::entities::crop::Crop;
 use verdania::models::entities::env_entity::EnvEntity;
 use verdania::models::entities::inventory_slot::InventorySlot;
@@ -35,6 +37,8 @@ struct Store {
 trait StoreTrait {
     fn new(world: IWorldDispatcher) -> Store;
     // Data
+    fn get_farm_count(ref self: Store, id: felt252) -> FarmCount;
+    fn set_farm_count(ref self: Store, farm_count: FarmCount);
     fn get_map(ref self: Store, id: u64) -> Map;
     fn set_map(ref self: Store, map: Map);
     fn get_tile(ref self: Store, id: u64) -> Tile;
@@ -79,6 +83,15 @@ impl StoreImpl of StoreTrait {
     }
 
     // Data
+
+    fn get_farm_count(ref self: Store, id: felt252) -> FarmCount {
+        get!(self.world, id, (FarmCount))
+    }
+
+    fn set_farm_count(ref self: Store, farm_count: FarmCount) {
+        set!(self.world, (farm_count));
+    }
+    
     fn get_map(ref self: Store, id: u64) -> Map {
         get!(self.world, id, (Map))
     }
