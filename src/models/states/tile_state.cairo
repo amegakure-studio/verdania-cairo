@@ -6,7 +6,7 @@ struct TileState {
     farm_id: ContractAddress,
     #[key]
     id: u64,
-    entity: u8,
+    entity_type: u8,
     entity_index: u64
 }
 
@@ -14,4 +14,5 @@ struct TileState {
 enum EntityType {
     Enviroment,
     Crop,
+    None
 }

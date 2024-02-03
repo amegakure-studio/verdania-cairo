@@ -1,5 +1,6 @@
 mod models {
     mod data {
+        mod game;
         mod world_config;
     }
 
