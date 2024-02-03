@@ -11,38 +11,29 @@ mod map_system {
     use starknet::{get_caller_address, ContractAddress};
     use verdania::models::entities::map::Map;
     use verdania::models::entities::tile::Tile;
+    use verdania::constants::map_1;
     use verdania::store::{Store, StoreTrait};
 
     #[storage]
     struct Storage {}
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl MapSystem of IMapSystem<ContractState> {
-         fn init(ref self: ContractState) {
+        fn init(ref self: ContractState) {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
-            let beach_farm = Map { id: 1, height: 60, width: 30 };
-
-            // generate tiles
-            let (mut x, mut y) = (0, 0);
+            let (tiles, height, width) = map_1();
+            let mut i = 0;
             loop {
-                if y == beach_farm.height {
+                if i == tiles.len() {
                     break;
                 }
-
-                if x == beach_farm.width {
-                    x = 0;
-                    y += 1;
-                }
-                store
-                    .set_tile(
-                        Tile {
-                            map_id: beach_farm.id, id: y * beach_farm.width + x, x, y, tile_type: 1
-                        }
-                    );
+                store.set_tile(*tiles.at(i));
             };
+
+            let beach_farm = Map { id: 1, height, width};
             store.set_map(beach_farm);
         }
     }

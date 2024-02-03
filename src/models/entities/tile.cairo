@@ -11,8 +11,13 @@ struct Tile {
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum TileType {
+    Bridge,
+    Building,
     Dirt,
     Grass,
+    Montain,
+    Sand,
     Water,
-    Structure,
 }
+
+// TODO: implement Into/TryInto
