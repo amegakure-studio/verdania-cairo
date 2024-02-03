@@ -22,37 +22,54 @@ mod env_entity_system {
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
-            store.set_env_entity(EnvEntity {
-                id: 1,
-                name: 'Tree',
-                drop_item_id: 1, // TODO: agregar item id madera
-                quantity: 4,
-                durability: 2
-            });
+            store
+                .set_env_entity(
+                    EnvEntity {
+                        id: 1,
+                        name: 'Tree',
+                        drop_item_id: 1, // TODO: agregar item id madera
+                        quantity: 4,
+                        durability: 2
+                    }
+                );
 
-            store.set_env_entity(EnvEntity {
-                id: 2,
-                name: 'Trunk',
-                drop_item_id: 1, // TODO: agregar item id madera
-                quantity: 1,
-                durability: 1
-            });
+            store
+                .set_env_entity(
+                    EnvEntity {
+                        id: 2,
+                        name: 'Trunk',
+                        drop_item_id: 1, // TODO: agregar item id madera
+                        quantity: 1,
+                        durability: 1
+                    }
+                );
 
-            store.set_env_entity(EnvEntity {
-                id: 3,
-                name: 'Small Rock',
-                drop_item_id: 2, // TODO: agregar item id piedra
-                quantity: 1,
-                durability: 1
-            });
+            store
+                .set_env_entity(
+                    EnvEntity {
+                        id: 3,
+                        name: 'Small Rock',
+                        drop_item_id: 2, // TODO: agregar item id piedra
+                        quantity: 1,
+                        durability: 1
+                    }
+                );
 
-            store.set_env_entity(EnvEntity {
-                id: 4,
-                name: 'Rock',
-                drop_item_id: 2, // TODO: agregar item id piedra
-                quantity: 4,
-                durability: 2
-            });
+            store
+                .set_env_entity(
+                    EnvEntity {
+                        id: 4,
+                        name: 'Rock',
+                        drop_item_id: 2, // TODO: agregar item id piedra
+                        quantity: 4,
+                        durability: 2
+                    }
+                );
+
+            store
+                .set_env_entity(
+                    EnvEntity { id: 5, name: 'Herb', drop_item_id: 0, quantity: 0, durability: 1 }
+                );
         }
     }
 }

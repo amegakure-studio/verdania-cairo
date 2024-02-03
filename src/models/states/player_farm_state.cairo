@@ -9,7 +9,7 @@ struct PlayerFarmState {
     farm_id: u64,
     name: felt252,
     crops_len: u64,
-    entities_len: u64,
+    env_entities_len: u64,
     connected_players: u64,
     open: bool,
     invitation_code: felt252

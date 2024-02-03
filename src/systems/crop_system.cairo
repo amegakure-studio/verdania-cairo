@@ -24,7 +24,7 @@ mod crop_system {
 
             store.set_crop(Crop {
                 id: 1,
-                name: 'Potato',
+                name: 'Corn',
                 harvest_time: 1000,
                 min_watering_time: 200,
                 drop_item_id: 1,
@@ -33,7 +33,7 @@ mod crop_system {
 
             store.set_crop(Crop {
                 id: 2,
-                name: 'Carrot',
+                name: 'Corn kernel',
                 harvest_time: 1000,
                 min_watering_time: 200,
                 drop_item_id: 1,
@@ -42,7 +42,88 @@ mod crop_system {
 
             store.set_crop(Crop {
                 id: 3,
-                name: 'Wheat',
+                name: 'Eggplant',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+
+            store.set_crop(Crop {
+                id: 4,
+                name: 'Eggplant seed',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+
+            store.set_crop(Crop {
+                id: 5,
+                name: 'Squash',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+            
+            store.set_crop(Crop {
+                id: 6,
+                name: 'Squash seed',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+
+            store.set_crop(Crop {
+                id: 7,
+                name: 'Potato',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+            
+            store.set_crop(Crop {
+                id: 8,
+                name: 'Potato tuber',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+
+            store.set_crop(Crop {
+                id: 9,
+                name: 'Tomato',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+
+            store.set_crop(Crop {
+                id: 10,
+                name: 'Tomato seed',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+
+            store.set_crop(Crop {
+                id: 11,
+                name: 'Onion',
+                harvest_time: 1000,
+                min_watering_time: 200,
+                drop_item_id: 1,
+                quantity: 1,
+            });
+
+            store.set_crop(Crop {
+                id: 12,
+                name: 'Onion sedd',
                 harvest_time: 1000,
                 min_watering_time: 200,
                 drop_item_id: 1,

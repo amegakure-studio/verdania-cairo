@@ -3,7 +3,7 @@ use starknet::ContractAddress;
 #[derive(Model, Copy, Drop, Serde)]
 struct TileState {
     #[key]
-    farm_id: ContractAddress,
+    farm_id: u64,
     #[key]
     id: u64,
     entity_type: u8,
@@ -12,7 +12,6 @@ struct TileState {
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum EntityType {
-    Enviroment,
-    Crop,
-    None
+    Enviroment, // 1
+    Crop // 2
 }
