@@ -24,16 +24,15 @@ mod map_system {
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
-            let (tiles, height, width) = map_1();
-            let mut i = 0;
+            let (mut tiles, height, width) = map_1();
             loop {
-                if i == tiles.len() {
-                    break;
+                match tiles.pop_front() {
+                    Option::Some(tile) => store.set_tile(*tile), 
+                    Option::None => { break; }
                 }
-                store.set_tile(*tiles.at(i));
             };
 
-            let beach_farm = Map { id: 1, height, width};
+            let beach_farm = Map { id: 1, height, width };
             store.set_map(beach_farm);
         }
     }
