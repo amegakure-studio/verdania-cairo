@@ -15,6 +15,8 @@ mod Marketplace {
     use verdania::marketplace::models::{MarketplaceMeta, MarketplaceItem};
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
+    use verdania::store::{Store, StoreTrait};
+
     use verdania::marketplace::erc1155::interface::{
         IERC1155DispatcherTrait, IERC1155Dispatcher
     };
@@ -26,8 +28,11 @@ mod Marketplace {
     impl MarketplaceImpl of IMarketplace<ContractState> {
 
         fn init(ref self: ContractState, erc20: ContractAddress, erc1155: ContractAddress) {
-            set!(
-                self.world_dispatcher.read(), 
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+
+            store.set_marketplace_meta(
                 MarketplaceMeta {
                         token: get_contract_address(),
                         erc20: erc20,
@@ -43,7 +48,11 @@ mod Marketplace {
             assert(token_amount > 0, 'Amount should be > 0');
             assert(price > 0, 'Price should be > 0');
 
-            let mut marketplace_meta = get!(self.world_dispatcher.read(), get_contract_address(), MarketplaceMeta);
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            
+            let mut marketplace_meta = store.get_marketplace_meta(get_contract_address());
 
             IERC1155Dispatcher { contract_address: marketplace_meta.erc1155 }
                 .safe_transfer_from(
@@ -56,9 +65,9 @@ mod Marketplace {
 
             let item_id = marketplace_meta.current_item_len;
             marketplace_meta.current_item_len += 1;
-            set!(self.world_dispatcher.read(), (marketplace_meta));
+            store.set_marketplace_meta(marketplace_meta);
 
-            set!(self.world_dispatcher.read(), 
+            store.set_marketplace_item(
                 MarketplaceItem {
                     id: item_id,
                     seller: get_caller_address(),
@@ -71,9 +80,13 @@ mod Marketplace {
         }
 
         fn buy_item(ref self: ContractState, item_id: u256, token_amount: u256) {
+
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
             
-            let mut marketplace_meta = get!(self.world_dispatcher.read(), get_contract_address(), MarketplaceMeta);
-            let mut item = get!(self.world_dispatcher.read(), item_id, MarketplaceItem);
+            let mut marketplace_meta = store.get_marketplace_meta(get_contract_address());
+            let mut item = store.get_marketplace_item(item_id);
 
             assert(token_amount <= item.remaining_amount, '');
 
@@ -95,7 +108,7 @@ mod Marketplace {
                 );
 
             item.remaining_amount = item.remaining_amount - token_amount;
-            set!(self.world_dispatcher.read(), (item));
+            store.set_marketplace_item(item);
         }
     }
 }

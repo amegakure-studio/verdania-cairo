@@ -25,6 +25,10 @@ use verdania::models::states::player_inventory_state::PlayerInventoryState;
 use verdania::models::states::player_state::PlayerState;
 use verdania::models::states::tile_state::TileState;
 
+use verdania::marketplace::erc20::models::{ERC20Balance, ERC20Allowance, ERC20Meta};
+use verdania::marketplace::erc1155::models::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
+use verdania::marketplace::models::{MarketplaceMeta, MarketplaceItem};
+
 use starknet::ContractAddress;
 
 /// Store struct.
@@ -75,6 +79,28 @@ trait StoreTrait {
     fn set_market(ref self: Store, market: Market);
     fn get_market_listed(ref self: Store, market_id: u64, index: u64) -> MarketListed;
     fn set_market_listed(ref self: Store, market_listed: MarketListed);
+    
+    // ERC20
+    fn get_erc20_balance(ref self: Store, token: ContractAddress, account: ContractAddress) -> ERC20Balance;
+    fn set_erc20_balance(ref self: Store, erc20_balance: ERC20Balance);
+    fn get_erc20_allowance(ref self: Store, token: ContractAddress, owner: ContractAddress, spender: ContractAddress) -> ERC20Allowance;
+    fn set_erc20_allowance(ref self: Store, erc20_allowance: ERC20Allowance);
+    fn get_erc20_meta(ref self: Store, token: ContractAddress) -> ERC20Meta;
+    fn set_erc20_meta(ref self: Store, erc20_meta: ERC20Meta);
+
+    // ERC1155
+    fn get_erc1155_meta(ref self: Store, token: ContractAddress) -> ERC1155Meta;
+    fn set_erc1155_meta(ref self: Store, erc1155_meta: ERC1155Meta);
+    fn get_erc1155_operator_approval(ref self: Store, token: ContractAddress, owner: ContractAddress, operator: ContractAddress) -> ERC1155OperatorApproval;
+    fn set_erc1155_operator_approval(ref self: Store, erc1155_operator_approval: ERC1155OperatorApproval);
+    fn get_erc1155_balance(ref self: Store, token: ContractAddress, account: ContractAddress, id: u256) -> ERC1155Balance;
+    fn set_erc1155_balance(ref self: Store, erc1155_balance: ERC1155Balance);
+
+    // Marketplace
+    fn get_marketplace_meta(ref self: Store, token: ContractAddress) -> MarketplaceMeta;
+    fn set_marketplace_meta(ref self: Store, marketplace_meta: MarketplaceMeta);
+    fn get_marketplace_item(ref self: Store, id: u256) -> MarketplaceItem;
+    fn set_marketplace_item(ref self: Store, marketplace_item: MarketplaceItem);
 }
 
 /// Implementation of the `StoreTrait` trait for the `Store` struct.
@@ -232,5 +258,76 @@ impl StoreImpl of StoreTrait {
 
     fn set_market_listed(ref self: Store, market_listed: MarketListed) {
         set!(self.world, (market_listed));
+    }
+
+    // ERC20
+    fn get_erc20_balance(ref self: Store, token: ContractAddress, account: ContractAddress) -> ERC20Balance {
+        let erc20_balance_key = (token, account);
+        get!(self.world, erc20_balance_key.into(), (ERC20Balance))
+    }
+
+    fn set_erc20_balance(ref self: Store, erc20_balance: ERC20Balance) {
+        set!(self.world, (erc20_balance));
+    }
+
+    fn get_erc20_allowance(ref self: Store, token: ContractAddress, owner: ContractAddress, spender: ContractAddress) -> ERC20Allowance {
+        let erc20_allowance_key = (token, owner, spender);
+        get!(self.world, erc20_allowance_key.into(), (ERC20Allowance))
+    }
+
+    fn set_erc20_allowance(ref self: Store, erc20_allowance: ERC20Allowance) {
+        set!(self.world, (erc20_allowance));
+    }
+
+    fn get_erc20_meta(ref self: Store, token: ContractAddress) -> ERC20Meta {
+        get!(self.world, token, (ERC20Meta))
+    }
+
+    fn set_erc20_meta(ref self: Store, erc20_meta: ERC20Meta) {
+        set!(self.world, (erc20_meta));
+    }
+
+    // ERC1155
+    fn get_erc1155_meta(ref self: Store, token: ContractAddress) -> ERC1155Meta {
+        get!(self.world, token, (ERC1155Meta))
+    }
+
+    fn set_erc1155_meta(ref self: Store, erc1155_meta: ERC1155Meta) {
+        set!(self.world, (erc1155_meta));
+    }
+
+    fn get_erc1155_operator_approval(ref self: Store, token: ContractAddress, owner: ContractAddress, operator: ContractAddress) -> ERC1155OperatorApproval {
+        let erc1155_operator_approval_key = (token, owner, operator);
+        get!(self.world, erc1155_operator_approval_key.into(), (ERC1155OperatorApproval))
+    }
+
+    fn set_erc1155_operator_approval(ref self: Store, erc1155_operator_approval: ERC1155OperatorApproval) {
+        set!(self.world, (erc1155_operator_approval));
+    }
+
+    fn get_erc1155_balance(ref self: Store, token: ContractAddress, account: ContractAddress, id: u256) -> ERC1155Balance {
+        let erc1155_balance_key = (token, account, id);
+        get!(self.world, erc1155_balance_key.into(), (ERC1155Balance))
+    }
+
+    fn set_erc1155_balance(ref self: Store, erc1155_balance: ERC1155Balance) {
+        set!(self.world, (erc1155_balance));
+    }
+    
+    // Marketplace
+    fn get_marketplace_meta(ref self: Store, token: ContractAddress) -> MarketplaceMeta {
+        get!(self.world, token, (MarketplaceMeta))
+    }
+
+    fn set_marketplace_meta(ref self: Store, marketplace_meta: MarketplaceMeta) {
+        set!(self.world, (marketplace_meta));
+    }
+
+    fn get_marketplace_item(ref self: Store, id: u256) -> MarketplaceItem {
+        get!(self.world, id, (MarketplaceItem))
+    }
+
+    fn set_marketplace_item(ref self: Store, marketplace_item: MarketplaceItem) {
+        set!(self.world, (marketplace_item));
     }
 }

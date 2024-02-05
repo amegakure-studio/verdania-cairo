@@ -8,6 +8,7 @@ mod ERC20 {
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address};
     use zeroable::Zeroable;
+    use verdania::store::{Store, StoreTrait};
 
     #[event]
     #[derive(Copy, Drop, starknet::Event)]
@@ -173,7 +174,10 @@ mod ERC20 {
     impl WorldInteractionsImpl of WorldInteractionsTrait {
 
         fn get_meta(self: @ContractState) -> ERC20Meta {
-            get!(self.world_dispatcher.read(), get_contract_address(), ERC20Meta)
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            store.get_erc20_meta(get_contract_address())
         }
 
         // Helper function to update total_supply model
@@ -182,12 +186,18 @@ mod ERC20 {
             // adding and subtracting is fewer steps than if
             meta.total_supply = meta.total_supply - subtract;
             meta.total_supply = meta.total_supply + add;
-            set!(self.world_dispatcher.read(), (meta));
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            store.set_erc20_meta(meta);
         }
 
         // Helper function for balance model
         fn get_balance(self: @ContractState, account: ContractAddress) -> ERC20Balance {
-            get!(self.world_dispatcher.read(), (get_contract_address(), account), ERC20Balance)
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            store.get_erc20_balance(get_contract_address(), account)
         }
 
         fn update_balance(
@@ -197,14 +207,20 @@ mod ERC20 {
             // adding and subtracting is fewer steps than if
             balance.amount = balance.amount - subtract;
             balance.amount = balance.amount + add;
-            set!(self.world_dispatcher.read(), (balance));
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            store.set_erc20_balance(balance);
         }
 
         // Helper function for allowance model
         fn get_allowance(
             self: @ContractState, owner: ContractAddress, spender: ContractAddress,
         ) -> ERC20Allowance {
-            get!(self.world_dispatcher.read(), (get_contract_address(), owner, spender), ERC20Allowance)
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            store.get_erc20_allowance(get_contract_address(), owner, spender)
         }
 
         fn update_allowance(
@@ -224,7 +240,10 @@ mod ERC20 {
         fn set_allowance(ref self: ContractState, allowance: ERC20Allowance) {
             assert(!allowance.owner.is_zero(), Errors::APPROVE_FROM_ZERO);
             assert(!allowance.spender.is_zero(), Errors::APPROVE_TO_ZERO);
-            set!(self.world_dispatcher.read(), (allowance));
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            store.set_erc20_allowance(allowance);
             self
                 .emit_event(
                     Approval {
