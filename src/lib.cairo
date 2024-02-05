@@ -36,5 +36,18 @@ mod systems {
 mod tests { // mod test_world;
 }
 
+mod marketplace {
+    mod erc20 {
+        mod erc20;
+        mod interface;
+        mod models;
+    }
+    mod erc1155 {
+        mod erc1155;
+        mod interface;
+        mod models;
+    }
+}
+
 mod constants;
 mod store;
