@@ -59,11 +59,41 @@ mod item_system {
             });
 
             store.set_item(Item {
-                id: 7,
-                name: 'Seed',
+                id: 2,
+                name: 'Corn kernel',
                 env_entity_id: 0 
             });
 
+            store.set_item(Item {
+                id: 4,
+                name: 'Eggplant seed',
+                env_entity_id: 0 
+            });
+
+            store.set_item(Item {
+                id: 6,
+                name: 'Squash seed',
+                env_entity_id: 0 
+            });
+
+            store.set_item(Item {
+                id: 8,
+                name: 'Potato tuber',
+                env_entity_id: 0 
+            });
+
+
+            store.set_item(Item {
+                id: 10,
+                name: 'Tomato seed',
+                env_entity_id: 0 
+            });
+
+            store.set_item(Item {
+                id: 12,
+                name: 'Onion sedd',
+                env_entity_id: 0 
+            });
         }
     }
 }
