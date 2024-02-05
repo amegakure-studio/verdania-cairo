@@ -3,6 +3,7 @@ use starknet::ContractAddress;
 #[starknet::interface]
 trait IERC1155<TState> {
     fn init(ref self: TState);
+    fn mint(ref self: TState, to: ContractAddress, id: u256, amount: u256);
     fn balance_of(self: @TState, account: ContractAddress, id: u256) -> u256;
     fn balance_of_batch(
         self: @TState, accounts: Array<ContractAddress>, ids: Array<u256>
@@ -57,9 +58,10 @@ trait IERC1155CamelOnly<TState> {
 
 #[starknet::interface]
 trait IERC1155Metadata<TState> {
-    fn name(self: @TState) -> felt252;
-    fn symbol(self: @TState) -> felt252;
-    fn uri(self: @TState, token_id: u256) -> felt252;
+    fn owner(self: @TState) -> ContractAddress;
+    // fn name(self: @TState) -> felt252;
+    // fn symbol(self: @TState) -> felt252;
+    // fn uri(self: @TState, token_id: u256) -> felt252;
 }
 
 //

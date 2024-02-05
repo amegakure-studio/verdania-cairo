@@ -47,6 +47,8 @@ mod marketplace {
         mod interface;
         mod models;
     }
+    mod marketplace;
+    mod models;
 }
 
 mod constants;

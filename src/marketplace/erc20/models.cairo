@@ -29,4 +29,5 @@ struct ERC20Meta {
     name: felt252,
     symbol: felt252,
     total_supply: u256,
+    owner: ContractAddress
 }

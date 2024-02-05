@@ -39,20 +39,6 @@ mod ERC20 {
         const MINT_TO_ZERO: felt252 = 'ERC20: mint to 0';
     }
 
-    // #[constructor]
-    // fn constructor(
-    //     ref self: ContractState
-    // ) {
-    //     // let world = self.world_dispatcher.read()
-    //     // self._world.write(world);
-    //     let name = 'DALE';
-    //     let symbol = 'DAL';
-    //     let initial_supply = 1000;
-    //     let recipient = get_caller_address();
-    //     self.initializer(name, symbol);
-    //     self._mint(recipient, initial_supply);
-    // }
-
     //
     // External
     //
@@ -75,13 +61,16 @@ mod ERC20 {
     #[abi(embed_v0)]
     impl ERC20Impl of interface::IERC20<ContractState> {
 
-        fn init(ref self: ContractState) {
-            let name = 'DALE';
-            let symbol = 'DAL';
-            let initial_supply = 1000;
+        fn init(ref self: ContractState, name: felt252, symbol: felt252, initial_supply: u256) {
             let recipient = get_caller_address();
-            self.initializer(name, symbol);
+            self.initializer(name, symbol, recipient);
             self._mint(recipient, initial_supply);
+        }
+
+        fn mint(ref self: ContractState, recipient: ContractAddress, amount: u256) {
+            let meta = self.get_meta();
+            assert(get_caller_address() == meta.owner, 'Caller is not the owner');
+            self._mint(recipient, amount);
         }
 
         fn total_supply(self: @ContractState) -> u256 {
@@ -182,9 +171,6 @@ mod ERC20 {
 
     #[generate_trait]
     impl WorldInteractionsImpl of WorldInteractionsTrait {
-        // fn world(self: @ContractState) -> IWorldDispatcher {
-        //     IWorldDispatcher { contract_address: self._world.read() }
-        // }
 
         fn get_meta(self: @ContractState) -> ERC20Meta {
             get!(self.world_dispatcher.read(), get_contract_address(), ERC20Meta)
@@ -259,8 +245,8 @@ mod ERC20 {
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        fn initializer(ref self: ContractState, name: felt252, symbol: felt252) {
-            let meta = ERC20Meta { token: get_contract_address(), name, symbol, total_supply: 0 };
+        fn initializer(ref self: ContractState, name: felt252, symbol: felt252, owner: ContractAddress) {
+            let meta = ERC20Meta { token: get_contract_address(), name, symbol, total_supply: 0, owner };
             set!(self.world_dispatcher.read(), (meta));
         }
 

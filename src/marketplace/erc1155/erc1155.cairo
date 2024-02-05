@@ -11,11 +11,6 @@ mod ERC1155 {
     use zeroable::Zeroable;
     use debug::PrintTrait;
 
-    // #[storage]
-    // struct Storage {
-    //     _world: ContractAddress,
-    // }
-
     #[event]
     #[derive(Clone, Drop, starknet::Event)]
     enum Event {
@@ -62,43 +57,41 @@ mod ERC1155 {
         const INSUFFICIENT_BALANCE: felt252 = 'ERC1155: insufficient balance';
     }
 
-    // #[constructor]
-    // fn constructor(
-    //     ref self: ContractState,
-    //     world: ContractAddress,
-    //     name: felt252,
-    //     symbol: felt252,
-    //     base_uri: felt252,
-    // ) {
-    //     self._world.write(world);
-    //     self.initializer(name, symbol, base_uri);
-    // }
-
     #[abi(embed_v0)]
     impl ERC1155MetadataImpl of interface::IERC1155Metadata<ContractState> {
-        fn name(self: @ContractState) -> felt252 {
-            self.get_meta().name
+        fn owner(self: @ContractState) -> ContractAddress {
+            self.get_meta().owner
         }
 
-        fn symbol(self: @ContractState) -> felt252 {
-            self.get_meta().symbol
-        }
+        // fn name(self: @ContractState) -> felt252 {
+        //     self.get_meta().name
+        // }
 
-        fn uri(self: @ContractState, token_id: u256) -> felt252 {
-            //assert(self._exists(token_id), Errors::INVALID_TOKEN_ID);
-            // TODO : concat with id
-            self.get_uri(token_id)
-        }
+        // fn symbol(self: @ContractState) -> felt252 {
+        //     self.get_meta().symbol
+        // }
+
+        // fn uri(self: @ContractState, token_id: u256) -> felt252 {
+        //     self.get_uri(token_id)
+        // }
     }
-
 
     #[abi(embed_v0)]
     impl ERC1155Impl of interface::IERC1155<ContractState> {
         fn init(ref self: ContractState) {
-            let name = 'DALE';
-            let symbol = 'DALE';
-            let base_uri = 'DDD';
-            self.initializer(name, symbol, base_uri);
+            let recipient = get_caller_address();
+            self.initializer(recipient);
+            self._mint(recipient, 1, 10*18); // TODO:
+            self._mint(recipient, 2, 10*27); // TODO:
+            self._mint(recipient, 3, 1); // TODO:
+            self._mint(recipient, 4, 10*9); // TODO:
+            self._mint(recipient, 5, 10*9); // TODO:
+        }
+
+        fn mint(ref self: ContractState, to: ContractAddress, id: u256, amount: u256) {
+            let meta = self.get_meta();
+            assert(get_caller_address() == meta.owner, 'Caller is not the owner');
+            self._mint(to, id, amount);
         }
 
         fn balance_of(self: @ContractState, account: ContractAddress, id: u256) -> u256 {
@@ -217,18 +210,15 @@ mod ERC1155 {
 
     #[generate_trait]
     impl WorldInteractionsImpl of WorldInteractionsTrait {
-        // fn world(self: @ContractState) -> IWorldDispatcher {
-        //     IWorldDispatcher { contract_address: self._world.read() }
-        // }
 
         fn get_meta(self: @ContractState) -> ERC1155Meta {
             get!(self.world_dispatcher.read(), get_contract_address(), ERC1155Meta)
         }
 
-        fn get_uri(self: @ContractState, token_id: u256) -> felt252 {
-            // TODO : concat with id when we have string type
-            self.get_meta().base_uri
-        }
+        // fn get_uri(self: @ContractState, token_id: u256) -> felt252 {
+        //     // TODO : concat with id when we have string type
+        //     self.get_meta().base_uri
+        // }
 
         fn get_balance(self: @ContractState, account: ContractAddress, id: u256) -> ERC1155Balance {
             get!(self.world_dispatcher.read(), (get_contract_address(), account, id), ERC1155Balance)
@@ -282,8 +272,8 @@ mod ERC1155 {
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        fn initializer(ref self: ContractState, name: felt252, symbol: felt252, base_uri: felt252) {
-            let meta = ERC1155Meta { token: get_contract_address(), name, symbol, base_uri };
+        fn initializer(ref self: ContractState, owner: ContractAddress) {
+            let meta = ERC1155Meta { token: get_contract_address(), owner };
             set!(self.world_dispatcher.read(), (meta));
         }
 

@@ -6,9 +6,10 @@ use starknet::ContractAddress;
 struct ERC1155Meta {
     #[key]
     token: ContractAddress,
-    name: felt252,
-    symbol: felt252,
-    base_uri: felt252,
+    owner: ContractAddress
+    // name: felt252,
+    // symbol: felt252,
+    // base_uri: felt252,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

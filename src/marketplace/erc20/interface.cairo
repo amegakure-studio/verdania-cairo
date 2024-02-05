@@ -2,7 +2,8 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 trait IERC20<TState> {
-    fn init(ref self: TState);
+    fn init(ref self: TState, name: felt252, symbol: felt252, initial_supply: u256);
+    fn mint(ref self: TState, recipient: ContractAddress, amount: u256);
     fn total_supply(self: @TState) -> u256;
     fn balance_of(self: @TState, account: ContractAddress) -> u256;
     fn allowance(self: @TState, owner: ContractAddress, spender: ContractAddress) -> u256;
