@@ -31,6 +31,7 @@ mod systems {
     mod farm_factory_system;
     mod item_system;
     mod map_system;
+    mod world_config_system;
 }
 
 mod tests { // mod test_world;

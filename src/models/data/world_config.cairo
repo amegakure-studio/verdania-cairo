@@ -1,3 +1,5 @@
+use starknet::ContractAddress;
+
 #[derive(Model, Copy, Drop, Serde)]
 struct WorldConfig {
     #[key]
@@ -21,4 +23,9 @@ struct ActivePlayers {
     last_activity_time: u64,
 }
 
-
+#[derive(Model, Copy, Drop, Serde)]
+struct GlobalContract {
+    #[key]
+    id: felt252,
+    address: ContractAddress
+}

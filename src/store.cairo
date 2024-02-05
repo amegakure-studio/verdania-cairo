@@ -5,7 +5,7 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 // Components imports
-use verdania::models::data::world_config::WorldConfig;
+use verdania::models::data::world_config::{WorldConfig, GlobalContract};
 
 use verdania::models::data::game::FarmCount;
 
@@ -49,10 +49,12 @@ trait StoreTrait {
     fn set_crop(ref self: Store, crop: Crop);
     fn get_env_entity(ref self: Store, id: u64) -> EnvEntity;
     fn set_env_entity(ref self: Store, env_entity: EnvEntity);
-
-    // State
     fn get_world_config(ref self: Store, id: u64) -> WorldConfig;
     fn set_world_config(ref self: Store, world_config: WorldConfig);
+    fn get_global_contract(ref self: Store, id: felt252) -> GlobalContract;
+    fn set_global_contract(ref self: Store, global_contract: GlobalContract);
+
+    // State
     fn get_player_farm_state(
         ref self: Store, map_id: u64, player: ContractAddress
     ) -> PlayerFarmState;
@@ -132,7 +134,6 @@ impl StoreImpl of StoreTrait {
         set!(self.world, (env_entity));
     }
 
-    // State
     fn get_world_config(ref self: Store, id: u64) -> WorldConfig {
         get!(self.world, id, (WorldConfig))
     }
@@ -140,6 +141,16 @@ impl StoreImpl of StoreTrait {
     fn set_world_config(ref self: Store, world_config: WorldConfig) {
         set!(self.world, (world_config));
     }
+
+    fn get_global_contract(ref self: Store, id: felt252) -> GlobalContract {
+        get!(self.world, id, (GlobalContract))
+    }
+
+    fn set_global_contract(ref self: Store, global_contract: GlobalContract) {
+        set!(self.world, (global_contract));
+    }
+
+    // State
 
     fn get_player_farm_state(
         ref self: Store, map_id: u64, player: ContractAddress
