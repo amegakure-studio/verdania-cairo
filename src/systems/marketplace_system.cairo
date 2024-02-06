@@ -1,7 +1,10 @@
 use starknet::ContractAddress;
+use verdania::models::entities::marketplace::MarketplaceMeta;
 
 #[starknet::interface]
 trait IMarketplace<TContractState> {
+    fn init(ref self: TContractState);
+    fn update_meta(ref self: TContractState, marketplace_meta: MarketplaceMeta);
     fn list_item(
         ref self: TContractState, id: u256, token_amount: u256, price: u256
     ) -> u256;
@@ -11,15 +14,15 @@ trait IMarketplace<TContractState> {
 #[dojo::contract]
 mod Marketplace {
     use super::IMarketplace;
-    use verdania::marketplace::models::{MarketplaceMeta, MarketplaceItem};
+    use verdania::models::entities::marketplace::{MarketplaceMeta, MarketplaceItem};
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     use verdania::store::{Store, StoreTrait};
 
-    use verdania::marketplace::erc1155::interface::{
+    use verdania::interfaces::IERC1155::{
         IERC1155DispatcherTrait, IERC1155Dispatcher
     };
-    use verdania::marketplace::erc20::interface::{
+    use verdania::interfaces::IERC20::{
         IERC20Dispatcher, IERC20DispatcherTrait
     };
 
@@ -27,6 +30,30 @@ mod Marketplace {
 
     #[external(v0)]
     impl MarketplaceImpl of IMarketplace<ContractState> {
+
+        fn init(ref self: ContractState) {
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+
+            store.set_marketplace_meta(MarketplaceMeta {
+                token: get_contract_address(),
+                owner: get_caller_address(),
+                open: false,
+                spawn_time: 60000,
+                item_list_len: 0
+            });
+        }
+
+        fn update_meta(ref self: ContractState, marketplace_meta: MarketplaceMeta) {
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+            
+            let mut meta = store.get_marketplace_meta(get_contract_address());
+            assert(get_caller_address() == meta.owner, 'Caller is not the owner');
+            store.set_marketplace_meta(marketplace_meta);
+        }
 
         fn list_item(
             ref self: ContractState, id: u256, token_amount: u256, price: u256
@@ -50,8 +77,8 @@ mod Marketplace {
                     data: array![]
                 );
 
-            let item_id = marketplace_meta.current_item_len;
-            marketplace_meta.current_item_len += 1;
+            let item_id = marketplace_meta.item_list_len;
+            marketplace_meta.item_list_len += 1;
             store.set_marketplace_meta(marketplace_meta);
 
             store.set_marketplace_item(

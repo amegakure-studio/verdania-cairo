@@ -4,7 +4,10 @@ use starknet::ContractAddress;
 struct MarketplaceMeta {
     #[key]
     token: ContractAddress,
-    current_item_len: u256
+    owner: ContractAddress,
+    open: bool,
+    spawn_time: u64,
+    item_list_len: u256
 }
 
 #[derive(Model, Copy, Drop, Serde)]

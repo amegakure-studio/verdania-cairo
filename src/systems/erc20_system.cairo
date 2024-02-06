@@ -2,8 +2,8 @@
 
 #[dojo::contract]
 mod ERC20 {
-    use verdania::marketplace::erc20::models::{ERC20Allowance, ERC20Balance, ERC20Meta};
-    use verdania::marketplace::erc20::interface;
+    use verdania::models::tokens::erc20::{ERC20Allowance, ERC20Balance, ERC20Meta};
+    use verdania::interfaces::IERC20;
     use integer::BoundedInt;
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address};
@@ -45,7 +45,7 @@ mod ERC20 {
     //
 
     #[abi(embed_v0)]
-    impl ERC20MetadataImpl of interface::IERC20Metadata<ContractState> {
+    impl ERC20MetadataImpl of IERC20::IERC20Metadata<ContractState> {
         fn name(self: @ContractState) -> felt252 {
             self.get_meta().name
         }
@@ -60,7 +60,7 @@ mod ERC20 {
     }
 
     #[abi(embed_v0)]
-    impl ERC20Impl of interface::IERC20<ContractState> {
+    impl ERC20Impl of IERC20::IERC20<ContractState> {
 
         fn init(ref self: ContractState, name: felt252, symbol: felt252, initial_supply: u256) {
             let recipient = get_caller_address();
@@ -117,7 +117,7 @@ mod ERC20 {
     }
 
     #[abi(embed_v0)]
-    impl ERC20CamelOnlyImpl of interface::IERC20CamelOnly<ContractState> {
+    impl ERC20CamelOnlyImpl of IERC20::IERC20CamelOnly<ContractState> {
         fn totalSupply(self: @ContractState) -> u256 {
             ERC20Impl::total_supply(self)
         }

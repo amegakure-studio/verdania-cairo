@@ -2,9 +2,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[dojo::contract]
 mod ERC1155 {
-    use verdania::marketplace::erc1155::models::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
-    use verdania::marketplace::erc1155::interface;
-    use verdania::marketplace::erc1155::interface::{IERC1155, IERC1155CamelOnly};
+    use verdania::models::tokens::erc1155::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
+    use verdania::interfaces::IERC1155;
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address};
     use array::ArrayTCloneImpl;
@@ -60,7 +59,7 @@ mod ERC1155 {
     }
 
     #[abi(embed_v0)]
-    impl ERC1155MetadataImpl of interface::IERC1155Metadata<ContractState> {
+    impl ERC1155MetadataImpl of IERC1155::IERC1155Metadata<ContractState> {
         fn owner(self: @ContractState) -> ContractAddress {
             self.get_meta().owner
         }
@@ -79,7 +78,7 @@ mod ERC1155 {
     }
 
     #[abi(embed_v0)]
-    impl ERC1155Impl of interface::IERC1155<ContractState> {
+    impl ERC1155Impl of IERC1155::IERC1155<ContractState> {
         fn init(ref self: ContractState) {
             let recipient = get_caller_address();
             self.initializer(recipient);
@@ -172,7 +171,7 @@ mod ERC1155 {
     }
 
     #[abi(embed_v0)]
-    impl ERC1155CamelOnlyImpl of interface::IERC1155CamelOnly<ContractState> {
+    impl ERC1155CamelOnlyImpl of IERC1155::IERC1155CamelOnly<ContractState> {
         fn balanceOf(self: @ContractState, account: ContractAddress, id: u256) -> u256 {
             ERC1155Impl::balance_of(self, account, id)
         }
