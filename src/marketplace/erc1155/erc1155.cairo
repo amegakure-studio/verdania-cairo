@@ -11,6 +11,7 @@ mod ERC1155 {
     use zeroable::Zeroable;
     use debug::PrintTrait;
     use verdania::store::{Store, StoreTrait};
+    use integer::BoundedInt;
 
     #[event]
     #[derive(Clone, Drop, starknet::Event)]
@@ -82,11 +83,18 @@ mod ERC1155 {
         fn init(ref self: ContractState) {
             let recipient = get_caller_address();
             self.initializer(recipient);
-            self._mint(recipient, 1, 10*18); // TODO:
-            self._mint(recipient, 2, 10*27); // TODO:
-            self._mint(recipient, 3, 1); // TODO:
-            self._mint(recipient, 4, 10*9); // TODO:
-            self._mint(recipient, 5, 10*9); // TODO:
+            self._mint(recipient, 1, BoundedInt::max());
+            self._mint(recipient, 2, BoundedInt::max());
+            self._mint(recipient, 3, BoundedInt::max());
+            self._mint(recipient, 4, BoundedInt::max());
+            self._mint(recipient, 5, BoundedInt::max());
+            self._mint(recipient, 6, BoundedInt::max());
+            self._mint(recipient, 7, BoundedInt::max());
+            self._mint(recipient, 8, BoundedInt::max());
+            self._mint(recipient, 9, BoundedInt::max());
+            self._mint(recipient, 10, BoundedInt::max());
+            self._mint(recipient, 11, BoundedInt::max());
+            self._mint(recipient, 12, BoundedInt::max());
         }
 
         fn mint(ref self: ContractState, to: ContractAddress, id: u256, amount: u256) {

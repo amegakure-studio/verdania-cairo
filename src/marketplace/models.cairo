@@ -4,8 +4,6 @@ use starknet::ContractAddress;
 struct MarketplaceMeta {
     #[key]
     token: ContractAddress,
-    erc20: ContractAddress,
-    erc1155: ContractAddress,
     current_item_len: u256
 }
 

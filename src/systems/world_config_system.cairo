@@ -2,7 +2,7 @@ use verdania::models::data::world_config::GlobalContract;
 
 #[starknet::interface]
 trait IWorldConfigSystem<TContractState> {
-    fn init_global_contracts(ref self: TContractState, global_contracts: Span<GlobalContract>);
+    fn init_global_contracts(ref self: TContractState, global_contracts: Array<GlobalContract>);
 }
 
 #[dojo::contract]
@@ -14,8 +14,8 @@ mod world_config_system {
 
     #[abi(embed_v0)]
     impl WorldConfigSystem of IWorldConfigSystem<ContractState> {
-        fn init_global_contracts(ref self: ContractState, global_contracts: Span<GlobalContract>) {
-            let mut global_contracts = global_contracts;
+        fn init_global_contracts(ref self: ContractState, global_contracts: Array<GlobalContract>) {
+            let mut global_contracts = global_contracts.span();
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);

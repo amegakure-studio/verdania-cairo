@@ -2,6 +2,10 @@ use verdania::models::entities::tile::Tile;
 use verdania::models::states::tile_state::TileState;
 use verdania::models::states::env_entity_state::EnvEntityState;
 
+const ERC20_CONTRACT_ID: felt252 = 'ERC20_CONTRACT_ID';
+const ERC1155_CONTRACT_ID: felt252 = 'ERC1155_CONTRACT_ID';
+const MARKETPLACE_CONTRACT_ID: felt252 = 'MARKETPLACE_CONTRACT_ID';
+
 fn map_1() -> (Span<Tile>, u8, u8) {
     let map = array![
         Tile { map_id: 1, id: 0, x: 0, y: 0, tile_type: 4 },

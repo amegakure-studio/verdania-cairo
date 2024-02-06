@@ -2,7 +2,6 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 trait IMarketplace<TContractState> {
-    fn init(ref self: TContractState, erc20: ContractAddress, erc1155: ContractAddress);
     fn list_item(
         ref self: TContractState, id: u256, token_amount: u256, price: u256
     ) -> u256;
@@ -24,23 +23,10 @@ mod Marketplace {
         IERC20Dispatcher, IERC20DispatcherTrait
     };
 
+    use verdania::constants::{ERC20_CONTRACT_ID, ERC1155_CONTRACT_ID};
+
     #[external(v0)]
     impl MarketplaceImpl of IMarketplace<ContractState> {
-
-        fn init(ref self: ContractState, erc20: ContractAddress, erc1155: ContractAddress) {
-            // [Setup] Datastore
-            let world = self.world();
-            let mut store: Store = StoreTrait::new(world);
-
-            store.set_marketplace_meta(
-                MarketplaceMeta {
-                        token: get_contract_address(),
-                        erc20: erc20,
-                        erc1155: erc1155,
-                        current_item_len: 0
-                }
-            );
-        }
 
         fn list_item(
             ref self: ContractState, id: u256, token_amount: u256, price: u256
@@ -54,7 +40,8 @@ mod Marketplace {
             
             let mut marketplace_meta = store.get_marketplace_meta(get_contract_address());
 
-            IERC1155Dispatcher { contract_address: marketplace_meta.erc1155 }
+            let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID); 
+            IERC1155Dispatcher { contract_address: erc1155.address }
                 .safe_transfer_from(
                     from: get_caller_address(),
                     to: get_contract_address(),
@@ -95,10 +82,13 @@ mod Marketplace {
 
             let total_amount = item.price * token_amount;
 
-            IERC20Dispatcher { contract_address: marketplace_meta.erc20 }
+            let erc20 = store.get_global_contract(ERC20_CONTRACT_ID);
+            let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID); 
+
+            IERC20Dispatcher { contract_address: erc20.address }
                 .transfer_from(get_caller_address(), item.seller, total_amount);
 
-            IERC1155Dispatcher { contract_address: marketplace_meta.erc1155 }
+            IERC1155Dispatcher { contract_address: erc1155.address }
                 .safe_transfer_from(
                     get_contract_address(),
                     get_caller_address(),
