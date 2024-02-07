@@ -5,12 +5,13 @@ mod ERC1155 {
     use verdania::models::tokens::erc1155::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
     use verdania::interfaces::IERC1155;
     use starknet::ContractAddress;
-    use starknet::{get_caller_address, get_contract_address};
+    use starknet::get_caller_address;
     use array::ArrayTCloneImpl;
     use zeroable::Zeroable;
     use debug::PrintTrait;
     use verdania::store::{Store, StoreTrait};
     use integer::BoundedInt;
+    use verdania::constants::ERC1155_CONTRACT_ID;
 
     #[event]
     #[derive(Clone, Drop, starknet::Event)]
@@ -223,7 +224,7 @@ mod ERC1155 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.get_erc1155_meta(get_contract_address())
+            store.get_erc1155_meta(ERC1155_CONTRACT_ID)
         }
 
         // fn get_uri(self: @ContractState, token_id: u256) -> felt252 {
@@ -235,7 +236,7 @@ mod ERC1155 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.get_erc1155_balance(get_contract_address(), account, id)
+            store.get_erc1155_balance(ERC1155_CONTRACT_ID, account, id)
         }
 
         fn get_operator_approval(
@@ -244,7 +245,7 @@ mod ERC1155 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.get_erc1155_operator_approval(get_contract_address(), owner, operator)
+            store.get_erc1155_operator_approval(ERC1155_CONTRACT_ID, owner, operator)
         }
 
         fn set_operator_approval(
@@ -258,7 +259,7 @@ mod ERC1155 {
             let mut store: Store = StoreTrait::new(world);
             store.set_erc1155_operator_approval(
                 ERC1155OperatorApproval { 
-                    token: get_contract_address(), 
+                    id: ERC1155_CONTRACT_ID, 
                     owner, 
                     operator, 
                     approved 
@@ -273,7 +274,7 @@ mod ERC1155 {
             let mut store: Store = StoreTrait::new(world);
             store.set_erc1155_balance(
                 ERC1155Balance { 
-                    token: get_contract_address(), 
+                    id_contract: ERC1155_CONTRACT_ID, 
                     account, 
                     id, 
                     amount 
@@ -305,7 +306,7 @@ mod ERC1155 {
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn initializer(ref self: ContractState, owner: ContractAddress) {
-            let meta = ERC1155Meta { token: get_contract_address(), owner };
+            let meta = ERC1155Meta { id: ERC1155_CONTRACT_ID, owner };
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);

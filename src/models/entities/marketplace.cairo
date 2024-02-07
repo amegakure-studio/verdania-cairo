@@ -3,7 +3,7 @@ use starknet::ContractAddress;
 #[derive(Model, Copy, Drop, Serde)]
 struct MarketplaceMeta {
     #[key]
-    token: ContractAddress,
+    id: felt252,
     owner: ContractAddress,
     open: bool,
     spawn_time: u64,
@@ -14,6 +14,7 @@ struct MarketplaceMeta {
 struct MarketplaceItem {
     #[key]
     id: u256,
+    token_id: u256,
     seller: ContractAddress,
     amount: u256,
     remaining_amount: u256,

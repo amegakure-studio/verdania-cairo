@@ -44,7 +44,10 @@ mod interfaces {
     mod IERC1155;
 }
 
-mod tests { // mod test_world;
+#[cfg(test)]
+mod tests {
+    mod setup;
+    mod test_marketplace_system;
 }
 
 mod constants;

@@ -5,7 +5,7 @@ use starknet::ContractAddress;
 #[derive(Model, Copy, Drop, Serde)]
 struct ERC20Balance {
     #[key]
-    token: ContractAddress,
+    id: felt252,
     #[key]
     account: ContractAddress,
     amount: u256,
@@ -14,7 +14,7 @@ struct ERC20Balance {
 #[derive(Model, Copy, Drop, Serde)]
 struct ERC20Allowance {
     #[key]
-    token: ContractAddress,
+    id: felt252,
     #[key]
     owner: ContractAddress,
     #[key]
@@ -25,7 +25,7 @@ struct ERC20Allowance {
 #[derive(Model, Copy, Drop, Serde)]
 struct ERC20Meta {
     #[key]
-    token: ContractAddress,
+    id: felt252,
     name: felt252,
     symbol: felt252,
     total_supply: u256,

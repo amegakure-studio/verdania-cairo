@@ -6,9 +6,10 @@ mod ERC20 {
     use verdania::interfaces::IERC20;
     use integer::BoundedInt;
     use starknet::ContractAddress;
-    use starknet::{get_caller_address, get_contract_address};
+    use starknet::get_caller_address;
     use zeroable::Zeroable;
     use verdania::store::{Store, StoreTrait};
+    use verdania::constants::ERC20_CONTRACT_ID;
 
     #[event]
     #[derive(Copy, Drop, starknet::Event)]
@@ -110,7 +111,7 @@ mod ERC20 {
             let owner = get_caller_address();
             self
                 .set_allowance(
-                    ERC20Allowance { token: get_contract_address(), owner, spender, amount }
+                    ERC20Allowance { id: ERC20_CONTRACT_ID, owner, spender, amount }
                 );
             true
         }
@@ -177,7 +178,7 @@ mod ERC20 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.get_erc20_meta(get_contract_address())
+            store.get_erc20_meta(ERC20_CONTRACT_ID)
         }
 
         // Helper function to update total_supply model
@@ -197,7 +198,7 @@ mod ERC20 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.get_erc20_balance(get_contract_address(), account)
+            store.get_erc20_balance(ERC20_CONTRACT_ID, account)
         }
 
         fn update_balance(
@@ -220,7 +221,7 @@ mod ERC20 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.get_erc20_allowance(get_contract_address(), owner, spender)
+            store.get_erc20_allowance(ERC20_CONTRACT_ID, owner, spender)
         }
 
         fn update_allowance(
@@ -265,7 +266,7 @@ mod ERC20 {
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn initializer(ref self: ContractState, name: felt252, symbol: felt252, owner: ContractAddress) {
-            let meta = ERC20Meta { token: get_contract_address(), name, symbol, total_supply: 0, owner };
+            let meta = ERC20Meta { id: ERC20_CONTRACT_ID, name, symbol, total_supply: 0, owner };
             set!(self.world_dispatcher.read(), (meta));
         }
 
@@ -288,7 +289,7 @@ mod ERC20 {
         ) {
             self
                 .set_allowance(
-                    ERC20Allowance { token: get_contract_address(), owner, spender, amount }
+                    ERC20Allowance { id: ERC20_CONTRACT_ID, owner, spender, amount }
                 );
         }
 

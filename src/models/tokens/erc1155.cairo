@@ -5,7 +5,7 @@ use starknet::ContractAddress;
 #[derive(Model, Copy, Drop, Serde)]
 struct ERC1155Meta {
     #[key]
-    token: ContractAddress,
+    id: felt252,
     owner: ContractAddress
     // name: felt252,
     // symbol: felt252,
@@ -15,7 +15,7 @@ struct ERC1155Meta {
 #[derive(Model, Copy, Drop, Serde)]
 struct ERC1155OperatorApproval {
     #[key]
-    token: ContractAddress,
+    id: felt252,
     #[key]
     owner: ContractAddress,
     #[key]
@@ -27,7 +27,7 @@ struct ERC1155OperatorApproval {
 #[derive(Model, Copy, Drop, Serde)]
 struct ERC1155Balance {
     #[key]
-    token: ContractAddress,
+    id_contract: felt252,
     #[key]
     account: ContractAddress,
     #[key]
