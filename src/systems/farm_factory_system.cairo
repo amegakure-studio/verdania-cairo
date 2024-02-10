@@ -14,11 +14,15 @@ mod farm_factory_system {
     use verdania::models::entities::crop::Crop;
     use verdania::models::states::player_state::PlayerState;
     use verdania::models::states::player_farm_state::PlayerFarmState;
-    use verdania::constants::{tile_state_1, env_entity_state_1};
+    use verdania::constants::{tile_state_1, env_entity_state_1, MAP_1_ID};
     use verdania::store::{Store, StoreTrait};
-
-    #[storage]
-    struct Storage {}
+    use verdania::constants::{ERC20_CONTRACT_ID, ERC1155_CONTRACT_ID, MARKETPLACE_CONTRACT_ID};
+    use verdania::interfaces::IERC1155::{
+        IERC1155DispatcherTrait, IERC1155Dispatcher
+    };
+    use verdania::interfaces::IERC20::{
+        IERC20Dispatcher, IERC20DispatcherTrait
+    };
 
     #[abi(embed_v0)]
     impl FarmFactory of IFarmFactorySystem<ContractState> {
@@ -28,14 +32,29 @@ mod farm_factory_system {
             let mut store: Store = StoreTrait::new(world);
 
             let player = get_caller_address();
-
-            let map_id = 1;
-            let player_farm_state = store.get_player_farm_state(map_id, player);
+            let player_farm_state = store.get_player_farm_state(MAP_1_ID, player);
             assert(player_farm_state.farm_id == 0, 'Err: already own a farm');
+
+            // -- CREAR FARM --
+            // Crear TileState
+            // Crear EnvEntityState
+            // Crear PlayerFarmState
+            // Crear PlayerState
+            // Mint items
+            // Mint de money
 
             let mut farm_count = store.get_farm_count(FARM_COUNT_KEY);
             farm_count.index += 1;
             store.set_farm_count(farm_count);
+
+            // Crear TileState
+            let mut tiles_state = tile_state_1(farm_count.index);
+            loop {
+                match tiles_state.pop_front() {
+                    Option::Some(tile_state) => store.set_tile_state(*tile_state), 
+                    Option::None => { break; }
+                }
+            };
 
             // Crear EnvEntityState
             let mut envs_entity_state = env_entity_state_1(farm_count.index);
@@ -47,21 +66,12 @@ mod farm_factory_system {
                 }
             };
 
-            // Crear TileState
-            let mut tiles_state = tile_state_1(farm_count.index);
-            loop {
-                match tiles_state.pop_front() {
-                    Option::Some(tile_state) => store.set_tile_state(*tile_state), 
-                    Option::None => { break; }
-                }
-            };
-
             // Crear PlayerFarmState
             store
                 .set_player_farm_state(
                     PlayerFarmState {
                         player,
-                        map_id,
+                        map_id: MAP_1_ID,
                         farm_id: farm_count.index,
                         name: '',
                         crops_len: 0,
@@ -78,13 +88,37 @@ mod farm_factory_system {
                     PlayerState {
                         player,
                         farm_id: farm_count.index,
-                        x: 30,
+                        x: 30, // donde hace spawn el personaje
                         y: 15,
-                        equipment_item_id: 0,
+                        equipment_item_id: 1,
                         tokens: 0
                     }
                 );
-            // Crear AccountPlayerState 
+
+            // Mint items
+            let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID); 
+            // Tools
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, 1, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, 2, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, 3, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, 4, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, 5, 1);
+
+            // Seed
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, 6, 10);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, 7, 10);
+
+            // Mint de money
+            let erc20 = store.get_global_contract(ERC20_CONTRACT_ID);
+            IERC20Dispatcher { contract_address: erc20.address }
+                .mint(player, 1000);
         }
     }
 }

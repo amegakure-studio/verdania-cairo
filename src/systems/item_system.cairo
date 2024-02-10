@@ -54,42 +54,36 @@ mod item_system {
 
             store.set_item(Item {
                 id: 6,
-                name: 'Pickaxe',
-                env_entity_id: 0 
-            });
-
-            store.set_item(Item {
-                id: 7,
                 name: 'Corn kernel',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 8,
+                id: 7,
                 name: 'Eggplant seed',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 9,
+                id: 8,
                 name: 'Squash seed',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 10,
+                id: 9,
                 name: 'Potato tuber',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 11,
+                id: 10,
                 name: 'Tomato seed',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 12,
+                id: 11,
                 name: 'Onion sedd',
                 env_entity_id: 0 
             });

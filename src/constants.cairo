@@ -5,6 +5,7 @@ use verdania::models::states::env_entity_state::EnvEntityState;
 const ERC20_CONTRACT_ID: felt252 = 'ERC20_CONTRACT_ID';
 const ERC1155_CONTRACT_ID: felt252 = 'ERC1155_CONTRACT_ID';
 const MARKETPLACE_CONTRACT_ID: felt252 = 'MARKETPLACE_CONTRACT_ID';
+const MAP_1_ID: u64 = 1;
 
 fn map_1() -> (Span<Tile>, u8, u8) {
     let map = array![
