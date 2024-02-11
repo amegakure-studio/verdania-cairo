@@ -13,6 +13,7 @@ use verdania::models::entities::env_entity::EnvEntity;
 use verdania::models::entities::item::Item;
 use verdania::models::entities::map::Map;
 use verdania::models::entities::tile::Tile;
+use verdania::models::entities::interact::Interact;
 
 use verdania::models::states::crop_state::CropState;
 use verdania::models::states::env_entity_state::EnvEntityState;
@@ -88,6 +89,10 @@ trait StoreTrait {
     fn set_marketplace_meta(ref self: Store, marketplace_meta: MarketplaceMeta);
     fn get_marketplace_item(ref self: Store, id: u256) -> MarketplaceItem;
     fn set_marketplace_item(ref self: Store, marketplace_item: MarketplaceItem);
+
+    // Interact
+    fn get_interact(ref self: Store, item_id: u64, env_id: u64) -> Interact;
+    fn set_interact(ref self: Store, interact: Interact);
 }
 
 /// Implementation of the `StoreTrait` trait for the `Store` struct.
@@ -280,5 +285,14 @@ impl StoreImpl of StoreTrait {
 
     fn set_marketplace_item(ref self: Store, marketplace_item: MarketplaceItem) {
         set!(self.world, (marketplace_item));
+    }
+
+    fn get_interact(ref self: Store, item_id: u64, env_id: u64) -> Interact {
+        let interact_key = (item_id, env_id);
+        get!(self.world, interact_key.into(), (Interact))
+    }
+
+    fn set_interact(ref self: Store, interact: Interact) {
+        set!(self.world, (interact));
     }
 }

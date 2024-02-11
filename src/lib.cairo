@@ -11,6 +11,7 @@ mod models {
         mod map;
         mod tile;
         mod marketplace;
+        mod interact;
     }
 
     mod states {
@@ -28,6 +29,7 @@ mod models {
 }
 
 mod systems {
+    // mod action_system;
     mod crop_system;
     mod env_entity_system;
     mod farm_factory_system;

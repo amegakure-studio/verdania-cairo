@@ -9,15 +9,24 @@ struct Tile {
     tile_type: u8
 }
 
+trait TileTrait {
+    fn new(map_id: u64, id: u64, x: u64, y: u64, tile_type: u8) -> Tile;
+}
+
+impl TileImpl of TileTrait {
+    fn new(map_id: u64, id: u64, x: u64, y: u64, tile_type: u8) -> Tile {
+        Tile { map_id, id, x, y, tile_type }
+    }
+}
+
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum TileType {
     Bridge,
     Building,
-    Dirt,
     Grass,
-    Montain,
     Sand,
     Water,
+    NotWalkable
 }
 
 impl TileTypeIntoU8 of Into<TileType, u8> {
@@ -26,11 +35,10 @@ impl TileTypeIntoU8 of Into<TileType, u8> {
         match self {
             TileType::Bridge => 1,
             TileType::Building => 2,
-            TileType::Dirt => 3,
-            TileType::Grass => 4,
-            TileType::Montain => 5,
-            TileType::Sand => 6,
-            TileType::Water => 7,
+            TileType::Grass => 3,
+            TileType::Sand => 4,
+            TileType::Water => 5,
+            TileType::NotWalkable => 6,
         }
     }
 }
@@ -43,15 +51,13 @@ impl U8TryIntoSkillType of TryInto<u8, TileType> {
         } else if self == 2 {
             Option::Some(TileType::Building)
         } else if self == 3 {
-            Option::Some(TileType::Dirt)
-        } else if self == 4 {
             Option::Some(TileType::Grass)
-        } else if self == 5 {
-            Option::Some(TileType::Montain)
-        } else if self == 6 {
+        } else if self == 4 {
             Option::Some(TileType::Sand)
-        } else if self == 7 {
+        } else if self == 5 {
             Option::Some(TileType::Water)
+        } else if self == 6 {
+            Option::Some(TileType::NotWalkable)
         } else {
             Option::None(())
         }
