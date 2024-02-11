@@ -1,5 +1,7 @@
 mod models {
     mod data {
+        mod env_entity_id;
+        mod items_id;
         mod game;
         mod world_config;
     }
@@ -39,6 +41,7 @@ mod systems {
     mod erc20_system;
     mod erc1155_system;
     mod marketplace_system;
+    mod interact_system;
 }
 
 mod interfaces {

@@ -41,7 +41,7 @@ trait StoreTrait {
     fn set_farm_count(ref self: Store, farm_count: FarmCount);
     fn get_map(ref self: Store, id: u64) -> Map;
     fn set_map(ref self: Store, map: Map);
-    fn get_tile(ref self: Store, id: u64) -> Tile;
+    fn get_tile(ref self: Store, map_id: u64, id: u64) -> Tile;
     fn set_tile(ref self: Store, tile: Tile);
     fn get_item(ref self: Store, id: u64) -> Item;
     fn set_item(ref self: Store, item: Item);
@@ -120,7 +120,7 @@ impl StoreImpl of StoreTrait {
         set!(self.world, (map));
     }
 
-    fn get_tile(ref self: Store, id: u64) -> Tile {
+    fn get_tile(ref self: Store, map_id: u64, id: u64) -> Tile {
         get!(self.world, id, (Tile))
     }
 

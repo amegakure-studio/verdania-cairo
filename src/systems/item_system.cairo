@@ -11,6 +11,8 @@ mod item_system {
     use starknet::{get_caller_address, ContractAddress};
     use verdania::models::entities::item::Item;
     use verdania::store::{Store, StoreTrait};
+    use verdania::models::data::items_id::{PICKAXE_ID, HOE_ID, WATERING_CAN_ID, PUMPKIN_SEED_ID, ONION_SEED_ID, CARROT_SEED_ID, CORN_SEED_ID, MUSHROOM_SEED_ID, PUMPKIN_ID, ONION_ID, CARROT_ID, CORN_ID, MUSHROOM_ID};
+    use verdania::models::data::env_entity_id::{ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID, ENV_MUSHROOM_ID};
 
     #[storage]
     struct Storage {}
@@ -23,69 +25,81 @@ mod item_system {
             let mut store: Store = StoreTrait::new(world);
 
             store.set_item(Item {
-                id: 1,
+                id: PICKAXE_ID,
                 name: 'Pickaxe',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 2,
-                name: 'Axe',
-                env_entity_id: 0 
-            });
-
-            store.set_item(Item {
-                id: 3,
+                id: HOE_ID,
                 name: 'Hoe',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 4,
+                id: WATERING_CAN_ID,
                 name: 'Watering Can',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 5,
-                name: 'Fish Rot',
+                id: PUMPKIN_ID,
+                name: 'Pumpkin',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 6,
-                name: 'Corn kernel',
+                id: ONION_ID,
+                name: 'Onion',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 7,
-                name: 'Eggplant seed',
+                id: CARROT_ID,
+                name: 'Carrot',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 8,
-                name: 'Squash seed',
+                id: CORN_ID,
+                name: 'Corn',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 9,
-                name: 'Potato tuber',
+                id: MUSHROOM_ID,
+                name: 'Mushroom',
                 env_entity_id: 0 
             });
 
             store.set_item(Item {
-                id: 10,
-                name: 'Tomato seed',
-                env_entity_id: 0 
+                id: PUMPKIN_SEED_ID,
+                name: 'Pumpkin Seed',
+                env_entity_id: ENV_PUMPKIN_ID 
             });
 
             store.set_item(Item {
-                id: 11,
-                name: 'Onion sedd',
-                env_entity_id: 0 
+                id: ONION_SEED_ID,
+                name: 'Onion Seed',
+                env_entity_id: ENV_ONION_ID
+            });
+
+            store.set_item(Item {
+                id: CARROT_SEED_ID,
+                name: 'Carrot Seed',
+                env_entity_id: ENV_CARROT_ID
+            });
+
+            store.set_item(Item {
+                id: CORN_ID,
+                name: 'Corn Seed',
+                env_entity_id: ENV_CORN_ID
+            });
+
+            store.set_item(Item {
+                id: MUSHROOM_ID,
+                name: 'Mushroom Seed',
+                env_entity_id: ENV_MUSHROOM_ID 
             });
         }
     }
