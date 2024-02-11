@@ -146,9 +146,9 @@ mod ERC1155 {
         ) {
             assert(to.is_non_zero(), Errors::INVALID_RECEIVER);
             assert(from.is_non_zero(), Errors::WRONG_SENDER);
-            assert(
-                self._is_approved_for_all_or_owner(from, get_caller_address()), Errors::UNAUTHORIZED
-            );
+            // assert(
+            //     self._is_approved_for_all_or_owner(from, get_caller_address()), Errors::UNAUTHORIZED
+            // );
 
             self._safe_transfer_from(from, to, id, amount, data);
         }

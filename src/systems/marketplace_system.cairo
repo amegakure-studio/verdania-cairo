@@ -6,9 +6,9 @@ trait IMarketplace<TContractState> {
     fn init(ref self: TContractState);
     fn update_meta(ref self: TContractState, marketplace_meta: MarketplaceMeta);
     fn list_item(
-        ref self: TContractState, token_id: u256, token_amount: u256, price: u256
+        ref self: TContractState, player: felt252, token_id: u256, token_amount: u256, price: u256
     ) -> u256;
-    fn buy_item(ref self: TContractState, item_id: u256, token_amount: u256);
+    fn buy_item(ref self: TContractState, player: felt252, item_id: u256, token_amount: u256);
 }
 
 #[dojo::contract]
@@ -56,11 +56,12 @@ mod Marketplace {
         }
 
         fn list_item(
-            ref self: ContractState, token_id: u256, token_amount: u256, price: u256
+            ref self: ContractState, player: felt252, token_id: u256, token_amount: u256, price: u256
         ) -> u256 {
             assert(token_amount > 0, 'Amount should be > 0');
             assert(price > 0, 'Price should be > 0');
 
+            let mut player: ContractAddress = player.try_into().unwrap();
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
@@ -72,7 +73,7 @@ mod Marketplace {
             
             IERC1155Dispatcher { contract_address: erc1155.address }
                 .safe_transfer_from(
-                    from: get_caller_address(),
+                    from: player,
                     to: marketplace.address,
                     id: token_id,
                     amount: token_amount,
@@ -87,7 +88,7 @@ mod Marketplace {
                 MarketplaceItem {
                     id: item_id,
                     token_id,
-                    seller: get_caller_address(),
+                    seller: player,
                     amount: token_amount,
                     remaining_amount: token_amount,
                     price
@@ -96,8 +97,9 @@ mod Marketplace {
             item_id
         }
 
-        fn buy_item(ref self: ContractState, item_id: u256, token_amount: u256) {
+        fn buy_item(ref self: ContractState, player: felt252, item_id: u256, token_amount: u256) {
 
+            let mut player: ContractAddress = player.try_into().unwrap();
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
@@ -114,12 +116,12 @@ mod Marketplace {
             let marketplace = store.get_global_contract(MARKETPLACE_CONTRACT_ID); 
 
             IERC20Dispatcher { contract_address: erc20.address }
-                .transfer_from(get_caller_address(), item.seller, total_amount);
+                .transfer_from(player, item.seller, total_amount);
 
             IERC1155Dispatcher { contract_address: erc1155.address }
                 .safe_transfer_from(
                     marketplace.address,
-                    get_caller_address(),
+                    player,
                     item.token_id,
                     token_amount,
                     array![]

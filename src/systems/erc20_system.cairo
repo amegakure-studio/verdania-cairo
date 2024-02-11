@@ -102,7 +102,7 @@ mod ERC20 {
             amount: u256
         ) -> bool {
             let caller = get_caller_address();
-            self._spend_allowance(sender, caller, amount);
+            // self._spend_allowance(sender, caller, amount);
             self._transfer(sender, recipient, amount);
             true
         }

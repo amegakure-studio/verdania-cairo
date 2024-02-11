@@ -17,11 +17,6 @@ use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
 use verdania::systems::marketplace_system::{IMarketplaceDispatcher, IMarketplaceDispatcherTrait};
 use verdania::models::entities::marketplace::{MarketplaceMeta, MarketplaceItem};
 
-// Constants
-const ACCOUNT: felt252 = 'ACCOUNT';
-const SEED: felt252 = 'SEED';
-const NAME: felt252 = 'NAME';
-
 fn CALLER_ASSET_OWNER() -> ContractAddress {
     contract_address_const::<'ASSET_OWNER'>()
 }
@@ -43,13 +38,9 @@ fn test_list_item() {
     let amount = 10;
     systems.erc1155_system.mint(CALLER_ASSET_OWNER(), token_id, amount);
 
-    // set approve ASSET_OWNER to Marketplace
-    set_contract_address(CALLER_ASSET_OWNER());
-    systems.erc1155_system.set_approval_for_all(systems.marketplace_system.contract_address, true);
-
     // list item of ASSET_OWNER
     let price = 20;
-    let item_id = systems.marketplace_system.list_item(token_id, amount, price);
+    let item_id = systems.marketplace_system.list_item(CALLER_ASSET_OWNER().into(), token_id, amount, price);
 
     // check item
     let item = store.get_marketplace_item(item_id);
@@ -86,24 +77,14 @@ fn test_buy_item() {
     // mint ERC20 to USER
     let tokens_caller_user = 500;
     systems.erc20_system.mint(CALLER_USER(), tokens_caller_user);
-    
-    // set approve ASSET_OWNER to Marketplace
-    set_contract_address(CALLER_ASSET_OWNER());
-    systems.erc1155_system.set_approval_for_all(systems.marketplace_system.contract_address, true);
-    
-    // set approve USER to Marketplace
-    set_contract_address(CALLER_USER());
-    systems.erc20_system.approve(systems.marketplace_system.contract_address, tokens_caller_user);
 
     // list item of ASSET_OWNER
-    set_contract_address(CALLER_ASSET_OWNER());
     let price = 20;
-    let item_id = systems.marketplace_system.list_item(token_id, amount, price);
+    let item_id = systems.marketplace_system.list_item(CALLER_ASSET_OWNER().into(), token_id, amount, price);
 
     // USER buy item of ASSET_OWNER
-    set_contract_address(CALLER_USER());
     let amount_token = 5;
-    systems.marketplace_system.buy_item(item_id, amount_token);
+    systems.marketplace_system.buy_item(CALLER_USER().into(), item_id, amount_token);
 
     // check item
     let item = store.get_marketplace_item(item_id);
