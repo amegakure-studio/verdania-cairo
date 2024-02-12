@@ -12,11 +12,15 @@ mod interact_system {
     use super::IInteractSystem;
     use starknet::{get_caller_address, ContractAddress};
     use verdania::models::entities::crop::{Crop, CropT};
-    use verdania::models::entities::item::{Tool};
+    use verdania::models::entities::item::{Tool, Seed, equip_item_is_a_seed};
     use verdania::models::entities::env_entity::{EnvEntity, EnvEntityT, EnvEntityT::{
         Rock,
         Tree,
     }, is_crop};
+    use verdania::constants::ERC1155_CONTRACT_ID;
+    use verdania::interfaces::IERC1155::{
+        IERC1155DispatcherTrait, IERC1155Dispatcher
+    };
     use verdania::models::entities::tile::is_suitable_for_crops;
     use verdania::constants::MAP_1_ID;
     use verdania::store::{Store, StoreTrait};
@@ -50,9 +54,40 @@ mod interact_system {
                 return;
             }
 
-            let tool: Tool = player_state.equipment_item_id.try_into().expect(Errors::WRONG_ITEM_ID_ERROR);
             let env_entity: EnvEntityT = tile_state.entity_type.try_into().expect(Errors::WRONG_ENV_ENTITY_ERROR);
-            
+            if is_crop(env_entity) {
+                let mut crop_state = store.get_crop_state(farm.farm_id, tile_state.entity_index);
+                // Ready for collect
+                if crop_state.growing_progress == 100 {
+                    let mut env_entity_details = store.get_env_entity(tile_state.entity_type);
+                    let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID); 
+                    IERC1155Dispatcher { contract_address: erc1155.address }
+                        .mint(player, env_entity_details.drop_item_id.into(), env_entity_details.quantity.into());
+                    
+                    tile_state.entity_type = Zeroable::zero();
+                    tile_state.entity_index = Zeroable::zero();
+                    store.set_tile_state(tile_state);
+
+                    return;
+                }
+            }
+
+            if equip_item_is_a_seed(player_state.equipment_item_id) && env_entity == EnvEntityT::SuitableForCrop {
+                let mut env_entity_details = store.get_env_entity(tile_state.entity_type);
+                let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID); 
+                IERC1155Dispatcher { contract_address: erc1155.address }
+                    .safe_transfer_from(player, Zeroable::zero(), player_state.equipment_item_id.into(), 1, array![]);
+
+                // TODO: Implement
+                let item_data = store.get_item(player_state.equipment_item_id);
+                // let crop_state
+                tile_state.entity_type = item_data.env_entity_id;
+                tile_state.entity_index = Zeroable::zero();
+                store.set_tile_state(tile_state);
+                return;
+            }
+
+            let tool: Tool = player_state.equipment_item_id.try_into().expect(Errors::WRONG_ITEM_ID_ERROR);
             match tool {
                 Tool::Hoe => {
                     let map = store.get_map(MAP_1_ID);
@@ -67,13 +102,23 @@ mod interact_system {
                     if env_entity != EnvEntityT::Rock {
                         return;
                     }
-                    // TODO: resolve
+                    let mut env_entity_details = store.get_env_entity(tile_state.entity_type);
+
+                    let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID); 
+                    IERC1155Dispatcher { contract_address: erc1155.address }
+                        .mint(player, env_entity_details.drop_item_id.into(), env_entity_details.quantity.into());
+                    
+                    tile_state.entity_type = Zeroable::zero();
+                    tile_state.entity_index = Zeroable::zero();
+                    store.set_tile_state(tile_state);
                 },
                 Tool::WateringCan => {
                     if !is_crop(env_entity) {
                         return;
                     }
-                    // TODO: resolve
+                    let mut crop_state = store.get_crop_state(farm.farm_id, tile_state.entity_index);
+                    crop_state.last_watering_time = starknet::get_block_timestamp();
+                    store.set_crop_state(crop_state);
                 }
             }
         } 
