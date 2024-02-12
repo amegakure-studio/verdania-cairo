@@ -4,7 +4,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 #[starknet::interface]
 trait IInteractSystem<TContractState> {
     fn init(ref self: TContractState);
-    fn interact(ref self: ContractState, player: ContractAddress, item_id: u64, env_id: u64, grid_id: u64);
+    fn interact(ref self: TContractState, player: ContractAddress, grid_id: u64);
 }
 
 #[dojo::contract]
@@ -37,23 +37,26 @@ mod interact_system {
             let mut store: Store = StoreTrait::new(world);
         }
 
-        fn interact(ref self: ContractState, player: ContractAddress, item_id: u64, env_id: u64, grid_id: u64) {
+        fn interact(ref self: ContractState, player: ContractAddress, grid_id: u64) {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
-            if !store.get_interact(item_id, env_id).can_interact {
+            let player_state = store.get_player_state(player);
+            let farm = store.get_player_farm_state(MAP_1_ID, player);
+            let mut tile_state = store.get_tile_state(farm.farm_id, grid_id);
+
+            if !store.get_interact(player_state.equipment_item_id, tile_state.entity_type).can_interact {
                 return;
             }
 
-            let tool: Tool = item_id.try_into().expect(Errors::WRONG_ITEM_ID_ERROR);
-            let env_entity: EnvEntityT = env_id.try_into().expect(Errors::WRONG_ENV_ENTITY_ERROR);
+            let tool: Tool = player_state.equipment_item_id.try_into().expect(Errors::WRONG_ITEM_ID_ERROR);
+            let env_entity: EnvEntityT = tile_state.entity_type.try_into().expect(Errors::WRONG_ENV_ENTITY_ERROR);
+            
             match tool {
                 Tool::Hoe => {
-                    let farm = store.get_player_farm_state(1, player);
                     let map = store.get_map(MAP_1_ID);
                     let tile = store.get_tile(MAP_1_ID, grid_id);
-                    let mut tile_state = store.get_tile_state(farm.farm_id, grid_id);
 
                     if is_suitable_for_crops(tile) && tile_state.entity_type.is_zero() {
                         tile_state.entity_type = EnvEntityT::SuitableForCrop.into();
