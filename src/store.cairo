@@ -75,7 +75,8 @@ trait StoreTrait {
     fn get_active_player(ref self: Store, index: u64) -> ActivePlayers;
     fn set_active_player(ref self: Store, active_player: ActivePlayers);
     fn set_active_players_len(ref self: Store, len: ActivePlayersLen);
-
+    fn get_active_players_len(ref self: Store) -> ActivePlayersLen;
+    
     // ERC20
     fn get_erc20_balance(ref self: Store, id: felt252, account: ContractAddress) -> ERC20Balance;
     fn set_erc20_balance(ref self: Store, erc20_balance: ERC20Balance);
@@ -263,6 +264,10 @@ impl StoreImpl of StoreTrait {
 
     fn get_active_player(ref self: Store, index: u64) -> ActivePlayers {
         get!(self.world, (index), (ActivePlayers))
+    }
+
+    fn get_active_players_len(ref self: Store) -> ActivePlayersLen {
+        get!(self.world, (ACTIVE_PLAYERS_LEN_ID), (ActivePlayersLen))
     }
 
     fn set_active_player(ref self: Store, active_player: ActivePlayers) {
