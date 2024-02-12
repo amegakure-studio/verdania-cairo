@@ -22,6 +22,7 @@ mod models {
         mod player_farm_state;
         mod player_state;
         mod tile_state;
+        mod active_players;
     }
 
     mod tokens {
@@ -42,6 +43,7 @@ mod systems {
     mod erc1155_system;
     mod marketplace_system;
     mod interact_system;
+    mod sync_system;
 }
 
 mod interfaces {

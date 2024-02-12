@@ -20,10 +20,13 @@ use verdania::models::states::env_entity_state::EnvEntityState;
 use verdania::models::states::player_farm_state::PlayerFarmState;
 use verdania::models::states::player_state::PlayerState;
 use verdania::models::states::tile_state::TileState;
+use verdania::models::states::active_players::{ActivePlayers, ActivePlayersLen};
 
 use verdania::models::tokens::erc20::{ERC20Balance, ERC20Allowance, ERC20Meta};
 use verdania::models::tokens::erc1155::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
 use verdania::models::entities::marketplace::{MarketplaceMeta, MarketplaceItem};
+
+use verdania::constants::{MAP_1_ID, ACTIVE_PLAYERS_LEN_ID};
 
 use starknet::ContractAddress;
 
@@ -60,6 +63,7 @@ trait StoreTrait {
     ) -> PlayerFarmState;
     fn set_player_farm_state(ref self: Store, player_farm_state: PlayerFarmState);
     fn get_crop_state(ref self: Store, farm_id: u64, index: u64) -> CropState;
+    fn get_crops_states(ref self: Store, player: ContractAddress, farm_id: u64) -> Span<CropState>;
     fn set_crop_state(ref self: Store, crop_state: CropState);
     fn get_env_entity_state(ref self: Store, farm_id: u64, index: u64) -> EnvEntityState;
     fn set_env_entity_state(ref self: Store, env_entity_state: EnvEntityState);
@@ -67,6 +71,10 @@ trait StoreTrait {
     fn set_tile_state(ref self: Store, tile_state: TileState);
     fn get_player_state(ref self: Store, player: ContractAddress) -> PlayerState;
     fn set_player_state(ref self: Store, player_state: PlayerState);
+    fn get_verdania_active_players(ref self: Store) -> Span<ActivePlayers>;
+    fn get_active_player(ref self: Store, index: u64) -> ActivePlayers;
+    fn set_active_player(ref self: Store, active_player: ActivePlayers);
+    fn set_active_players_len(ref self: Store, len: ActivePlayersLen);
 
     // ERC20
     fn get_erc20_balance(ref self: Store, id: felt252, account: ContractAddress) -> ERC20Balance;
@@ -194,6 +202,21 @@ impl StoreImpl of StoreTrait {
         get!(self.world, crop_state_key.into(), (CropState))
     }
 
+    fn get_crops_states(ref self: Store, player: ContractAddress, farm_id: u64) -> Span<CropState> {
+        // TODO: assuming that we have only one map
+        let farm_state = self.get_player_farm_state(MAP_1_ID, player);
+        let mut i = 0;
+        let mut res = array![];
+        loop {
+            if farm_state.crops_len == i {
+                break;
+            }
+            res.append(self.get_crop_state(farm_id, i));
+            i += 1;
+        };
+        res.span()
+    }
+
     fn set_crop_state(ref self: Store, crop_state: CropState) {
         set!(self.world, (crop_state));
     }
@@ -223,6 +246,33 @@ impl StoreImpl of StoreTrait {
     fn set_player_state(ref self: Store, player_state: PlayerState) {
         set!(self.world, (player_state));
     }
+
+    fn get_verdania_active_players(ref self: Store) -> Span<ActivePlayers> {
+        let ap_len = get!(self.world, ACTIVE_PLAYERS_LEN_ID, (ActivePlayersLen));
+        let mut active_players = array![];
+        let mut i = 0;
+        loop {
+            if ap_len.len == i {
+                break;
+            }
+            active_players.append(self.get_active_player(i));
+            i += 1;
+        };
+        active_players.span()
+    }
+
+    fn get_active_player(ref self: Store, index: u64) -> ActivePlayers {
+        get!(self.world, (index), (ActivePlayers))
+    }
+
+    fn set_active_player(ref self: Store, active_player: ActivePlayers) {
+        set!(self.world, (active_player));
+    }
+
+    fn set_active_players_len(ref self: Store, len: ActivePlayersLen) {
+        set!(self.world, (len));
+    }
+
 
     // ERC20
     fn get_erc20_balance(ref self: Store, id: felt252, account: ContractAddress) -> ERC20Balance {

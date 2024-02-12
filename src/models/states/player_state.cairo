@@ -8,5 +8,6 @@ struct PlayerState {
     x: u64,
     y: u64,
     equipment_item_id: u64,
-    tokens: u256
+    tokens: u256,
+    last_timestamp_activity: u64
 }
