@@ -11,9 +11,7 @@ struct Tile {
 
 fn is_walkable(tile: Tile) -> bool {
     let tile_type: TileType = tile.tile_type.try_into().expect('Cannot convert tile type');
-    tile_type == TileType::Bridge ||
-    tile_type == TileType::Grass ||
-    tile_type == TileType::Sand
+    tile_type == TileType::Bridge || tile_type == TileType::Grass || tile_type == TileType::Sand
 }
 
 fn is_suitable_for_crops(tile: Tile) -> bool {

@@ -27,7 +27,7 @@ mod map_system {
             let (mut tiles, height, width) = map_1();
             loop {
                 match tiles.pop_front() {
-                    Option::Some(tile) => store.set_tile(*tile), 
+                    Option::Some(tile) => store.set_tile(*tile),
                     Option::None => { break; }
                 }
             };

@@ -10,7 +10,7 @@ mod setup {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // Internal imports
-    
+
     // Models
     use verdania::models::data::game::{farm_count, FarmCount};
     use verdania::models::data::world_config::{active_players, ActivePlayers};
@@ -30,7 +30,9 @@ mod setup {
     use verdania::models::states::tile_state::{tile_state, TileState};
     use verdania::models::tokens::erc1155::{erc_1155_balance, ERC1155Balance};
     use verdania::models::tokens::erc1155::{erc_1155_meta, ERC1155Meta};
-    use verdania::models::tokens::erc1155::{erc_1155_operator_approval, ERC1155OperatorApproval};
+    use verdania::models::tokens::erc1155::{
+        erc_1155_operator_approval, ERC1155OperatorApproval
+    };
     use verdania::models::tokens::erc20::{erc_20_allowance, ERC20Allowance};
     use verdania::models::tokens::erc20::{erc_20_balance, ERC20Balance};
     use verdania::models::tokens::erc20::{erc_20_meta, ERC20Meta};
@@ -38,12 +40,18 @@ mod setup {
     // Systems
     use verdania::systems::crop_system::{crop_system, ICropSystemDispatcher};
     use verdania::systems::env_entity_system::{env_entity_system, IEnvEntitySystemDispatcher};
-    use verdania::systems::farm_factory_system::{farm_factory_system, IFarmFactorySystemDispatcher};
+    use verdania::systems::farm_factory_system::{
+        farm_factory_system, IFarmFactorySystemDispatcher
+    };
     use verdania::systems::item_system::{item_system, IItemSystemDispatcher};
     use verdania::systems::map_system::{map_system, IMapSystemDispatcher};
-    use verdania::systems::world_config_system::{world_config_system, IWorldConfigSystemDispatcher, IWorldConfigSystemDispatcherTrait};
+    use verdania::systems::world_config_system::{
+        world_config_system, IWorldConfigSystemDispatcher, IWorldConfigSystemDispatcherTrait
+    };
 
-    use verdania::systems::marketplace_system::{Marketplace, IMarketplaceDispatcher, IMarketplaceDispatcherTrait};
+    use verdania::systems::marketplace_system::{
+        Marketplace, IMarketplaceDispatcher, IMarketplaceDispatcherTrait
+    };
     use verdania::interfaces::IERC1155::{IERC1155Dispatcher, IERC1155DispatcherTrait};
     use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use verdania::systems::erc1155_system::ERC1155;
@@ -118,7 +126,9 @@ mod setup {
             },
             farm_factory_system: IFarmFactorySystemDispatcher {
                 contract_address: world
-                    .deploy_contract('salt', farm_factory_system::TEST_CLASS_HASH.try_into().unwrap())
+                    .deploy_contract(
+                        'salt', farm_factory_system::TEST_CLASS_HASH.try_into().unwrap()
+                    )
             },
             item_system: IItemSystemDispatcher {
                 contract_address: world
@@ -134,7 +144,9 @@ mod setup {
             },
             world_config_system: IWorldConfigSystemDispatcher {
                 contract_address: world
-                    .deploy_contract('salt', world_config_system::TEST_CLASS_HASH.try_into().unwrap())
+                    .deploy_contract(
+                        'salt', world_config_system::TEST_CLASS_HASH.try_into().unwrap()
+                    )
             }
         };
 

@@ -22,59 +22,77 @@ mod crop_system {
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
-            store.set_crop(Crop {
-                id: 1,
-                name: 'Corn',
-                harvest_time: 1000,
-                min_watering_time: 200,
-                drop_item_id: 1,
-                quantity: 1,
-            });
+            store
+                .set_crop(
+                    Crop {
+                        id: 1,
+                        name: 'Corn',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: 1,
+                        quantity: 1,
+                    }
+                );
 
-            store.set_crop(Crop {
-                id: 2,
-                name: 'Eggplant',
-                harvest_time: 1000,
-                min_watering_time: 200,
-                drop_item_id: 1,
-                quantity: 1,
-            });
+            store
+                .set_crop(
+                    Crop {
+                        id: 2,
+                        name: 'Eggplant',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: 1,
+                        quantity: 1,
+                    }
+                );
 
-            store.set_crop(Crop {
-                id: 3,
-                name: 'Squash',
-                harvest_time: 1000,
-                min_watering_time: 200,
-                drop_item_id: 1,
-                quantity: 1,
-            });
+            store
+                .set_crop(
+                    Crop {
+                        id: 3,
+                        name: 'Squash',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: 1,
+                        quantity: 1,
+                    }
+                );
 
-            store.set_crop(Crop {
-                id: 4,
-                name: 'Potato',
-                harvest_time: 1000,
-                min_watering_time: 200,
-                drop_item_id: 1,
-                quantity: 1,
-            });
+            store
+                .set_crop(
+                    Crop {
+                        id: 4,
+                        name: 'Potato',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: 1,
+                        quantity: 1,
+                    }
+                );
 
-            store.set_crop(Crop {
-                id: 5,
-                name: 'Tomato',
-                harvest_time: 1000,
-                min_watering_time: 200,
-                drop_item_id: 1,
-                quantity: 1,
-            });
+            store
+                .set_crop(
+                    Crop {
+                        id: 5,
+                        name: 'Tomato',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: 1,
+                        quantity: 1,
+                    }
+                );
 
-            store.set_crop(Crop {
-                id: 6,
-                name: 'Onion',
-                harvest_time: 1000,
-                min_watering_time: 200,
-                drop_item_id: 1,
-                quantity: 1,
-            });
+            store
+                .set_crop(
+                    Crop {
+                        id: 6,
+                        name: 'Onion',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: 1,
+                        quantity: 1,
+                    }
+                );
         }
     }
 }

@@ -2,7 +2,9 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[dojo::contract]
 mod ERC1155 {
-    use verdania::models::tokens::erc1155::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
+    use verdania::models::tokens::erc1155::{
+        ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance
+    };
     use verdania::interfaces::IERC1155;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
@@ -64,18 +66,17 @@ mod ERC1155 {
         fn owner(self: @ContractState) -> ContractAddress {
             self.get_meta().owner
         }
+    // fn name(self: @ContractState) -> felt252 {
+    //     self.get_meta().name
+    // }
 
-        // fn name(self: @ContractState) -> felt252 {
-        //     self.get_meta().name
-        // }
+    // fn symbol(self: @ContractState) -> felt252 {
+    //     self.get_meta().symbol
+    // }
 
-        // fn symbol(self: @ContractState) -> felt252 {
-        //     self.get_meta().symbol
-        // }
-
-        // fn uri(self: @ContractState, token_id: u256) -> felt252 {
-        //     self.get_uri(token_id)
-        // }
+    // fn uri(self: @ContractState, token_id: u256) -> felt252 {
+    //     self.get_uri(token_id)
+    // }
     }
 
     #[abi(embed_v0)]
@@ -219,7 +220,6 @@ mod ERC1155 {
 
     #[generate_trait]
     impl WorldInteractionsImpl of WorldInteractionsTrait {
-
         fn get_meta(self: @ContractState) -> ERC1155Meta {
             // [Setup] Datastore
             let world = self.world();
@@ -257,14 +257,10 @@ mod ERC1155 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.set_erc1155_operator_approval(
-                ERC1155OperatorApproval { 
-                    id: ERC1155_CONTRACT_ID, 
-                    owner, 
-                    operator, 
-                    approved 
-                }
-            );
+            store
+                .set_erc1155_operator_approval(
+                    ERC1155OperatorApproval { id: ERC1155_CONTRACT_ID, owner, operator, approved }
+                );
             self.emit_event(ApprovalForAll { owner, operator, approved });
         }
 
@@ -272,14 +268,10 @@ mod ERC1155 {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            store.set_erc1155_balance(
-                ERC1155Balance { 
-                    id_contract: ERC1155_CONTRACT_ID, 
-                    account, 
-                    id, 
-                    amount 
-                }
-            );
+            store
+                .set_erc1155_balance(
+                    ERC1155Balance { id_contract: ERC1155_CONTRACT_ID, account, id, amount }
+                );
         }
 
         fn update_balances(

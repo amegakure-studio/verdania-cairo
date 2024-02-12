@@ -17,12 +17,8 @@ mod farm_factory_system {
     use verdania::constants::{tile_state_1, env_entity_state_1, MAP_1_ID};
     use verdania::store::{Store, StoreTrait};
     use verdania::constants::{ERC20_CONTRACT_ID, ERC1155_CONTRACT_ID, MARKETPLACE_CONTRACT_ID};
-    use verdania::interfaces::IERC1155::{
-        IERC1155DispatcherTrait, IERC1155Dispatcher
-    };
-    use verdania::interfaces::IERC20::{
-        IERC20Dispatcher, IERC20DispatcherTrait
-    };
+    use verdania::interfaces::IERC1155::{IERC1155DispatcherTrait, IERC1155Dispatcher};
+    use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
 
     #[abi(embed_v0)]
     impl FarmFactory of IFarmFactorySystem<ContractState> {
@@ -51,7 +47,7 @@ mod farm_factory_system {
             let mut tiles_state = tile_state_1(farm_count.index);
             loop {
                 match tiles_state.pop_front() {
-                    Option::Some(tile_state) => store.set_tile_state(*tile_state), 
+                    Option::Some(tile_state) => store.set_tile_state(*tile_state),
                     Option::None => { break; }
                 }
             };
@@ -61,7 +57,7 @@ mod farm_factory_system {
             let env_entities_len = envs_entity_state.len();
             loop {
                 match envs_entity_state.pop_front() {
-                    Option::Some(env_entity_state) => store.set_env_entity_state(*env_entity_state), 
+                    Option::Some(env_entity_state) => store.set_env_entity_state(*env_entity_state),
                     Option::None => { break; }
                 }
             };
@@ -96,29 +92,21 @@ mod farm_factory_system {
                 );
 
             // Mint items
-            let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID); 
+            let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
             // Tools
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, 1, 1);
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, 2, 1);
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, 3, 1);
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, 4, 1);
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, 5, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, 1, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, 2, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, 3, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, 4, 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, 5, 1);
 
             // Seed
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, 6, 10);
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, 7, 10);
+            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, 6, 10);
+            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, 7, 10);
 
             // Mint de money
             let erc20 = store.get_global_contract(ERC20_CONTRACT_ID);
-            IERC20Dispatcher { contract_address: erc20.address }
-                .mint(player, 1000);
+            IERC20Dispatcher { contract_address: erc20.address }.mint(player, 1000);
         }
     }
 }

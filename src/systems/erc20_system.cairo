@@ -62,7 +62,6 @@ mod ERC20 {
 
     #[abi(embed_v0)]
     impl ERC20Impl of IERC20::IERC20<ContractState> {
-
         fn init(ref self: ContractState, name: felt252, symbol: felt252, initial_supply: u256) {
             let recipient = get_caller_address();
             self.initializer(name, symbol, recipient);
@@ -109,10 +108,7 @@ mod ERC20 {
 
         fn approve(ref self: ContractState, spender: ContractAddress, amount: u256) -> bool {
             let owner = get_caller_address();
-            self
-                .set_allowance(
-                    ERC20Allowance { id: ERC20_CONTRACT_ID, owner, spender, amount }
-                );
+            self.set_allowance(ERC20Allowance { id: ERC20_CONTRACT_ID, owner, spender, amount });
             true
         }
     }
@@ -173,7 +169,6 @@ mod ERC20 {
 
     #[generate_trait]
     impl WorldInteractionsImpl of WorldInteractionsTrait {
-
         fn get_meta(self: @ContractState) -> ERC20Meta {
             // [Setup] Datastore
             let world = self.world();
@@ -265,7 +260,9 @@ mod ERC20 {
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        fn initializer(ref self: ContractState, name: felt252, symbol: felt252, owner: ContractAddress) {
+        fn initializer(
+            ref self: ContractState, name: felt252, symbol: felt252, owner: ContractAddress
+        ) {
             let meta = ERC20Meta { id: ERC20_CONTRACT_ID, name, symbol, total_supply: 0, owner };
             set!(self.world_dispatcher.read(), (meta));
         }
@@ -287,10 +284,7 @@ mod ERC20 {
         fn _approve(
             ref self: ContractState, owner: ContractAddress, spender: ContractAddress, amount: u256
         ) {
-            self
-                .set_allowance(
-                    ERC20Allowance { id: ERC20_CONTRACT_ID, owner, spender, amount }
-                );
+            self.set_allowance(ERC20Allowance { id: ERC20_CONTRACT_ID, owner, spender, amount });
         }
 
         fn _transfer(

@@ -7,9 +7,9 @@ struct ERC1155Meta {
     #[key]
     id: felt252,
     owner: ContractAddress
-    // name: felt252,
-    // symbol: felt252,
-    // base_uri: felt252,
+// name: felt252,
+// symbol: felt252,
+// base_uri: felt252,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

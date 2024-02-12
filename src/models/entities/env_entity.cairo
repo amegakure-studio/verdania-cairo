@@ -1,4 +1,7 @@
-use verdania::models::data::env_entity_id::{ENV_SUITABLE_FOR_CROP, ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID, ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID};
+use verdania::models::data::env_entity_id::{
+    ENV_SUITABLE_FOR_CROP, ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID,
+    ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID
+};
 
 #[derive(Model, Copy, Drop, Serde)]
 struct EnvEntity {
@@ -23,11 +26,11 @@ enum EnvEntityT {
 }
 
 fn is_crop(entity: EnvEntityT) -> bool {
-    entity == EnvEntityT::Pumpkin ||
-    entity == EnvEntityT::Carrot ||
-    entity == EnvEntityT::Onion ||
-    entity == EnvEntityT::Corn ||
-    entity == EnvEntityT::Mushroom
+    entity == EnvEntityT::Pumpkin
+        || entity == EnvEntityT::Carrot
+        || entity == EnvEntityT::Onion
+        || entity == EnvEntityT::Corn
+        || entity == EnvEntityT::Mushroom
 }
 
 impl EnvEntityTIntoU64 of Into<EnvEntityT, u64> {

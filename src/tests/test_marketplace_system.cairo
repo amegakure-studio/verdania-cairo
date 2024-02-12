@@ -14,7 +14,9 @@ use integer::BoundedInt;
 use verdania::tests::setup::{setup, setup::Systems, setup::OWNER};
 use verdania::interfaces::IERC1155::{IERC1155Dispatcher, IERC1155DispatcherTrait};
 use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
-use verdania::systems::marketplace_system::{IMarketplaceDispatcher, IMarketplaceDispatcherTrait};
+use verdania::systems::marketplace_system::{
+    IMarketplaceDispatcher, IMarketplaceDispatcherTrait
+};
 use verdania::models::entities::marketplace::{MarketplaceMeta, MarketplaceItem};
 
 fn CALLER_ASSET_OWNER() -> ContractAddress {
@@ -40,7 +42,9 @@ fn test_list_item() {
 
     // list item of ASSET_OWNER
     let price = 20;
-    let item_id = systems.marketplace_system.list_item(CALLER_ASSET_OWNER().into(), token_id, amount, price);
+    let item_id = systems
+        .marketplace_system
+        .list_item(CALLER_ASSET_OWNER().into(), token_id, amount, price);
 
     // check item
     let item = store.get_marketplace_item(item_id);
@@ -49,14 +53,16 @@ fn test_list_item() {
     assert(item.amount == amount, 'wrong amount');
     assert(item.remaining_amount == amount, 'wrong remaining_amount');
     assert(item.price == price, 'wrong price');
-    
+
     // check balance ERC1155
     assert(
         systems.erc1155_system.balance_of(CALLER_ASSET_OWNER(), token_id) == 0,
         'balance asset owner'
     );
     assert(
-        systems.erc1155_system.balance_of(systems.marketplace_system.contract_address, token_id) == amount,
+        systems
+            .erc1155_system
+            .balance_of(systems.marketplace_system.contract_address, token_id) == amount,
         'balance marketplace'
     );
 }
@@ -80,7 +86,9 @@ fn test_buy_item() {
 
     // list item of ASSET_OWNER
     let price = 20;
-    let item_id = systems.marketplace_system.list_item(CALLER_ASSET_OWNER().into(), token_id, amount, price);
+    let item_id = systems
+        .marketplace_system
+        .list_item(CALLER_ASSET_OWNER().into(), token_id, amount, price);
 
     // USER buy item of ASSET_OWNER
     let amount_token = 5;
@@ -88,9 +96,7 @@ fn test_buy_item() {
 
     // check item
     let item = store.get_marketplace_item(item_id);
-    assert(
-        item.remaining_amount == amount - amount_token, 'wrong remaining_amount'
-    );
+    assert(item.remaining_amount == amount - amount_token, 'wrong remaining_amount');
 
     // check balance ERC1155
     assert(
@@ -98,10 +104,9 @@ fn test_buy_item() {
         'wrong caller_user'
     );
     assert(
-        systems.erc1155_system
-            .balance_of(
-                systems.marketplace_system.contract_address, token_id
-            ) == amount
+        systems
+            .erc1155_system
+            .balance_of(systems.marketplace_system.contract_address, token_id) == amount
             - amount_token,
         'wrong marketplace'
     );

@@ -21,7 +21,7 @@ mod world_config_system {
             let mut store: Store = StoreTrait::new(world);
             loop {
                 match global_contracts.pop_front() {
-                    Option::Some(global_contract) => store.set_global_contract(*global_contract), 
+                    Option::Some(global_contract) => store.set_global_contract(*global_contract),
                     Option::None => { break; }
                 }
             };
