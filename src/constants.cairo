@@ -7,7 +7,7 @@ const ERC1155_CONTRACT_ID: felt252 = 'ERC1155_CONTRACT_ID';
 const MARKETPLACE_CONTRACT_ID: felt252 = 'MARKETPLACE_CONTRACT_ID';
 const MAP_1_ID: u64 = 1;
 
-fn map_1() -> (Span<Tile>, u8, u8) {
+fn map_1() -> (Span<Tile>, u64, u64) {
     let map = array![
         TileTrait::new(MAP_1_ID, 173, 23, 5, 5),
         TileTrait::new(MAP_1_ID, 349, 19, 11, 5),

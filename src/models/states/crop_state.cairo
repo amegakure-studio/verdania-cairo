@@ -3,7 +3,7 @@ use starknet::ContractAddress;
 #[derive(Model, Copy, Drop, Serde)]
 struct CropState {
     #[key]
-    farm_id: ContractAddress,
+    farm_id: u64,
     #[key]
     index: u64,
     crop_id: u64,
@@ -12,4 +12,5 @@ struct CropState {
     growing_progress: u64,
     planting_time: u64,
     last_watering_time: u64,
+    harvested: bool,
 }

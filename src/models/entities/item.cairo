@@ -1,5 +1,5 @@
 use core::option::OptionTrait;
-use verdania::models::data::items_id::{PICKAXE_ID, HOE_ID, WATERING_CAN_ID, PUMPKIN_SEED_ID, ONION_SEED_ID, CARROT_SEED_ID, CORN_SEED_ID, MUSHROOM_SEED_ID};
+use verdania::models::data::items_id::{PICKAXE_ID, HOE_ID, WATERING_CAN_ID, PUMPKIN_SEED_ID, ONION_SEED_ID, CARROT_SEED_ID, CORN_SEED_ID, MUSHROOM_SEED_ID, PUMPKIN_ID, ONION_ID, CARROT_ID, CORN_ID, MUSHROOM_ID};
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Item {
@@ -28,6 +28,18 @@ enum Seed {
 fn equip_item_is_a_seed(item_id: u64) -> bool {
     let opt_seed: Option<Seed> = item_id.try_into();
     opt_seed.is_some()
+}
+
+fn get_crop_id_from_seed(item_id: u64) -> u64 {
+    assert(equip_item_is_a_seed(item_id), 'item_id should be a seed');
+    let seed: Seed = item_id.try_into().unwrap();
+    match seed {
+        Seed::Carrot => CARROT_ID,
+        Seed::Corn => CORN_ID,
+        Seed::Mushroom => MUSHROOM_ID,
+        Seed::Onion => ONION_ID,
+        Seed::Pumpkin => PUMPKIN_ID,
+    } 
 }
 
 impl SeedIntoU64 of Into<Seed, u64> {

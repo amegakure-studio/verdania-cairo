@@ -2,6 +2,6 @@
 struct Map {
     #[key]
     id: u64,
-    height: u8,
-    width: u8
+    height: u64,
+    width: u64
 }
