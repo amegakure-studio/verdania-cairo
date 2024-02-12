@@ -107,7 +107,7 @@ mod interact_system {
                     harvested: false,
                 };
 
-                let new_index = add_or_replace_free_crop_state(ref store, farm, new_crop_state);
+                let new_index = get_crop_state_unused_id(ref store, farm, new_crop_state);
                 // update tile state with new crop
                 // TODO: check tile_state.entity_type
                 tile_state.entity_type = crop_id_from_seed;
@@ -178,7 +178,7 @@ mod interact_system {
             );
     }
 
-    fn add_or_replace_free_crop_state(
+    fn get_crop_state_unused_id(
         ref store: Store, farm: PlayerFarmState, crop_state: CropState
     ) -> u64 {
         let mut i = 0;
