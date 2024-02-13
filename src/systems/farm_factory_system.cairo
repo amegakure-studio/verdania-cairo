@@ -88,7 +88,6 @@ mod farm_factory_system {
                         y: 15,
                         equipment_item_id: 1,
                         tokens: 0,
-                        last_timestamp_activity: starknet::get_block_timestamp()
                     }
                 );
 

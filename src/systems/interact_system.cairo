@@ -1,5 +1,7 @@
-use starknet::ContractAddress;
+use verdania::store::{Store, StoreTrait};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
+use starknet::ContractAddress;
 
 #[starknet::interface]
 trait IInteractSystem<TContractState> {
@@ -18,12 +20,14 @@ mod interact_system {
     use verdania::models::entities::env_entity::{
         EnvEntity, EnvEntityT, EnvEntityT::{Rock, Tree,}, is_crop
     };
-    use verdania::models::states::{player_farm_state::PlayerFarmState, crop_state::{CropState}};
+    use verdania::models::states::{player_farm_state::PlayerFarmState, player_state::PlayerState, crop_state::CropState};
     use verdania::constants::ERC1155_CONTRACT_ID;
     use verdania::interfaces::IERC1155::{IERC1155DispatcherTrait, IERC1155Dispatcher};
     use verdania::models::entities::tile::is_suitable_for_crops;
-    use verdania::constants::MAP_1_ID;
+    use verdania::models::entities::map::Map;
+    use verdania::constants::{MAP_1_ID, ACTIVE_PLAYERS_LEN_ID};
     use verdania::store::{Store, StoreTrait};
+    use verdania::models::states::active_players::{ActivePlayers, ActivePlayersLen};
 
     #[storage]
     struct Storage {}
@@ -47,8 +51,13 @@ mod interact_system {
             let mut store: Store = StoreTrait::new(world);
 
             let player_state = store.get_player_state(player);
+            let map = store.get_map(MAP_1_ID);
             let mut farm = store.get_player_farm_state(MAP_1_ID, player);
             let mut tile_state = store.get_tile_state(farm.farm_id, grid_id);
+
+            if !player_is_adjacent(map, player_state, grid_id) {
+                return;
+            }
 
             if !store
                 .get_interact(player_state.equipment_item_id, tile_state.entity_type)
@@ -161,6 +170,10 @@ mod interact_system {
                     store.set_crop_state(crop_state);
                 }
             }
+            // reset AFK time
+            let active_players_len = store.get_active_players_len();
+            store.set_active_player(ActivePlayers { idx: active_players_len.len + 1, player: player, last_timestamp_activity: starknet::get_block_timestamp() });
+            store.set_active_players_len(ActivePlayersLen { key: ACTIVE_PLAYERS_LEN_ID, len: active_players_len.len + 1 });
         }
     }
 
@@ -176,6 +189,15 @@ mod interact_system {
             .safe_transfer_from(
                 player, Zeroable::zero(), item_id.into(), quantity.into(), array![]
             );
+    }
+
+    fn player_is_adjacent(map: Map, player_state: PlayerState, grid_id: u64) -> bool {
+        let (gy, gx) = integer::u64_safe_divmod(grid_id, integer::u64_as_non_zero(map.width));
+        let px = player_state.x;
+        let py = player_state.y;
+        let dx = if px > gx { px - gx } else { gx - px };
+        let dy = if py > gy { py - gy } else { gy - py };
+        (dx == 1 && dy == 0) || (dx == 0 && dy == 1) || (dx == 1 && dy == 1)
     }
 
     fn get_crop_state_unused_id(

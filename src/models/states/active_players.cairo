@@ -4,7 +4,8 @@ use starknet::ContractAddress;
 struct ActivePlayers {
     #[key]
     idx: u64,
-    player: ContractAddress
+    player: ContractAddress,
+    last_timestamp_activity: u64
 }
 
 #[derive(Model, Copy, Drop, Serde)]
