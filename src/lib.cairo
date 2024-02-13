@@ -43,7 +43,7 @@ mod systems {
     mod erc1155_system;
     mod marketplace_system;
     mod interact_system;
-    mod sync_system;
+    mod updater_system;
 }
 
 mod interfaces {
