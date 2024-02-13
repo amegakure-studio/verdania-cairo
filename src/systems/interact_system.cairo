@@ -33,8 +33,10 @@ mod interact_system {
     struct Storage {}
 
     mod Errors {
-        const WRONG_ITEM_ID_ERROR: felt252 = 'Interact: item isnt a tool';
-        const WRONG_ENV_ENTITY_ERROR: felt252 = 'Interact: env entity';
+        const WRONG_ENV_ENTITY_ERROR: felt252 = 'cannot obtain env entity tile';
+        const WRONG_ITEM_ID_ERROR: felt252 = 'cannot obtain tool from item_id';
+        const NON_ADJACENT_ERROR: felt252 = 'player must be adjacent to grid';
+        const INTERACTION_NOT_REGISTERED: felt252 = 'interaction doesnt exists';
     }
 
     #[abi(embed_v0)]
@@ -55,20 +57,19 @@ mod interact_system {
             let mut farm = store.get_player_farm_state(MAP_1_ID, player);
             let mut tile_state = store.get_tile_state(farm.farm_id, grid_id);
 
-            if !player_is_adjacent(map, player_state, grid_id) {
-                return;
-            }
+            assert(!player_is_adjacent(map, player_state, grid_id), Errors::NON_ADJACENT_ERROR);
 
-            if !store
+            assert(!store
                 .get_interact(player_state.equipment_item_id, tile_state.entity_type)
-                .can_interact {
-                return;
-            }
+                .can_interact, Errors::INTERACTION_NOT_REGISTERED);
 
             let env_entity: EnvEntityT = tile_state
                 .entity_type
                 .try_into()
                 .expect(Errors::WRONG_ENV_ENTITY_ERROR);
+
+            let current_timestamp = starknet::get_block_timestamp();
+
             if is_crop(env_entity) {
                 let mut crop_state = store.get_crop_state(farm.farm_id, tile_state.entity_index);
 
@@ -111,8 +112,8 @@ mod interact_system {
                     x: x,
                     y: y,
                     growing_progress: Zeroable::zero(),
-                    planting_time: starknet::get_block_timestamp(),
-                    last_watering_time: starknet::get_block_timestamp(),
+                    planting_time: current_timestamp,
+                    last_watering_time: current_timestamp,
                     harvested: false,
                 };
 
@@ -134,6 +135,7 @@ mod interact_system {
                 .equipment_item_id
                 .try_into()
                 .expect(Errors::WRONG_ITEM_ID_ERROR);
+
             match tool {
                 Tool::Hoe => {
                     let map = store.get_map(MAP_1_ID);
@@ -166,14 +168,23 @@ mod interact_system {
                     }
                     let mut crop_state = store
                         .get_crop_state(farm.farm_id, tile_state.entity_index);
-                    crop_state.last_watering_time = starknet::get_block_timestamp();
+                    crop_state.last_watering_time = current_timestamp;
                     store.set_crop_state(crop_state);
                 }
             }
+            // TODO: we have to handle this in a better way
             // reset AFK time
-            let active_players_len = store.get_active_players_len();
-            store.set_active_player(ActivePlayers { idx: active_players_len.len + 1, player: player, last_timestamp_activity: starknet::get_block_timestamp() });
-            store.set_active_players_len(ActivePlayersLen { key: ACTIVE_PLAYERS_LEN_ID, len: active_players_len.len + 1 });
+            let mut active_players = store.get_verdania_active_players();
+            loop {
+                if active_players.is_empty() {
+                    break;
+                }
+                let aplayer = *(active_players.pop_front().unwrap());
+                if aplayer.player == player {
+                    store.set_active_player(ActivePlayers { idx: aplayer.idx, player, last_timestamp_activity: current_timestamp} )
+                    break;
+                }
+            }
         }
     }
 
