@@ -16,3 +16,7 @@ const ONION_ID: u64 = 2001;
 const CARROT_ID: u64 = 2002;
 const CORN_ID: u64 = 2003;
 const MUSHROOM_ID: u64 = 2004;
+
+// Materials
+const WOOD_ID: u64 = 3000;
+const ROCK_ID: u64 = 3001;

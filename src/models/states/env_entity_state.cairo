@@ -9,4 +9,5 @@ struct EnvEntityState {
     env_entity_id: u64,
     x: u64,
     y: u64,
+    active: bool
 }

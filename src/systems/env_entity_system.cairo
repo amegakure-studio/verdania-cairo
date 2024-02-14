@@ -11,9 +11,11 @@ mod env_entity_system {
     use starknet::{get_caller_address, ContractAddress};
     use verdania::models::entities::env_entity::EnvEntity;
     use verdania::store::{Store, StoreTrait};
-
-    #[storage]
-    struct Storage {}
+    use verdania::models::data::env_entity_id::{
+        ENV_SUITABLE_FOR_CROP, ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID,
+        ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID, ENV_TRUNK_ID
+    };
+    use verdania::models::data::items_id::{ WOOD_ID, ROCK_ID };
 
     #[abi(embed_v0)]
     impl EnvEntitySystem of IEnvEntitySystem<ContractState> {
@@ -25,20 +27,20 @@ mod env_entity_system {
             store
                 .set_env_entity(
                     EnvEntity {
-                        id: 1,
+                        id: ENV_TREE_ID,
                         name: 'Tree',
-                        drop_item_id: 1, // TODO: agregar item id madera
+                        drop_item_id: WOOD_ID,
                         quantity: 4,
-                        durability: 2
+                        durability: 3
                     }
                 );
 
             store
                 .set_env_entity(
                     EnvEntity {
-                        id: 2,
+                        id: ENV_TRUNK_ID,
                         name: 'Trunk',
-                        drop_item_id: 1, // TODO: agregar item id madera
+                        drop_item_id: WOOD_ID,
                         quantity: 1,
                         durability: 1
                     }
@@ -47,28 +49,23 @@ mod env_entity_system {
             store
                 .set_env_entity(
                     EnvEntity {
-                        id: 3,
-                        name: 'Small Rock',
-                        drop_item_id: 2, // TODO: agregar item id piedra
-                        quantity: 1,
-                        durability: 1
-                    }
-                );
-
-            store
-                .set_env_entity(
-                    EnvEntity {
-                        id: 4,
+                        id: ENV_ROCK_ID,
                         name: 'Rock',
-                        drop_item_id: 2, // TODO: agregar item id piedra
-                        quantity: 4,
-                        durability: 2
+                        drop_item_id: ROCK_ID,
+                        quantity: 1,
+                        durability: 1
                     }
                 );
 
             store
                 .set_env_entity(
-                    EnvEntity { id: 5, name: 'Herb', drop_item_id: 0, quantity: 0, durability: 1 }
+                    EnvEntity { 
+                        id: ENV_SUITABLE_FOR_CROP, 
+                        name: 'Suitable for crop', 
+                        drop_item_id: 0, 
+                        quantity: 0, 
+                        durability: 1 
+                    }
                 );
         }
     }
