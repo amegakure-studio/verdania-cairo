@@ -71,15 +71,13 @@ mod interact_system {
 
             let current_timestamp = starknet::get_block_timestamp();
             if tile_state.entity_type == TS_CROP_ID {
-                // If entity placed in that tile is a crop
-                // TODO: SHOULD CALL ENV ENTITY STATE FIRST
+                println!("TS_CROP_ID");
                 let mut crop_state = store.get_crop_state(farm.farm_id, tile_state.entity_index);
-
-                // Ready for collect
+                // println!("e-entity state idx: {}, (x: {}, y: {}), ee-id: {}, active: {}", env_entity_state.index, env_entity_state.x, env_entity_state.y, env_entity_state.env_entity_id, env_entity_state.active);
+                // let crop_env_type: EnvEntityT = env_entity_state.env_entity_id.try_into().expect('cannot convert EE to env crop');
+                
                 if crop_state.growing_progress == 100 {
                     let mut crop_details = store.get_crop(crop_state.crop_id);
-                    
-                    let pfelt: felt252 = player.into();
 
                     add_item(
                         ref store,
@@ -94,6 +92,10 @@ mod interact_system {
                     tile_state.entity_type = Zeroable::zero();
                     tile_state.entity_index = Zeroable::zero();
                     store.set_tile_state(tile_state);
+
+                    let mut env_entity_state = store.get_env_entity_state(farm.farm_id, tile_state.entity_index);
+                    env_entity_state.active = false;
+                    store.set_env_entity_state(env_entity_state);
 
                     // Add crop to farm
                     farm.crops_len -= 1;
@@ -133,6 +135,7 @@ mod interact_system {
                     let ee_from_crop: EnvEntityT = crop_t.into();
                     println!("Env entity from crop {}", ee_from_crop);
                     println!("Tile entity IDX {}", tile_state.entity_index);
+
                     let env_entity_state = EnvEntityState {
                         farm_id: farm.farm_id,
                         index: tile_state.entity_index,

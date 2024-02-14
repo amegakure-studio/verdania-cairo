@@ -36,7 +36,6 @@ mod farm_factory_system {
             let mut farm_count = store.get_farm_count(FARM_COUNT_KEY);
             farm_count.index += 1;
             store.set_farm_count(farm_count);
-            println!("FARM ID: {}", farm_count.index);
 
             // Crear TileState
             let mut tiles_state = tile_state_1(farm_count.index);
