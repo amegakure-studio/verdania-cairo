@@ -20,7 +20,9 @@ mod interact_system {
     use verdania::models::entities::env_entity::{
         EnvEntity, EnvEntityT, EnvEntityT::{Rock, Tree,}, is_crop
     };
-    use verdania::models::states::{player_farm_state::PlayerFarmState, player_state::PlayerState, crop_state::CropState};
+    use verdania::models::states::{
+        player_farm_state::PlayerFarmState, player_state::PlayerState, crop_state::CropState
+    };
     use verdania::constants::ERC1155_CONTRACT_ID;
     use verdania::interfaces::IERC1155::{IERC1155DispatcherTrait, IERC1155Dispatcher};
     use verdania::models::entities::tile::is_suitable_for_crops;
@@ -28,9 +30,6 @@ mod interact_system {
     use verdania::constants::{MAP_1_ID, ACTIVE_PLAYERS_LEN_ID};
     use verdania::store::{Store, StoreTrait};
     use verdania::models::states::active_players::{ActivePlayers, ActivePlayersLen};
-
-    #[storage]
-    struct Storage {}
 
     mod Errors {
         const WRONG_ENV_ENTITY_ERROR: felt252 = 'cannot obtain env entity tile';
@@ -56,13 +55,9 @@ mod interact_system {
             let map = store.get_map(MAP_1_ID);
             let mut farm = store.get_player_farm_state(MAP_1_ID, player);
             let mut tile_state = store.get_tile_state(farm.farm_id, grid_id);
+            assert(player_is_adjacent(map, player_state, grid_id), Errors::NON_ADJACENT_ERROR);
 
-            assert(!player_is_adjacent(map, player_state, grid_id), Errors::NON_ADJACENT_ERROR);
-
-            assert(!store
-                .get_interact(player_state.equipment_item_id, tile_state.entity_type)
-                .can_interact, Errors::INTERACTION_NOT_REGISTERED);
-
+            // TODO: entity_type only could be 1 or 2 (CROP or ENV)
             let env_entity: EnvEntityT = tile_state
                 .entity_type
                 .try_into()
@@ -70,17 +65,23 @@ mod interact_system {
 
             let current_timestamp = starknet::get_block_timestamp();
 
-            if is_crop(env_entity) {
+            // If entity placed in that tile is a crop
+            if env_entity.entity_type == 2 {
                 let mut crop_state = store.get_crop_state(farm.farm_id, tile_state.entity_index);
 
                 // Ready for collect
                 if crop_state.growing_progress == 100 {
-                    let mut env_entity_details = store.get_env_entity(tile_state.entity_type);
+                    assert(tile_state.entity_type == 2, 'ERR: entity type should be 2');
+                    let mut crop_details = store.get_crop(tile_state.entity_index);
+                    
+                    let pfelt: felt252 = player.into();
+                    println!("adding player: {}, id: {}, quantity: {}", pfelt, crop_details.drop_item_id, crop_details.quantity);
+
                     add_item(
                         ref store,
                         player,
-                        env_entity_details.drop_item_id,
-                        env_entity_details.quantity
+                        crop_details.drop_item_id,
+                        crop_details.quantity
                     );
 
                     crop_state.harvested = true;
@@ -131,6 +132,14 @@ mod interact_system {
                 return;
             }
 
+            assert(
+                store
+                    .get_interact(player_state.equipment_item_id, tile_state.entity_type)
+                    .can_interact,
+                Errors::INTERACTION_NOT_REGISTERED
+            );
+            println!("/// IS ADJACENT");
+
             let tool: Tool = player_state
                 .equipment_item_id
                 .try_into()
@@ -138,9 +147,7 @@ mod interact_system {
 
             match tool {
                 Tool::Hoe => {
-                    let map = store.get_map(MAP_1_ID);
                     let tile = store.get_tile(MAP_1_ID, grid_id);
-
                     if is_suitable_for_crops(tile) && tile_state.entity_type.is_zero() {
                         tile_state.entity_type = EnvEntityT::SuitableForCrop.into();
                         store.set_tile_state(tile_state);
@@ -181,7 +188,12 @@ mod interact_system {
                 }
                 let aplayer = *(active_players.pop_front().unwrap());
                 if aplayer.player == player {
-                    store.set_active_player(ActivePlayers { idx: aplayer.idx, player, last_timestamp_activity: current_timestamp} )
+                    store
+                        .set_active_player(
+                            ActivePlayers {
+                                idx: aplayer.idx, player, last_timestamp_activity: current_timestamp
+                            }
+                        );
                     break;
                 }
             }
@@ -206,8 +218,18 @@ mod interact_system {
         let (gy, gx) = integer::u64_safe_divmod(grid_id, integer::u64_as_non_zero(map.width));
         let px = player_state.x;
         let py = player_state.y;
-        let dx = if px > gx { px - gx } else { gx - px };
-        let dy = if py > gy { py - gy } else { gy - py };
+        println!("GX {}, GY {}", gx, gy);
+        println!("PX {}, PY {}", px, py);
+        let dx = if px > gx {
+            px - gx
+        } else {
+            gx - px
+        };
+        let dy = if py > gy {
+            py - gy
+        } else {
+            gy - py
+        };
         (dx == 1 && dy == 0) || (dx == 0 && dy == 1) || (dx == 1 && dy == 1)
     }
 

@@ -55,6 +55,7 @@ mod interfaces {
 mod tests {
     mod setup;
     mod test_marketplace_system;
+    mod test_interact_system;
 }
 
 mod constants;

@@ -100,7 +100,7 @@ mod ERC1155 {
 
         fn mint(ref self: ContractState, to: ContractAddress, id: u256, amount: u256) {
             let meta = self.get_meta();
-            assert(get_caller_address() == meta.owner, 'Caller is not the owner');
+            // assert(get_caller_address() == meta.owner, 'Caller is not the owner');
             self._mint(to, id, amount);
         }
 

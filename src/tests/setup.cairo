@@ -23,6 +23,7 @@ mod setup {
     use verdania::models::entities::marketplace::{marketplace_item, MarketplaceItem};
     use verdania::models::entities::marketplace::{marketplace_meta, MarketplaceMeta};
     use verdania::models::entities::tile::{tile, Tile};
+    use verdania::models::entities::interact::{interact, Interact};
     use verdania::models::states::crop_state::{crop_state, CropState};
     use verdania::models::states::env_entity_state::{env_entity_state, EnvEntityState};
     use verdania::models::states::player_farm_state::{player_farm_state, PlayerFarmState};
@@ -52,6 +53,9 @@ mod setup {
     use verdania::systems::marketplace_system::{
         Marketplace, IMarketplaceDispatcher, IMarketplaceDispatcherTrait
     };
+    use verdania::systems::interact_system::{
+        interact_system, IInteractSystemDispatcher, IInteractSystemDispatcherTrait
+    };
     use verdania::interfaces::IERC1155::{IERC1155Dispatcher, IERC1155DispatcherTrait};
     use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use verdania::systems::erc1155_system::ERC1155;
@@ -75,6 +79,7 @@ mod setup {
         map_system: IMapSystemDispatcher,
         marketplace_system: IMarketplaceDispatcher,
         world_config_system: IWorldConfigSystemDispatcher,
+        interact_system: IInteractSystemDispatcher,
     }
 
     fn spawn_game() -> (IWorldDispatcher, Systems) {
@@ -101,7 +106,8 @@ mod setup {
             erc_1155_operator_approval::TEST_CLASS_HASH,
             erc_20_allowance::TEST_CLASS_HASH,
             erc_20_balance::TEST_CLASS_HASH,
-            erc_20_meta::TEST_CLASS_HASH
+            erc_20_meta::TEST_CLASS_HASH,
+            interact::TEST_CLASS_HASH
         ];
 
         let world = spawn_test_world(models);
@@ -146,6 +152,12 @@ mod setup {
                 contract_address: world
                     .deploy_contract(
                         'salt', world_config_system::TEST_CLASS_HASH.try_into().unwrap()
+                    )
+            },
+            interact_system: IInteractSystemDispatcher {
+                contract_address: world
+                    .deploy_contract(
+                        'salt', interact_system::TEST_CLASS_HASH.try_into().unwrap()
                     )
             }
         };

@@ -11,9 +11,7 @@ mod crop_system {
     use starknet::{get_caller_address, ContractAddress};
     use verdania::models::entities::crop::Crop;
     use verdania::store::{Store, StoreTrait};
-
-    #[storage]
-    struct Storage {}
+    use verdania::models::data::items_id::{PUMPKIN_ID, ONION_ID, CARROT_ID, CORN_ID, MUSHROOM_ID};
 
     #[abi(embed_v0)]
     impl CropSystem of ICropSystem<ContractState> {
@@ -25,72 +23,60 @@ mod crop_system {
             store
                 .set_crop(
                     Crop {
-                        id: 1,
+                        id: CORN_ID,
                         name: 'Corn',
                         harvest_time: 1000,
                         min_watering_time: 200,
-                        drop_item_id: 1,
-                        quantity: 1,
+                        drop_item_id: CORN_ID,
+                        quantity: 3,
                     }
                 );
 
             store
                 .set_crop(
                     Crop {
-                        id: 2,
-                        name: 'Eggplant',
+                        id: PUMPKIN_ID,
+                        name: 'Pumpkin',
                         harvest_time: 1000,
                         min_watering_time: 200,
-                        drop_item_id: 1,
-                        quantity: 1,
+                        drop_item_id: PUMPKIN_ID,
+                        quantity: 2,
                     }
                 );
 
             store
                 .set_crop(
                     Crop {
-                        id: 3,
-                        name: 'Squash',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
-                        drop_item_id: 1,
-                        quantity: 1,
-                    }
-                );
-
-            store
-                .set_crop(
-                    Crop {
-                        id: 4,
-                        name: 'Potato',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
-                        drop_item_id: 1,
-                        quantity: 1,
-                    }
-                );
-
-            store
-                .set_crop(
-                    Crop {
-                        id: 5,
-                        name: 'Tomato',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
-                        drop_item_id: 1,
-                        quantity: 1,
-                    }
-                );
-
-            store
-                .set_crop(
-                    Crop {
-                        id: 6,
+                        id: ONION_ID,
                         name: 'Onion',
                         harvest_time: 1000,
                         min_watering_time: 200,
-                        drop_item_id: 1,
-                        quantity: 1,
+                        drop_item_id: ONION_ID,
+                        quantity: 3,
+                    }
+                );
+
+            store
+                .set_crop(
+                    Crop {
+                        id: CARROT_ID,
+                        name: 'Carrot',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: CARROT_ID,
+                        quantity: 3,
+                    }
+                );
+
+            store
+                .set_crop(
+                    Crop {
+                        id: MUSHROOM_ID,
+                        name: 'Mushroom',
+                        harvest_time: 1000,
+                        min_watering_time: 200,
+                        drop_item_id: MUSHROOM_ID,
+                        quantity: 2,
                     }
                 );
         }
