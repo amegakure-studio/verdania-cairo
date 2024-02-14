@@ -51,6 +51,29 @@ mod interfaces {
     mod IERC1155;
 }
 
+mod pathfinding {
+    mod algorithms {
+        mod jps;
+    }
+
+    mod data_structures {
+        mod tile_info;
+        mod min_heap;
+    }
+
+    mod numbers {
+        mod i64;
+        mod integer_trait;
+    }
+
+    mod utils {
+        mod constants;
+        mod heuristics;
+        mod movement;
+        mod map_utils;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     mod setup;
