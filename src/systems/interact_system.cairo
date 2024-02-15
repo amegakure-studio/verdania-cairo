@@ -56,7 +56,7 @@ mod interact_system {
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
-            let player_state = store.get_player_state(player);
+            let mut player_state = store.get_player_state(player);
             let map = store.get_map(MAP_1_ID);
             let mut farm = store.get_player_farm_state(MAP_1_ID, player);
             let mut tile_state = store.get_tile_state(farm.id, grid_id);
@@ -96,6 +96,16 @@ mod interact_system {
                 let env_entity_state = store.get_env_entity_state(farm.id, tile_state.entity_index);
                 if env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP {
                     remove_item(ref store, player, player_state.equipment_item_id, 1);
+
+                    let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
+                    let seed_balance = IERC1155Dispatcher { contract_address: erc1155.address }
+                        .balance_of(player, player_state.equipment_item_id);
+
+                    if seed_balance.is_zero() {
+                        player_state.equipment_item_id = 0;
+                        store.set_player_state(player_state);
+                    }
+
                     let (y, x) = integer::u64_safe_divmod(
                         grid_id, integer::u64_as_non_zero(map.width)
                     );
