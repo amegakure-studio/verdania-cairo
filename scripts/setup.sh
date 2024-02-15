@@ -47,7 +47,7 @@ sozo execute ${world_config_system} init_global_contracts -c 3,23588828915041553
 sleep 3
 
 # erc20
-sozo execute ${erc20_system} init -c 1145130053,4473164,10000,0 --rpc-url http://0.0.0.0:5050
+sozo execute ${erc20_system} init -c 1145130053,4473164,10000 --rpc-url http://0.0.0.0:5050
 sleep 3
 
 # erc1155 
