@@ -7,8 +7,6 @@ use starknet::ContractAddress;
 trait IUpdaterSystem<TContractState> {
     fn connect(ref self: TContractState, player: ContractAddress);
     fn update(ref self: TContractState);
-// TODO: make update_crops_states internal
-// fn _update_crops_states(ref self: TContractState, player_id: ContractAddress);
 }
 
 #[dojo::contract]
@@ -69,7 +67,7 @@ mod world_config_system {
                             ActivePlayers {
                                 idx: new_active_players_len,
                                 player: active_player.player,
-                                last_timestamp_activity: starknet::get_block_timestamp()
+                                last_timestamp_activity: active_player.last_timestamp_activity
                             }
                         );
                     new_active_players_len += 1;
