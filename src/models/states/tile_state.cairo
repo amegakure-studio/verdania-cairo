@@ -29,7 +29,7 @@ impl TileStateTIntoU64 of Into<TileStateT, u64> {
     }
 }
 
-impl CropTTryIntoU64 of TryInto<u64, TileStateT> {
+impl TileStateTTryIntoU64 of TryInto<u64, TileStateT> {
     #[inline(always)]
     fn try_into(self: u64) -> Option<TileStateT> {
         if self == TS_ENVIROMENT_ID {

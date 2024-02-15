@@ -81,10 +81,10 @@ mod farm_factory_system {
                     PlayerState {
                         player,
                         farm_id: farm_count.index,
-                        x: 30, // donde hace spawn el personaje
-                        y: 15,
+                        x: 13,
+                        y: 49,
                         equipment_item_id: 1,
-                        tokens: 0, // TODO: remove this since its on erc20
+                        tokens: 0,
                     }
                 );
 
