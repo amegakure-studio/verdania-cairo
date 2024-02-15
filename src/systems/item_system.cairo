@@ -19,9 +19,6 @@ mod item_system {
         ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID, ENV_MUSHROOM_ID
     };
 
-    #[storage]
-    struct Storage {}
-
     #[abi(embed_v0)]
     impl ItemSystem of IItemSystem<ContractState> {
         fn init(ref self: ContractState) {

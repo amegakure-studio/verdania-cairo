@@ -14,9 +14,6 @@ mod map_system {
     use verdania::constants::map_1;
     use verdania::store::{Store, StoreTrait};
 
-    #[storage]
-    struct Storage {}
-
     #[abi(embed_v0)]
     impl MapSystem of IMapSystem<ContractState> {
         fn init(ref self: ContractState) {
