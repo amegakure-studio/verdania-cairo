@@ -1,6 +1,13 @@
 use verdania::models::entities::tile::{Tile, TileTrait};
 use verdania::models::states::tile_state::TileState;
 use verdania::models::states::env_entity_state::EnvEntityState;
+use verdania::models::entities::tile::{T_BRIDGE_ID, T_BUILDING_ID, T_GRASS_ID, T_SAND_ID, T_WATER_ID, T_NOT_WALKABLE_ID};
+// const T_BRIDGE_ID: u64 = 1;
+// const T_BUILDING_ID: u64 = 2;
+// const T_GRASS_ID: u64 = 3;
+// const T_SAND_ID: u64 = 4;
+// const T_WATER_ID: u64 = 5;
+// const T_NON_WALKABLE_ID: u64 = 6;
 
 const ERC20_CONTRACT_ID: felt252 = 'ERC20_CONTRACT_ID';
 const ERC1155_CONTRACT_ID: felt252 = 'ERC1155_CONTRACT_ID';
