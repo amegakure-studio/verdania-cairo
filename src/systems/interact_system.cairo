@@ -213,6 +213,9 @@ mod interact_system {
                     tile_state.entity_type = Zeroable::zero();
                     tile_state.entity_index = Zeroable::zero();
                     store.set_tile_state(tile_state);
+
+                    farm.env_entities_len -= 1;
+                    store.set_player_farm_state(farm);
                 },
                 Tool::WateringCan => {
                     if tile_state.entity_type != TS_CROP_ID {
