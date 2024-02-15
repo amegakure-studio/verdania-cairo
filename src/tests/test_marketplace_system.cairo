@@ -14,9 +14,7 @@ use integer::BoundedInt;
 use verdania::tests::setup::{setup, setup::Systems, setup::OWNER};
 use verdania::interfaces::IERC1155::{IERC1155Dispatcher, IERC1155DispatcherTrait};
 use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
-use verdania::systems::marketplace_system::{
-    IMarketplaceDispatcher, IMarketplaceDispatcherTrait
-};
+use verdania::systems::marketplace_system::{IMarketplaceDispatcher, IMarketplaceDispatcherTrait};
 use verdania::models::entities::marketplace::{MarketplaceMeta, MarketplaceItem};
 
 fn CALLER_ASSET_OWNER() -> ContractAddress {

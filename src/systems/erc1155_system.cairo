@@ -2,9 +2,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[dojo::contract]
 mod ERC1155 {
-    use verdania::models::tokens::erc1155::{
-        ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance
-    };
+    use verdania::models::tokens::erc1155::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
     use verdania::interfaces::IERC1155;
     use starknet::ContractAddress;
     use starknet::get_caller_address;

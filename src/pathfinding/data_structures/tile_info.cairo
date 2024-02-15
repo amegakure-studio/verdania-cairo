@@ -2,9 +2,7 @@ use core::array::SpanTrait;
 use core::dict::Felt252DictTrait;
 use core::nullable::{Nullable, NullableTrait};
 use core::option::OptionTrait;
-use verdania::pathfinding::data_structures::{
-    min_heap::{MinHeap, MinHeapTrait},
-};
+use verdania::pathfinding::data_structures::{min_heap::{MinHeap, MinHeapTrait},};
 use verdania::pathfinding::numbers::i64::i64;
 use verdania::pathfinding::numbers::integer_trait::IntegerTrait;
 use verdania::pathfinding::utils::constants::{

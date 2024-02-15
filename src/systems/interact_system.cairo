@@ -14,9 +14,7 @@ mod interact_system {
     use super::IInteractSystem;
     use starknet::{get_caller_address, ContractAddress};
     use verdania::models::entities::crop::{Crop, CropT};
-    use verdania::models::entities::item::{
-        Tool, Seed, equip_item_is_a_seed, get_crop_id_from_seed
-    };
+    use verdania::models::entities::item::{Tool, Seed, equip_item_is_a_seed, get_crop_id_from_seed};
     use verdania::models::entities::env_entity::{
         EnvEntity, EnvEntityT, EnvEntityT::{Rock, Tree,}, is_crop
     };
@@ -50,7 +48,7 @@ mod interact_system {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-            // TODO: register items interactions
+        // TODO: register items interactions
         }
 
         fn interact(ref self: ContractState, player: ContractAddress, grid_id: u64) {
@@ -95,8 +93,7 @@ mod interact_system {
             }
 
             if equip_item_is_a_seed(player_state.equipment_item_id) {
-                let env_entity_state = store
-                    .get_env_entity_state(farm.id, tile_state.entity_index);
+                let env_entity_state = store.get_env_entity_state(farm.id, tile_state.entity_index);
                 if env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP {
                     remove_item(ref store, player, player_state.equipment_item_id, 1);
                     let (y, x) = integer::u64_safe_divmod(
@@ -221,8 +218,7 @@ mod interact_system {
                     if tile_state.entity_type != TS_CROP_ID {
                         return;
                     }
-                    let mut crop_state = store
-                        .get_crop_state(farm.id, tile_state.entity_index);
+                    let mut crop_state = store.get_crop_state(farm.id, tile_state.entity_index);
                     crop_state.last_watering_time = current_timestamp;
                     store.set_crop_state(crop_state);
                 }

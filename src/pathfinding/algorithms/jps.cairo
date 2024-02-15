@@ -5,7 +5,6 @@ trait IJPS_system<TContractState> {
 
 #[dojo::contract]
 mod JPS_system {
-
     use super::IJPS_system;
     use starknet::{get_caller_address, ContractAddress};
     use verdania::store::{Store, StoreTrait};
@@ -15,13 +14,13 @@ mod JPS_system {
     use core::nullable::{Nullable, NullableTrait};
     use core::option::OptionTrait;
     use verdania::pathfinding::data_structures::{
-        tile_info::{TilesInfo, TilesInfoTrait, InfoKey},
-        min_heap::{MinHeap, MinHeapTrait},
+        tile_info::{TilesInfo, TilesInfoTrait, InfoKey}, min_heap::{MinHeap, MinHeapTrait},
     };
     use verdania::pathfinding::numbers::i64::i64;
     use verdania::pathfinding::numbers::integer_trait::IntegerTrait;
     use verdania::pathfinding::utils::constants::{
-        PARENT_KEY, STATUS_KEY, DISTANCE_KEY, DISTANCE_TO_GOAL_KEY, ESTIMATED_TOTAL_PATH_DISTANCE_KEY, MAP_WIDTH
+        PARENT_KEY, STATUS_KEY, DISTANCE_KEY, DISTANCE_TO_GOAL_KEY,
+        ESTIMATED_TOTAL_PATH_DISTANCE_KEY, MAP_WIDTH
     };
     use verdania::pathfinding::utils::heuristics::manhattan;
     use verdania::pathfinding::utils::movement::get_movement_direction_coords;
@@ -33,9 +32,9 @@ mod JPS_system {
 
     #[abi(embed_v0)]
     impl JPSSystem of IJPS_system<ContractState> {
-
-        fn find_path(self: @ContractState, start: (u64, u64), goal: (u64, u64)) -> Span<(u64, u64)> {
-
+        fn find_path(
+            self: @ContractState, start: (u64, u64), goal: (u64, u64)
+        ) -> Span<(u64, u64)> {
             let mut store: Store = StoreTrait::new(self.world_dispatcher.read());
 
             let (sx, sy) = start;
@@ -108,8 +107,10 @@ mod JPS_system {
                 }
 
                 let jd = manhattan(
-                    (IntegerTrait::<i64>::new(jx, false) - IntegerTrait::<i64>::new(node_x, false)).mag,
-                    (IntegerTrait::<i64>::new(jy, false) - IntegerTrait::<i64>::new(node_y, false)).mag
+                    (IntegerTrait::<i64>::new(jx, false) - IntegerTrait::<i64>::new(node_x, false))
+                        .mag,
+                    (IntegerTrait::<i64>::new(jy, false) - IntegerTrait::<i64>::new(node_y, false))
+                        .mag
                 );
                 let ng = tiles_info.read(node_id, InfoKey::CUMULATIVE_PATH_DISTANCE).deref() + jd;
 
@@ -132,13 +133,17 @@ mod JPS_system {
                         );
                         tiles_info.write(jump_point, InfoKey::DISTANCE_TO_GOAL, jp_h_estimated);
                     }
-                    let jp_g = tiles_info.read(jump_point, InfoKey::CUMULATIVE_PATH_DISTANCE).deref();
-                    let jp_f = jp_g + tiles_info.read(jump_point, InfoKey::DISTANCE_TO_GOAL).deref();
+                    let jp_g = tiles_info
+                        .read(jump_point, InfoKey::CUMULATIVE_PATH_DISTANCE)
+                        .deref();
+                    let jp_f = jp_g
+                        + tiles_info.read(jump_point, InfoKey::DISTANCE_TO_GOAL).deref();
 
                     tiles_info.write(jump_point, InfoKey::ESTIMATIVE_TOTAL_COST, jp_f);
                     tiles_info.write(jump_point, InfoKey::PARENT, node_id);
 
-                    if jp_status.is_null() || (!jp_status.is_null() && jp_status.deref() != OPENED) {
+                    if jp_status.is_null()
+                        || (!jp_status.is_null() && jp_status.deref() != OPENED) {
                         open_list.add(jump_point, jp_f);
                         tiles_info.write(jump_point, InfoKey::STATUS, OPENED);
                     }
@@ -273,15 +278,18 @@ mod JPS_system {
                     relevant_neighbours
                         .append(convert_position_to_idx(MAP_WIDTH, (ix + dx).mag, y));
                 }
-                if is_walkable_at(ref store, ix, iy + dy) || is_walkable_at(ref store, ix + dx, iy) {
+                if is_walkable_at(ref store, ix, iy + dy)
+                    || is_walkable_at(ref store, ix + dx, iy) {
                     relevant_neighbours
                         .append(convert_position_to_idx(MAP_WIDTH, (ix + dx).mag, (iy + dy).mag));
                 }
-                if !is_walkable_at(ref store, ix - dx, iy) && is_walkable_at(ref store, ix, iy + dy) {
+                if !is_walkable_at(ref store, ix - dx, iy)
+                    && is_walkable_at(ref store, ix, iy + dy) {
                     relevant_neighbours
                         .append(convert_position_to_idx(MAP_WIDTH, (ix - dx).mag, (iy + dy).mag));
                 }
-                if !is_walkable_at(ref store, ix, iy - dy) && is_walkable_at(ref store, ix + dx, iy) {
+                if !is_walkable_at(ref store, ix, iy - dy)
+                    && is_walkable_at(ref store, ix + dx, iy) {
                     relevant_neighbours
                         .append(convert_position_to_idx(MAP_WIDTH, (ix + dx).mag, (iy - dy).mag));
                 }
@@ -381,7 +389,7 @@ mod JPS_system {
     fn is_walkable_at(ref store: Store, x: i64, y: i64) -> bool {
         let map = store.get_map(MAP_1_ID);
         let flag = is_inside(x, y, map.width, map.height);
-        
+
         // TODO: farm_id
         let farm_id = 1;
         let tile_id = convert_position_to_idx(MAP_WIDTH, x.mag, y.mag);

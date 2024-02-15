@@ -30,9 +30,7 @@ mod setup {
     use verdania::models::states::tile_state::{tile_state, TileState};
     use verdania::models::tokens::erc1155::{erc_1155_balance, ERC1155Balance};
     use verdania::models::tokens::erc1155::{erc_1155_meta, ERC1155Meta};
-    use verdania::models::tokens::erc1155::{
-        erc_1155_operator_approval, ERC1155OperatorApproval
-    };
+    use verdania::models::tokens::erc1155::{erc_1155_operator_approval, ERC1155OperatorApproval};
     use verdania::models::tokens::erc20::{erc_20_allowance, ERC20Allowance};
     use verdania::models::tokens::erc20::{erc_20_balance, ERC20Balance};
     use verdania::models::tokens::erc20::{erc_20_meta, ERC20Meta};
@@ -40,9 +38,7 @@ mod setup {
     // Systems
     use verdania::systems::crop_system::{crop_system, ICropSystemDispatcher};
     use verdania::systems::env_entity_system::{env_entity_system, IEnvEntitySystemDispatcher};
-    use verdania::systems::farm_factory_system::{
-        farm_factory_system, IFarmFactorySystemDispatcher
-    };
+    use verdania::systems::farm_factory_system::{farm_factory_system, IFarmFactorySystemDispatcher};
     use verdania::systems::item_system::{item_system, IItemSystemDispatcher};
     use verdania::systems::map_system::{map_system, IMapSystemDispatcher};
     use verdania::systems::world_config_system::{

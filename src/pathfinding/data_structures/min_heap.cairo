@@ -27,7 +27,7 @@ trait MinHeapTrait<T> {
     fn left_child(ref self: MinHeap<T>, parent_idx: u32) -> Option<(T, T)>;
     fn right_child(ref self: MinHeap<T>, parent_idx: u32) -> Option<(T, T)>;
     fn get_smallest_child_idx(ref self: MinHeap<T>, idx: u32) -> u32;
-    // fn print(ref self: MinHeap<T>, width: u64);
+// fn print(ref self: MinHeap<T>, width: u64);
 }
 
 impl MinHeapImpl<
@@ -147,23 +147,22 @@ impl MinHeapImpl<
             Option::None(())
         }
     }
-
-    // fn print(ref self: MinHeap<T>, width: u64) {
-    //     let mut i = 0;
-    //     print!("Heap: {{ len: {}, values: [", self.len);
-    //     loop {
-    //         if i == self.len {
-    //             break;
-    //         }
-    //         let (id, value) = self.heap.get(i.into()).deref();
-    //         let id_felt: felt252 = id.into();
-    //         let value_felt: felt252 = value.into();
-    //         let (x, y) = convert_idx_to_position(width, id.into());
-    //         print!(" pos {}, (id: {}, ({}, {}), g: {}),", i, id_felt, x, y, value_felt);
-    //         i += 1;
-    //     };
-    //     println!(" ] }}")
-    // }
+// fn print(ref self: MinHeap<T>, width: u64) {
+//     let mut i = 0;
+//     print!("Heap: {{ len: {}, values: [", self.len);
+//     loop {
+//         if i == self.len {
+//             break;
+//         }
+//         let (id, value) = self.heap.get(i.into()).deref();
+//         let id_felt: felt252 = id.into();
+//         let value_felt: felt252 = value.into();
+//         let (x, y) = convert_idx_to_position(width, id.into());
+//         print!(" pos {}, (id: {}, ({}, {}), g: {}),", i, id_felt, x, y, value_felt);
+//         i += 1;
+//     };
+//     println!(" ] }}")
+// }
 }
 
 // AUX METHODS

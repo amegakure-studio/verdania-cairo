@@ -18,9 +18,7 @@ use verdania::store::{Store, StoreTrait};
 use verdania::systems::farm_factory_system::{
     IFarmFactorySystemDispatcher, IFarmFactorySystemDispatcherTrait
 };
-use verdania::systems::interact_system::{
-    IInteractSystemDispatcher, IInteractSystemDispatcherTrait
-};
+use verdania::systems::interact_system::{IInteractSystemDispatcher, IInteractSystemDispatcherTrait};
 use verdania::systems::map_system::{IMapSystemDispatcher, IMapSystemDispatcherTrait};
 use verdania::systems::crop_system::{ICropSystemDispatcher, ICropSystemDispatcherTrait};
 use verdania::systems::env_entity_system::{
@@ -109,12 +107,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
     };
 
     let env_entity_state = EnvEntityState {
-        farm_id: farm.id,
-        index: 1000,
-        env_entity_id: ENV_PUMPKIN_ID,
-        x: x - 1,
-        y: y,
-        active: true,
+        farm_id: farm.id, index: 1000, env_entity_id: ENV_PUMPKIN_ID, x: x - 1, y: y, active: true,
     };
 
     // Create a crop into (29, 13) 
@@ -217,4 +210,5 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
 //     assert(env_entity_state_af.x == (x - 1), 'wrong env entity x');
 //     assert(env_entity_state_af.y == y, 'wrong env entity y');
 // }
+
 

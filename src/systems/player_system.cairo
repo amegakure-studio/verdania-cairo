@@ -3,7 +3,9 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[starknet::interface]
 trait IPlayerSystem<TContractState> {
-    fn create(ref self: TContractState, player: ContractAddress, player_name: felt252, gender_id: u64);
+    fn create(
+        ref self: TContractState, player: ContractAddress, player_name: felt252, gender_id: u64
+    );
     fn equip(ref self: TContractState, player: ContractAddress, item_id: u64);
 }
 
@@ -17,18 +19,16 @@ mod player_system {
 
     #[abi(embed_v0)]
     impl PlayerSystem of IPlayerSystem<ContractState> {
-        fn create(ref self: ContractState, player: ContractAddress, player_name: felt252, gender_id: u64) {
+        fn create(
+            ref self: ContractState, player: ContractAddress, player_name: felt252, gender_id: u64
+        ) {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
             let gender: Gender = gender_id.try_into().expect('Cannot convert ID to Gender');
 
-            let player_skin = PlayerSkin {
-                player: player,
-                name: player_name,
-                gender: gender_id
-            };
+            let player_skin = PlayerSkin { player: player, name: player_name, gender: gender_id };
 
             store.set_player_skin(player_skin);
         }
