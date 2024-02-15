@@ -13,6 +13,7 @@ mod models {
         mod map;
         mod tile;
         mod marketplace;
+        mod skin;
         mod interact;
     }
 
@@ -44,6 +45,7 @@ mod systems {
     mod marketplace_system;
     mod interact_system;
     mod updater_system;
+    mod player_system;
 }
 
 mod interfaces {
