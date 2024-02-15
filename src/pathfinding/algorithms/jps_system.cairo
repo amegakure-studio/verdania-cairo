@@ -1,14 +1,14 @@
 use starknet::ContractAddress;
 
 #[starknet::interface]
-trait IJPS_system<TContractState> {
+trait IJPSSystem<TContractState> {
     fn find_path(self: @TContractState, player: ContractAddress, start: (u64, u64), goal: (u64, u64)) -> Span<(u64, u64)>;
 }
 
 #[dojo::contract]
-mod JPS_system {
+mod jps_system {
 
-    use super::IJPS_system;
+    use super::IJPSSystem;
     use starknet::{get_caller_address, ContractAddress};
     use verdania::store::{Store, StoreTrait};
 
@@ -35,6 +35,10 @@ mod JPS_system {
         EnvEntity, EnvEntityT, EnvEntityT::{Rock, Tree,}, is_crop
     };
     use verdania::models::entities::map::Map;
+    use verdania::models::data::env_entity_id::{
+        ENV_SUITABLE_FOR_CROP, ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID,
+        ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID
+    };
 
     const OPENED: u64 = 1;
     const CLOSED: u64 = 2;
@@ -44,7 +48,7 @@ mod JPS_system {
     }
 
     #[abi(embed_v0)]
-    impl JPSSystem of IJPS_system<ContractState> {
+    impl JPSSystem of IJPSSystem<ContractState> {
 
         fn find_path(self: @ContractState, player: ContractAddress, start: (u64, u64), goal: (u64, u64)) -> Span<(u64, u64)> {
 
@@ -407,11 +411,9 @@ mod JPS_system {
         if tile_state.entity_type == TS_CROP_ID {
             true
         } else if tile_state.entity_type == TS_ENVIROMENT_ID {
-            let env_entity: EnvEntityT = tile_state
-                .entity_type
-                .try_into()
-                .expect(Errors::WRONG_ENV_ENTITY_ERROR);
-            is_crop(env_entity) || env_entity == EnvEntityT::Rock.into()
+            let env_entity_state = store.get_env_entity_state(farm_id, tile_state.entity_index);
+            env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP || 
+            env_entity_state.env_entity_id == ENV_ROCK_ID 
         } else {
             // Tile type
             let tile = store.get_tile(farm_id, tile_id);

@@ -55,7 +55,7 @@ mod interfaces {
 
 mod pathfinding {
     mod algorithms {
-        mod jps;
+        mod jps_system;
     }
 
     mod data_structures {
