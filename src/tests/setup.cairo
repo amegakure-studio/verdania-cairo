@@ -13,7 +13,6 @@ mod setup {
 
     // Models
     use verdania::models::data::game::{farm_count, FarmCount};
-    use verdania::models::data::world_config::{active_players, ActivePlayers};
     use verdania::models::data::world_config::{global_contract, GlobalContract};
     use verdania::models::data::world_config::{world_config, WorldConfig};
     use verdania::models::entities::crop::{crop, Crop};
@@ -86,7 +85,6 @@ mod setup {
         // [Setup] World
         let models = array![
             farm_count::TEST_CLASS_HASH,
-            active_players::TEST_CLASS_HASH,
             global_contract::TEST_CLASS_HASH,
             world_config::TEST_CLASS_HASH,
             crop::TEST_CLASS_HASH,
@@ -157,7 +155,7 @@ mod setup {
             interact_system: IInteractSystemDispatcher {
                 contract_address: world
                     .deploy_contract('salt', interact_system::TEST_CLASS_HASH.try_into().unwrap())
-            }
+            },
         };
 
         set_contract_address(OWNER());
