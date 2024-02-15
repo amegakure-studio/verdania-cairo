@@ -21,7 +21,10 @@ mod farm_factory_system {
     use verdania::constants::{ERC20_CONTRACT_ID, ERC1155_CONTRACT_ID, MARKETPLACE_CONTRACT_ID};
     use verdania::interfaces::IERC1155::{IERC1155DispatcherTrait, IERC1155Dispatcher};
     use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
-    use verdania::models::data::items_id::{PICKAXE_ID, HOE_ID, WATERING_CAN_ID, PUMPKIN_SEED_ID, ONION_SEED_ID, CARROT_SEED_ID, CORN_SEED_ID, MUSHROOM_SEED_ID};
+    use verdania::models::data::items_id::{
+        PICKAXE_ID, HOE_ID, WATERING_CAN_ID, PUMPKIN_SEED_ID, ONION_SEED_ID, CARROT_SEED_ID,
+        CORN_SEED_ID, MUSHROOM_SEED_ID
+    };
 
     #[abi(embed_v0)]
     impl FarmFactory of IFarmFactorySystem<ContractState> {
@@ -89,14 +92,19 @@ mod farm_factory_system {
             let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
 
             // Tools
-            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, PICKAXE_ID.into(), 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, PICKAXE_ID.into(), 1);
             IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, HOE_ID.into(), 1);
-            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, WATERING_CAN_ID.into(), 1);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, WATERING_CAN_ID.into(), 1);
 
             // Seed
-            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, PUMPKIN_SEED_ID.into(), 3);
-            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, ONION_SEED_ID.into(), 3);
-            IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, CARROT_SEED_ID.into(), 3);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, PUMPKIN_SEED_ID.into(), 3);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, ONION_SEED_ID.into(), 3);
+            IERC1155Dispatcher { contract_address: erc1155.address }
+                .mint(player, CARROT_SEED_ID.into(), 3);
 
             // Mint verdania tokens
             let erc20 = store.get_global_contract(ERC20_CONTRACT_ID);

@@ -50,8 +50,7 @@ mod interact_system {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
-
-            // register items interactions
+            // TODO: register items interactions
         }
 
         fn interact(ref self: ContractState, player: ContractAddress, grid_id: u64) {
@@ -69,16 +68,11 @@ mod interact_system {
             let current_timestamp = starknet::get_block_timestamp();
             if tile_state.entity_type == TS_CROP_ID {
                 let mut crop_state = store.get_crop_state(farm.farm_id, tile_state.entity_index);
-                
+
                 if crop_state.growing_progress == 100 {
                     let mut crop_details = store.get_crop(crop_state.crop_id);
 
-                    add_item(
-                        ref store,
-                        player,
-                        crop_details.drop_item_id,
-                        crop_details.quantity
-                    );
+                    add_item(ref store, player, crop_details.drop_item_id, crop_details.quantity);
 
                     crop_state.harvested = true;
                     store.set_crop_state(crop_state);
@@ -87,7 +81,8 @@ mod interact_system {
                     tile_state.entity_index = Zeroable::zero();
                     store.set_tile_state(tile_state);
 
-                    let mut env_entity_state = store.get_env_entity_state(farm.farm_id, tile_state.entity_index);
+                    let mut env_entity_state = store
+                        .get_env_entity_state(farm.farm_id, tile_state.entity_index);
                     env_entity_state.active = false;
                     store.set_env_entity_state(env_entity_state);
 
@@ -98,12 +93,15 @@ mod interact_system {
                     return;
                 }
             }
-            
+
             if equip_item_is_a_seed(player_state.equipment_item_id) {
-                let env_entity_state = store.get_env_entity_state(farm.farm_id, tile_state.entity_index);
+                let env_entity_state = store
+                    .get_env_entity_state(farm.farm_id, tile_state.entity_index);
                 if env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP {
                     remove_item(ref store, player, player_state.equipment_item_id, 1);
-                    let (y, x) = integer::u64_safe_divmod(grid_id, integer::u64_as_non_zero(map.width));
+                    let (y, x) = integer::u64_safe_divmod(
+                        grid_id, integer::u64_as_non_zero(map.width)
+                    );
                     let crop_id_from_seed = get_crop_id_from_seed(player_state.equipment_item_id);
 
                     let new_crop_index = get_crop_state_unused_id(ref store, farm);
@@ -120,7 +118,9 @@ mod interact_system {
                     };
                     store.set_crop_state(new_crop_state);
 
-                    let crop_t: CropT = crop_id_from_seed.try_into().expect('Cannot convert crop_id to CropT'); 
+                    let crop_t: CropT = crop_id_from_seed
+                        .try_into()
+                        .expect('Cannot convert crop_id to CropT');
                     let ee_from_crop: EnvEntityT = crop_t.into();
 
                     let env_entity_state = EnvEntityState {
@@ -161,7 +161,9 @@ mod interact_system {
                 Tool::Hoe => {
                     let tile = store.get_tile(MAP_1_ID, grid_id);
                     if is_suitable_for_crops(tile) && tile_state.entity_type.is_zero() {
-                        let (y, x) = integer::u64_safe_divmod(grid_id, integer::u64_as_non_zero(map.width));
+                        let (y, x) = integer::u64_safe_divmod(
+                            grid_id, integer::u64_as_non_zero(map.width)
+                        );
                         let env_entity_state = EnvEntityState {
                             farm_id: farm.farm_id,
                             index: tile_state.entity_index,
@@ -181,7 +183,8 @@ mod interact_system {
                         return;
                     }
 
-                    let env_entity_state = store.get_env_entity_state(farm.farm_id, tile_state.entity_index);
+                    let env_entity_state = store
+                        .get_env_entity_state(farm.farm_id, tile_state.entity_index);
                     if env_entity_state.env_entity_id != ENV_ROCK_ID {
                         return;
                     }
@@ -194,14 +197,16 @@ mod interact_system {
                         env_entity_details.quantity
                     );
 
-                    let (y, x) = integer::u64_safe_divmod(grid_id, integer::u64_as_non_zero(map.width));
-                        let env_entity_state = EnvEntityState {
-                            farm_id: farm.farm_id,
-                            index: tile_state.entity_index,
-                            env_entity_id: Zeroable::zero(),
-                            x: x,
-                            y: y,
-                            active: false,
+                    let (y, x) = integer::u64_safe_divmod(
+                        grid_id, integer::u64_as_non_zero(map.width)
+                    );
+                    let env_entity_state = EnvEntityState {
+                        farm_id: farm.farm_id,
+                        index: tile_state.entity_index,
+                        env_entity_id: Zeroable::zero(),
+                        x: x,
+                        y: y,
+                        active: false,
                     };
                     store.set_env_entity_state(env_entity_state);
 
@@ -248,9 +253,7 @@ mod interact_system {
     fn remove_item(ref store: Store, player: ContractAddress, item_id: u64, quantity: u64) {
         let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
         IERC1155Dispatcher { contract_address: erc1155.address }
-            .safe_transfer_from(
-                player, erc1155.address, item_id.into(), quantity.into(), array![]
-            );
+            .safe_transfer_from(player, erc1155.address, item_id.into(), quantity.into(), array![]);
     }
 
     fn player_is_adjacent(map: Map, player_state: PlayerState, grid_id: u64) -> bool {
@@ -270,8 +273,7 @@ mod interact_system {
         (dx == 1 && dy == 0) || (dx == 0 && dy == 1) || (dx == 1 && dy == 1)
     }
 
-    fn get_crop_state_unused_id(
-        ref store: Store, farm: PlayerFarmState) -> u64 {
+    fn get_crop_state_unused_id(ref store: Store, farm: PlayerFarmState) -> u64 {
         let mut i = 0;
         let mut unused_space = false;
         loop {
@@ -292,8 +294,7 @@ mod interact_system {
         }
     }
 
-    fn get_env_entity_state_unused_id(
-        ref store: Store, farm: PlayerFarmState) -> u64 {
+    fn get_env_entity_state_unused_id(ref store: Store, farm: PlayerFarmState) -> u64 {
         let mut i = 0;
         let mut unused_space = false;
         loop {

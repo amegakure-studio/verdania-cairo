@@ -156,9 +156,7 @@ mod setup {
             },
             interact_system: IInteractSystemDispatcher {
                 contract_address: world
-                    .deploy_contract(
-                        'salt', interact_system::TEST_CLASS_HASH.try_into().unwrap()
-                    )
+                    .deploy_contract('salt', interact_system::TEST_CLASS_HASH.try_into().unwrap())
             }
         };
 

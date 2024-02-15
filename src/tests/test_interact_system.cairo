@@ -2,7 +2,9 @@ use verdania::interfaces::IERC1155::IERC1155DispatcherTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use verdania::constants::MAP_1_ID;
-use verdania::models::states::{tile_state::TileState, crop_state::CropState, env_entity_state::EnvEntityState};
+use verdania::models::states::{
+    tile_state::TileState, crop_state::CropState, env_entity_state::EnvEntityState
+};
 use verdania::models::entities::interact::Interact;
 use verdania::models::entities::env_entity::{EnvEntity};
 use verdania::models::data::items_id::{PUMPKIN_ID, PUMPKIN_SEED_ID};
@@ -19,12 +21,8 @@ use verdania::systems::farm_factory_system::{
 use verdania::systems::interact_system::{
     IInteractSystemDispatcher, IInteractSystemDispatcherTrait
 };
-use verdania::systems::map_system::{
-    IMapSystemDispatcher, IMapSystemDispatcherTrait
-};
-use verdania::systems::crop_system::{
-    ICropSystemDispatcher, ICropSystemDispatcherTrait
-};
+use verdania::systems::map_system::{IMapSystemDispatcher, IMapSystemDispatcherTrait};
+use verdania::systems::crop_system::{ICropSystemDispatcher, ICropSystemDispatcherTrait};
 use verdania::systems::env_entity_system::{
     IEnvEntitySystemDispatcher, IEnvEntitySystemDispatcherTrait
 };
@@ -47,9 +45,9 @@ fn test_interact_non_adjacent() {
     // Create a new farm
     systems.farm_factory_system.create_farm(PLAYER());
     let farm = store.get_player_farm_state(MAP_1_ID, PLAYER());
-    
+
     systems.map_system.init();
-    
+
     // Set player position
     let mut player_state = store.get_player_state(PLAYER());
     player_state.x = 27;
@@ -71,10 +69,7 @@ fn test_interact_non_adjacent() {
     };
 
     let tile_state = TileState {
-        farm_id: 1,
-        id: (13 * map.width) + 29,
-        entity_type: 2,
-        entity_index: 1,
+        farm_id: 1, id: (13 * map.width) + 29, entity_type: 2, entity_index: 1,
     };
 
     store.set_tile_state(tile_state);
@@ -93,16 +88,16 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
     // Create a new farm
     systems.farm_factory_system.create_farm(PLAYER());
     let mut farm = store.get_player_farm_state(MAP_1_ID, PLAYER());
-    
+
     systems.map_system.init();
     systems.crop_system.init();
-    
+
     let map = store.get_map(MAP_1_ID);
 
     let x = 28;
     let y = 13;
     let interact_grid_id = (y * map.width) + (x - 1);
-    
+
     // Set player position
     let mut player_state = store.get_player_state(PLAYER());
     player_state.x = x;
@@ -110,10 +105,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
     store.set_player_state(player_state);
 
     let tile_state = TileState {
-        farm_id: farm.farm_id,
-        id: interact_grid_id,
-        entity_type: TS_CROP_ID, 
-        entity_index: 1000,
+        farm_id: farm.farm_id, id: interact_grid_id, entity_type: TS_CROP_ID, entity_index: 1000,
     };
 
     let env_entity_state = EnvEntityState {
@@ -150,24 +142,23 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
     // check player gets the tokens
     let pumpkin_quantity = systems.erc1155_system.balance_of(PLAYER(), PUMPKIN_ID.into());
     assert(pumpkin_quantity == pumpkin_quantity_bf + 2, 'wrong pumpkin amount');
-    
+
     // check the tile its free now
     let new_ts = store.get_tile_state(farm.farm_id, interact_grid_id);
     assert(new_ts.entity_type.is_zero(), 'entity type should be zero');
     assert(new_ts.entity_index.is_zero(), 'entity index should be zero');
 }
-
 // #[test]
 // #[available_gas(1_000_000_000_000)]
 // fn test_interact_equipment_is_a_seed_and_tile_is_suitable_for_crop() {
 //     // Setup
 //     let (world, systems) = setup::spawn_game();
 //     let mut store = StoreTrait::new(world);
-  
+
 //     // Create a new farm
 //     systems.farm_factory_system.create_farm(PLAYER());
 //     let mut farm = store.get_player_farm_state(MAP_1_ID, PLAYER());
-    
+
 //     // Init systems
 //     systems.map_system.init();
 //     systems.env_entity_system.init();
@@ -178,7 +169,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
 //     let x = 28;
 //     let y = 13;
 //     let interact_grid_id = (y * map.width) + (x - 1);
-    
+
 //     // Set player position with a corn seed equiped
 //     let mut player_state = store.get_player_state(PLAYER());
 //     player_state.equipment_item_id = PUMPKIN_SEED_ID;
@@ -226,3 +217,4 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
 //     assert(env_entity_state_af.x == (x - 1), 'wrong env entity x');
 //     assert(env_entity_state_af.y == y, 'wrong env entity y');
 // }
+

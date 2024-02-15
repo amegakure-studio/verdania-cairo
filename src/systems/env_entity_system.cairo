@@ -15,7 +15,7 @@ mod env_entity_system {
         ENV_SUITABLE_FOR_CROP, ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID,
         ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID, ENV_TRUNK_ID
     };
-    use verdania::models::data::items_id::{ WOOD_ID, ROCK_ID };
+    use verdania::models::data::items_id::{WOOD_ID, ROCK_ID};
 
     #[abi(embed_v0)]
     impl EnvEntitySystem of IEnvEntitySystem<ContractState> {
@@ -59,12 +59,12 @@ mod env_entity_system {
 
             store
                 .set_env_entity(
-                    EnvEntity { 
-                        id: ENV_SUITABLE_FOR_CROP, 
-                        name: 'Suitable for crop', 
-                        drop_item_id: 0, 
-                        quantity: 0, 
-                        durability: 1 
+                    EnvEntity {
+                        id: ENV_SUITABLE_FOR_CROP,
+                        name: 'Suitable for crop',
+                        drop_item_id: 0,
+                        quantity: 0,
+                        durability: 1
                     }
                 );
         }

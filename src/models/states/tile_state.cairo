@@ -15,7 +15,7 @@ struct TileState {
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum TileStateT {
-    Enviroment, 
+    Enviroment,
     Crop
 }
 
