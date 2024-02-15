@@ -92,8 +92,8 @@ mod farm_factory_system {
             let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
 
             // Tools
-            IERC1155Dispatcher { contract_address: erc1155.address }
-                .mint(player, PICKAXE_ID.into(), 1);
+            // IERC1155Dispatcher { contract_address: erc1155.address }
+            //     .mint(player, PICKAXE_ID.into(), 1);
             IERC1155Dispatcher { contract_address: erc1155.address }.mint(player, HOE_ID.into(), 1);
             IERC1155Dispatcher { contract_address: erc1155.address }
                 .mint(player, WATERING_CAN_ID.into(), 1);

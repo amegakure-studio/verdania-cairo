@@ -175,45 +175,45 @@ mod interact_system {
                         store.set_tile_state(tile_state);
                     }
                 },
-                Tool::Pickaxe => {
-                    if tile_state.entity_type != TS_ENVIROMENT_ID {
-                        return;
-                    }
+                // Tool::Pickaxe => {
+                //     if tile_state.entity_type != TS_ENVIROMENT_ID {
+                //         return;
+                //     }
 
-                    let env_entity_state = store
-                        .get_env_entity_state(farm.id, tile_state.entity_index);
-                    if env_entity_state.env_entity_id != ENV_ROCK_ID {
-                        return;
-                    }
+                //     let env_entity_state = store
+                //         .get_env_entity_state(farm.id, tile_state.entity_index);
+                //     if env_entity_state.env_entity_id != ENV_ROCK_ID {
+                //         return;
+                //     }
 
-                    let mut env_entity_details = store.get_env_entity(ENV_ROCK_ID);
-                    add_item(
-                        ref store,
-                        player,
-                        env_entity_details.drop_item_id,
-                        env_entity_details.quantity
-                    );
+                //     let mut env_entity_details = store.get_env_entity(ENV_ROCK_ID);
+                //     add_item(
+                //         ref store,
+                //         player,
+                //         env_entity_details.drop_item_id,
+                //         env_entity_details.quantity
+                //     );
 
-                    let (y, x) = integer::u64_safe_divmod(
-                        grid_id, integer::u64_as_non_zero(map.width)
-                    );
-                    let env_entity_state = EnvEntityState {
-                        farm_id: farm.id,
-                        index: tile_state.entity_index,
-                        env_entity_id: Zeroable::zero(),
-                        x: x,
-                        y: y,
-                        active: false,
-                    };
-                    store.set_env_entity_state(env_entity_state);
+                //     let (y, x) = integer::u64_safe_divmod(
+                //         grid_id, integer::u64_as_non_zero(map.width)
+                //     );
+                //     let env_entity_state = EnvEntityState {
+                //         farm_id: farm.id,
+                //         index: tile_state.entity_index,
+                //         env_entity_id: Zeroable::zero(),
+                //         x: x,
+                //         y: y,
+                //         active: false,
+                //     };
+                //     store.set_env_entity_state(env_entity_state);
 
-                    tile_state.entity_type = Zeroable::zero();
-                    tile_state.entity_index = Zeroable::zero();
-                    store.set_tile_state(tile_state);
+                //     tile_state.entity_type = Zeroable::zero();
+                //     tile_state.entity_index = Zeroable::zero();
+                //     store.set_tile_state(tile_state);
 
-                    farm.env_entities_len -= 1;
-                    store.set_player_farm_state(farm);
-                },
+                //     farm.env_entities_len -= 1;
+                //     store.set_player_farm_state(farm);
+                // },
                 Tool::WateringCan => {
                     if tile_state.entity_type != TS_CROP_ID {
                         return;

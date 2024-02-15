@@ -15,7 +15,7 @@ struct Item {
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum Tool {
     Hoe,
-    Pickaxe,
+    // Pickaxe,
     WateringCan,
 }
 
@@ -29,8 +29,8 @@ enum Seed {
 }
 
 fn its_a_valid_item(item_id: u64) -> bool {
-    item_id == PICKAXE_ID
-        || item_id == HOE_ID
+    // item_id == PICKAXE_ID
+        item_id == HOE_ID
         || item_id == WATERING_CAN_ID
         || item_id == PUMPKIN_SEED_ID
         || item_id == ONION_SEED_ID
@@ -98,7 +98,7 @@ impl ToolIntoU64 of Into<Tool, u64> {
     fn into(self: Tool) -> u64 {
         match self {
             Tool::Hoe => HOE_ID,
-            Tool::Pickaxe => PICKAXE_ID,
+            // Tool::Pickaxe => PICKAXE_ID,
             Tool::WateringCan => WATERING_CAN_ID,
         }
     }
@@ -109,8 +109,8 @@ impl ToolTryIntoU64 of TryInto<u64, Tool> {
     fn try_into(self: u64) -> Option<Tool> {
         if self == HOE_ID {
             Option::Some(Tool::Hoe)
-        } else if self == PICKAXE_ID {
-            Option::Some(Tool::Pickaxe)
+        // } else if self == PICKAXE_ID {
+        //     Option::Some(Tool::Pickaxe)
         } else if self == WATERING_CAN_ID {
             Option::Some(Tool::WateringCan)
         } else {

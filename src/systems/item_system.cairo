@@ -26,7 +26,7 @@ mod item_system {
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 
-            store.set_item(Item { id: PICKAXE_ID, name: 'Pickaxe', env_entity_id: 0 });
+            // store.set_item(Item { id: PICKAXE_ID, name: 'Pickaxe', env_entity_id: 0 });
 
             store.set_item(Item { id: HOE_ID, name: 'Hoe', env_entity_id: 0 });
 
