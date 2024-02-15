@@ -7,6 +7,7 @@ const SKIN_GIRL_ID: u64 = 2;
 struct PlayerSkin {
     #[key]
     player: ContractAddress,
+    name: felt252,
     gender: u64
 }
 

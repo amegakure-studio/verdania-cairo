@@ -14,6 +14,7 @@ use verdania::models::entities::item::Item;
 use verdania::models::entities::map::Map;
 use verdania::models::entities::tile::Tile;
 use verdania::models::entities::interact::Interact;
+use verdania::models::entities::skin::PlayerSkin;
 
 use verdania::models::states::crop_state::CropState;
 use verdania::models::states::env_entity_state::EnvEntityState;
@@ -56,6 +57,8 @@ trait StoreTrait {
     fn set_world_config(ref self: Store, world_config: WorldConfig);
     fn get_global_contract(ref self: Store, id: felt252) -> GlobalContract;
     fn set_global_contract(ref self: Store, global_contract: GlobalContract);
+    fn set_player_skin(ref self: Store, skin: PlayerSkin);
+    fn get_player_skin(ref self: Store, player: ContractAddress) -> PlayerSkin;
 
     // State
     fn get_player_farm_state(
@@ -183,6 +186,14 @@ impl StoreImpl of StoreTrait {
 
     fn set_global_contract(ref self: Store, global_contract: GlobalContract) {
         set!(self.world, (global_contract));
+    }
+
+    fn set_player_skin(ref self: Store, skin: PlayerSkin) {
+        set!(self.world, (skin));
+    }
+
+    fn get_player_skin(ref self: Store, player: ContractAddress) -> PlayerSkin {
+        get!(self.world, player, (PlayerSkin))
     }
 
     // State

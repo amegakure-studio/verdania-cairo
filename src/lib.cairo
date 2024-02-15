@@ -45,7 +45,7 @@ mod systems {
     mod marketplace_system;
     mod interact_system;
     mod updater_system;
-    mod player_system;
+    mod skin_system;
 }
 
 mod interfaces {
