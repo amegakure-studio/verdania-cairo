@@ -8,28 +8,34 @@ output=$(sozo build && sozo migrate --rpc-url http://0.0.0.0:5050)
 contract_addresses=$(echo "$output" | awk '/Contract address/ {print $NF}')
 world_address=$(echo "$output" | awk '/Successfully migrated World at address/ {print $NF}')
 
-crop_system=$(echo "$contract_addresses" | awk 'NR==3')
-env_entity_system=$(echo "$contract_addresses" | awk 'NR==4')
-erc1155_system=$(echo "$contract_addresses" | awk 'NR==5')
-erc20_system=$(echo "$contract_addresses" | awk 'NR==6')
-farm_factory_system=$(echo "$contract_addresses" | awk 'NR==7')
-item_system=$(echo "$contract_addresses" | awk 'NR==8')
-map_system=$(echo "$contract_addresses" | awk 'NR==9')
-marketplace_system=$(echo "$contract_addresses" | awk 'NR==10')
-interact_system=$(echo "$contract_addresses" | awk 'NR==11')
-skin_system=$(echo "$contract_addresses" | awk 'NR==11')
+jps_system=$(echo "$contract_addresses" | awk 'NR==3')
+crop_system=$(echo "$contract_addresses" | awk 'NR==4')
+env_entity_system=$(echo "$contract_addresses" | awk 'NR==5')
+erc1155_system=$(echo "$contract_addresses" | awk 'NR==6')
+erc20_system=$(echo "$contract_addresses" | awk 'NR==7')
+farm_factory_system=$(echo "$contract_addresses" | awk 'NR==8')
+interact_system=$(echo "$contract_addresses" | awk 'NR==9')
+item_system=$(echo "$contract_addresses" | awk 'NR==10')
+map_system=$(echo "$contract_addresses" | awk 'NR==11')
+marketplace_system=$(echo "$contract_addresses" | awk 'NR==12')
+player_system=$(echo "$contract_addresses" | awk 'NR==13')
+updater_system=$(echo "$contract_addresses" | awk 'NR==14')
+world_config_system=$(echo "$contract_addresses" | awk 'NR==15')
 
 echo -e "\nSystems: "
-echo "erc1155_system: $erc1155_system"
-echo "erc20_system: $erc20_system"
-echo "marketplace_system: $marketplace_system"
+echo "jps_system: $jps_system"
 echo "crop_system: $crop_system"
 echo "env_entity_system: $env_entity_system" 
+echo "erc1155_system: $erc1155_system"
+echo "erc20_system: $erc20_system"
 echo "farm_factory_system: $farm_factory_system"
+echo "interact_system: $interact_system"
 echo "item_system: $item_system"
 echo "map_system: $map_system"
-echo "interact_system: $interact_system"
-echo "skin_system: $skin_system"
+echo "marketplace_system: $marketplace_system"
+echo "player_system: $player_system"
+echo "updater_system: $updater_system"
+echo "world_config_system: $world_config_system"
 echo -e "\n🎉 World Address: $world_address"
 
 echo -e "\n Setup ..."
@@ -46,9 +52,14 @@ sleep 3
 
 # erc1155 
 sozo execute ${erc1155_system} init --rpc-url http://0.0.0.0:5050
+sleep 3
 
 # marketplace
 sozo execute ${marketplace_system} init --rpc-url http://0.0.0.0:5050
+sleep 3
+
+# map
+sozo execute ${map_system} init --rpc-url http://0.0.0.0:5050
 
 echo -e "\n✅ Setup finish!"
 
