@@ -257,6 +257,9 @@ mod interact_system {
 
     fn player_is_adjacent(map: Map, player_state: PlayerState, grid_id: u64) -> bool {
         let (gy, gx) = integer::u64_safe_divmod(grid_id, integer::u64_as_non_zero(map.width));
+        if player_state.x == gx && player_state.y == gy {
+            return true;
+        } 
         let px = player_state.x;
         let py = player_state.y;
         let dx = if px > gx {
