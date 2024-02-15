@@ -83,7 +83,7 @@ mod farm_factory_system {
                         farm_id: farm_count.index,
                         x: 13,
                         y: 49,
-                        equipment_item_id: 1,
+                        equipment_item_id: HOE_ID.into(),
                         tokens: 0,
                     }
                 );
