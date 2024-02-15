@@ -55,6 +55,7 @@ mod setup {
     use verdania::interfaces::IERC20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use verdania::systems::erc1155_system::ERC1155;
     use verdania::systems::erc20_system::ERC20;
+    use verdania::pathfinding::algorithms::jps_system::{jps_system, IJPSSystemDispatcher};
 
     // Constants
     use integer::BoundedInt;
@@ -75,6 +76,7 @@ mod setup {
         marketplace_system: IMarketplaceDispatcher,
         world_config_system: IWorldConfigSystemDispatcher,
         interact_system: IInteractSystemDispatcher,
+        jps_system: IJPSSystemDispatcher,
     }
 
     fn spawn_game() -> (IWorldDispatcher, Systems) {
@@ -151,6 +153,10 @@ mod setup {
             interact_system: IInteractSystemDispatcher {
                 contract_address: world
                     .deploy_contract('salt', interact_system::TEST_CLASS_HASH.try_into().unwrap())
+            },
+            jps_system: IJPSSystemDispatcher {
+                contract_address: world
+                    .deploy_contract('salt', jps_system::TEST_CLASS_HASH.try_into().unwrap())
             },
         };
 

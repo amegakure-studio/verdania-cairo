@@ -29,7 +29,7 @@ mod jps_system {
     use verdania::pathfinding::utils::movement::get_movement_direction_coords;
     use verdania::pathfinding::utils::map_utils::{convert_position_to_idx, convert_idx_to_position};
     use verdania::constants::MAP_1_ID;
-    use verdania::models::entities::tile::TileType;
+    use verdania::models::entities::tile::{TileType, Tile, is_walkable};
     use verdania::models::states::tile_state::{TS_ENVIROMENT_ID, TS_CROP_ID};
     use verdania::models::entities::env_entity::{
         EnvEntity, EnvEntityT, EnvEntityT::{Rock, Tree,}, is_crop
@@ -407,19 +407,23 @@ mod jps_system {
         }
         
         let tile_id = convert_position_to_idx(map.width, x.mag, y.mag);
+        println!("tile_id: {}, x: {}, y: {}", tile_id, x.mag, y.mag);
+
         let tile_state = store.get_tile_state(farm_id, tile_id);
+        println!("tile_state.entity_type: {}", tile_state.entity_type);
         if tile_state.entity_type == TS_CROP_ID {
+            println!("TS_CROP_ID");
             true
         } else if tile_state.entity_type == TS_ENVIROMENT_ID {
+            println!("TS_ENVIROMENT_ID");
             let env_entity_state = store.get_env_entity_state(farm_id, tile_state.entity_index);
             env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP || 
             env_entity_state.env_entity_id == ENV_ROCK_ID 
         } else {
             // Tile type
-            let tile = store.get_tile(farm_id, tile_id);
-            tile.tile_type == TileType::Grass.into() ||
-            tile.tile_type == TileType::Sand.into() ||
-            tile.tile_type == TileType::Bridge.into() 
+            println!("store.get_tile");
+            let tile = store.get_tile(map.id, tile_id);
+            is_walkable(tile)
         }
     }
 
