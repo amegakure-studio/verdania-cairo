@@ -15,8 +15,8 @@ use verdania::models::data::env_entity_id::{
 use verdania::models::states::tile_state::{TS_ENVIROMENT_ID, TS_CROP_ID};
 use verdania::tests::setup::{setup, setup::Systems, setup::OWNER};
 use verdania::store::{Store, StoreTrait};
-use verdania::systems::farm_factory_system::{
-    IFarmFactorySystemDispatcher, IFarmFactorySystemDispatcherTrait
+use verdania::systems::farm_system::{
+    IFarmSystemDispatcher, IFarmSystemDispatcherTrait
 };
 use verdania::systems::interact_system::{IInteractSystemDispatcher, IInteractSystemDispatcherTrait};
 use verdania::systems::map_system::{IMapSystemDispatcher, IMapSystemDispatcherTrait};
@@ -41,7 +41,7 @@ fn test_interact_non_adjacent() {
     let mut store = StoreTrait::new(world);
 
     // Create a new farm
-    systems.farm_factory_system.create_farm(PLAYER());
+    systems.farm_system.create_farm(PLAYER());
     let farm = store.get_player_farm_state(MAP_1_ID, PLAYER());
 
     systems.map_system.init();
@@ -84,7 +84,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
     let mut store = StoreTrait::new(world);
 
     // Create a new farm
-    systems.farm_factory_system.create_farm(PLAYER());
+    systems.farm_system.create_farm(PLAYER());
     let mut farm = store.get_player_farm_state(MAP_1_ID, PLAYER());
 
     systems.map_system.init();
@@ -149,7 +149,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
 //     let mut store = StoreTrait::new(world);
 
 //     // Create a new farm
-//     systems.farm_factory_system.create_farm(PLAYER());
+//     systems.farm_system.create_farm(PLAYER());
 //     let mut farm = store.get_player_farm_state(MAP_1_ID, PLAYER());
 
 //     // Init systems

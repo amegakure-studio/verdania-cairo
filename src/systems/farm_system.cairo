@@ -3,14 +3,16 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use starknet::ContractAddress;
 
 #[starknet::interface]
-trait IFarmFactorySystem<TContractState> {
+trait IFarmSystem<TContractState> {
     fn create_farm(ref self: TContractState, player: ContractAddress);
+    fn join_farm(ref self: TContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress);
+    fn leave_farm(ref self: TContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress);
 }
 
 #[dojo::contract]
-mod farm_factory_system {
+mod farm_system {
     use core::array::SpanTrait;
-    use super::IFarmFactorySystem;
+    use super::IFarmSystem;
     use starknet::ContractAddress;
     use verdania::models::data::game::{FarmCount, FARM_COUNT_KEY};
     use verdania::models::entities::crop::Crop;
@@ -27,7 +29,7 @@ mod farm_factory_system {
     };
 
     #[abi(embed_v0)]
-    impl FarmFactory of IFarmFactorySystem<ContractState> {
+    impl FarmSystem of IFarmSystem<ContractState> {
         fn create_farm(ref self: ContractState, player: ContractAddress) {
             // [Setup] Datastore
             let world = self.world();
@@ -109,6 +111,37 @@ mod farm_factory_system {
             // Mint verdania tokens
             let erc20 = store.get_global_contract(ERC20_CONTRACT_ID);
             IERC20Dispatcher { contract_address: erc20.address }.mint(player, 1000);
+        }
+
+
+        fn join_farm(ref self: ContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress) {
+            // [Setup] Datastore
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+
+            // TODO: add validation
+            let mut visitor_state = store.get_player_state(visitor);
+            visitor_state.farm_id = farm_id;
+            store.set_player_state(visitor_state);
+
+            let mut owner_farm_state = store.get_player_farm_state(MAP_1_ID, owner);
+            owner_farm_state.connected_players += 1;
+            store.set_player_farm_state(owner_farm_state);
+        }
+
+        fn leave_farm(ref self: ContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress) {
+            let world = self.world();
+            let mut store: Store = StoreTrait::new(world);
+
+            // TODO: add validation
+            let mut visitor_farm_state = store.get_player_farm_state(MAP_1_ID, visitor);
+            let mut visitor_state = store.get_player_state(visitor);
+            visitor_state.farm_id = visitor_farm_state.id;
+            store.set_player_state(visitor_state);
+
+            let mut owner_farm_state = store.get_player_farm_state(MAP_1_ID, owner);
+            owner_farm_state.connected_players -= 1;
+            store.set_player_farm_state(owner_farm_state);
         }
     }
 }

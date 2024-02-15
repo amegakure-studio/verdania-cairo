@@ -36,7 +36,7 @@ mod systems {
     // mod action_system;
     mod crop_system;
     mod env_entity_system;
-    mod farm_factory_system;
+    mod farm_system;
     mod item_system;
     mod map_system;
     mod world_config_system;

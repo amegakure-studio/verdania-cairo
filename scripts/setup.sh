@@ -13,7 +13,7 @@ crop_system=$(echo "$contract_addresses" | awk 'NR==4')
 env_entity_system=$(echo "$contract_addresses" | awk 'NR==5')
 erc1155_system=$(echo "$contract_addresses" | awk 'NR==6')
 erc20_system=$(echo "$contract_addresses" | awk 'NR==7')
-farm_factory_system=$(echo "$contract_addresses" | awk 'NR==8')
+farm_system=$(echo "$contract_addresses" | awk 'NR==8')
 interact_system=$(echo "$contract_addresses" | awk 'NR==9')
 item_system=$(echo "$contract_addresses" | awk 'NR==10')
 map_system=$(echo "$contract_addresses" | awk 'NR==11')
@@ -28,7 +28,7 @@ echo "crop_system: $crop_system"
 echo "env_entity_system: $env_entity_system" 
 echo "erc1155_system: $erc1155_system"
 echo "erc20_system: $erc20_system"
-echo "farm_factory_system: $farm_factory_system"
+echo "farm_system: $farm_system"
 echo "interact_system: $interact_system"
 echo "item_system: $item_system"
 echo "map_system: $map_system"

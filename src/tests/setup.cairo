@@ -38,7 +38,7 @@ mod setup {
     // Systems
     use verdania::systems::crop_system::{crop_system, ICropSystemDispatcher};
     use verdania::systems::env_entity_system::{env_entity_system, IEnvEntitySystemDispatcher};
-    use verdania::systems::farm_factory_system::{farm_factory_system, IFarmFactorySystemDispatcher};
+    use verdania::systems::farm_system::{farm_system, IFarmSystemDispatcher};
     use verdania::systems::item_system::{item_system, IItemSystemDispatcher};
     use verdania::systems::map_system::{map_system, IMapSystemDispatcher};
     use verdania::systems::world_config_system::{
@@ -69,7 +69,7 @@ mod setup {
         env_entity_system: IEnvEntitySystemDispatcher,
         erc1155_system: IERC1155Dispatcher,
         erc20_system: IERC20Dispatcher,
-        farm_factory_system: IFarmFactorySystemDispatcher,
+        farm_system: IFarmSystemDispatcher,
         item_system: IItemSystemDispatcher,
         map_system: IMapSystemDispatcher,
         marketplace_system: IMarketplaceDispatcher,
@@ -124,10 +124,10 @@ mod setup {
                 contract_address: world
                     .deploy_contract('salt', ERC20::TEST_CLASS_HASH.try_into().unwrap())
             },
-            farm_factory_system: IFarmFactorySystemDispatcher {
+            farm_system: IFarmSystemDispatcher {
                 contract_address: world
                     .deploy_contract(
-                        'salt', farm_factory_system::TEST_CLASS_HASH.try_into().unwrap()
+                        'salt', farm_system::TEST_CLASS_HASH.try_into().unwrap()
                     )
             },
             item_system: IItemSystemDispatcher {
