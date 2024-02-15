@@ -141,7 +141,8 @@ impl StoreImpl of StoreTrait {
     }
 
     fn get_tile(ref self: Store, map_id: u64, id: u64) -> Tile {
-        get!(self.world, id, (Tile))
+        let tile_key = (map_id, id);
+        get!(self.world, tile_key.into(), (Tile))
     }
 
     fn set_tile(ref self: Store, tile: Tile) {
