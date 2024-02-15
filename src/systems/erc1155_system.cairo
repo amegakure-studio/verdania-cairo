@@ -12,6 +12,7 @@ mod ERC1155 {
     use verdania::store::{Store, StoreTrait};
     use integer::BoundedInt;
     use verdania::constants::ERC1155_CONTRACT_ID;
+    use verdania::models::data::items_id::{PUMPKIN_ID, ONION_ID, CARROT_ID, CORN_ID, MUSHROOM_ID, PUMPKIN_SEED_ID, ONION_SEED_ID, CARROT_SEED_ID, CORN_SEED_ID, MUSHROOM_SEED_ID,};
 
     #[event]
     #[derive(Clone, Drop, starknet::Event)]
@@ -64,17 +65,6 @@ mod ERC1155 {
         fn owner(self: @ContractState) -> ContractAddress {
             self.get_meta().owner
         }
-    // fn name(self: @ContractState) -> felt252 {
-    //     self.get_meta().name
-    // }
-
-    // fn symbol(self: @ContractState) -> felt252 {
-    //     self.get_meta().symbol
-    // }
-
-    // fn uri(self: @ContractState, token_id: u64) -> felt252 {
-    //     self.get_uri(token_id)
-    // }
     }
 
     #[abi(embed_v0)]
@@ -82,18 +72,17 @@ mod ERC1155 {
         fn init(ref self: ContractState) {
             let recipient = get_caller_address();
             self.initializer(recipient);
-            self._mint(recipient, 1, BoundedInt::max());
-            self._mint(recipient, 2, BoundedInt::max());
-            self._mint(recipient, 3, BoundedInt::max());
-            self._mint(recipient, 4, BoundedInt::max());
-            self._mint(recipient, 5, BoundedInt::max());
-            self._mint(recipient, 6, BoundedInt::max());
-            self._mint(recipient, 7, BoundedInt::max());
-            self._mint(recipient, 8, BoundedInt::max());
-            self._mint(recipient, 9, BoundedInt::max());
-            self._mint(recipient, 10, BoundedInt::max());
-            self._mint(recipient, 11, BoundedInt::max());
-            self._mint(recipient, 12, BoundedInt::max());
+            self._mint(recipient, PUMPKIN_ID, 10000);
+            self._mint(recipient, ONION_ID, 10000);
+            self._mint(recipient, CARROT_ID, 10000);
+            self._mint(recipient, CORN_ID, 10000);
+            self._mint(recipient, MUSHROOM_ID, 10000);
+
+            self._mint(recipient, PUMPKIN_SEED_ID, 10000);
+            self._mint(recipient, ONION_SEED_ID, 10000);
+            self._mint(recipient, CARROT_SEED_ID, 10000);
+            self._mint(recipient, CORN_SEED_ID, 10000);
+            self._mint(recipient, MUSHROOM_SEED_ID, 10000);
         }
 
         fn mint(ref self: ContractState, to: ContractAddress, id: u64, amount: u64) {
