@@ -61,13 +61,13 @@ mod interact_system {
             let player_state = store.get_player_state(player);
             let map = store.get_map(MAP_1_ID);
             let mut farm = store.get_player_farm_state(MAP_1_ID, player);
-            let mut tile_state = store.get_tile_state(farm.farm_id, grid_id);
+            let mut tile_state = store.get_tile_state(farm.id, grid_id);
 
             assert(player_is_adjacent(map, player_state, grid_id), Errors::NON_ADJACENT_ERROR);
 
             let current_timestamp = starknet::get_block_timestamp();
             if tile_state.entity_type == TS_CROP_ID {
-                let mut crop_state = store.get_crop_state(farm.farm_id, tile_state.entity_index);
+                let mut crop_state = store.get_crop_state(farm.id, tile_state.entity_index);
 
                 if crop_state.growing_progress == 100 {
                     let mut crop_details = store.get_crop(crop_state.crop_id);
@@ -82,7 +82,7 @@ mod interact_system {
                     store.set_tile_state(tile_state);
 
                     let mut env_entity_state = store
-                        .get_env_entity_state(farm.farm_id, tile_state.entity_index);
+                        .get_env_entity_state(farm.id, tile_state.entity_index);
                     env_entity_state.active = false;
                     store.set_env_entity_state(env_entity_state);
 
@@ -96,7 +96,7 @@ mod interact_system {
 
             if equip_item_is_a_seed(player_state.equipment_item_id) {
                 let env_entity_state = store
-                    .get_env_entity_state(farm.farm_id, tile_state.entity_index);
+                    .get_env_entity_state(farm.id, tile_state.entity_index);
                 if env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP {
                     remove_item(ref store, player, player_state.equipment_item_id, 1);
                     let (y, x) = integer::u64_safe_divmod(
@@ -106,7 +106,7 @@ mod interact_system {
 
                     let new_crop_index = get_crop_state_unused_id(ref store, farm);
                     let new_crop_state = CropState {
-                        farm_id: farm.farm_id,
+                        farm_id: farm.id,
                         index: new_crop_index,
                         crop_id: crop_id_from_seed,
                         x: x,
@@ -124,7 +124,7 @@ mod interact_system {
                     let ee_from_crop: EnvEntityT = crop_t.into();
 
                     let env_entity_state = EnvEntityState {
-                        farm_id: farm.farm_id,
+                        farm_id: farm.id,
                         index: tile_state.entity_index,
                         env_entity_id: ee_from_crop.into(),
                         x: x,
@@ -165,7 +165,7 @@ mod interact_system {
                             grid_id, integer::u64_as_non_zero(map.width)
                         );
                         let env_entity_state = EnvEntityState {
-                            farm_id: farm.farm_id,
+                            farm_id: farm.id,
                             index: tile_state.entity_index,
                             env_entity_id: ENV_SUITABLE_FOR_CROP,
                             x: x,
@@ -184,7 +184,7 @@ mod interact_system {
                     }
 
                     let env_entity_state = store
-                        .get_env_entity_state(farm.farm_id, tile_state.entity_index);
+                        .get_env_entity_state(farm.id, tile_state.entity_index);
                     if env_entity_state.env_entity_id != ENV_ROCK_ID {
                         return;
                     }
@@ -201,7 +201,7 @@ mod interact_system {
                         grid_id, integer::u64_as_non_zero(map.width)
                     );
                     let env_entity_state = EnvEntityState {
-                        farm_id: farm.farm_id,
+                        farm_id: farm.id,
                         index: tile_state.entity_index,
                         env_entity_id: Zeroable::zero(),
                         x: x,
@@ -222,7 +222,7 @@ mod interact_system {
                         return;
                     }
                     let mut crop_state = store
-                        .get_crop_state(farm.farm_id, tile_state.entity_index);
+                        .get_crop_state(farm.id, tile_state.entity_index);
                     crop_state.last_watering_time = current_timestamp;
                     store.set_crop_state(crop_state);
                 }
@@ -283,7 +283,7 @@ mod interact_system {
             if farm.crops_len == i {
                 break;
             }
-            let stored_crop_state = store.get_crop_state(farm.farm_id, i);
+            let stored_crop_state = store.get_crop_state(farm.id, i);
             if stored_crop_state.harvested {
                 unused_space = true;
                 break;
@@ -304,7 +304,7 @@ mod interact_system {
             if farm.env_entities_len == i {
                 break;
             }
-            let stored_env_entity_state = store.get_env_entity_state(farm.farm_id, i);
+            let stored_env_entity_state = store.get_env_entity_state(farm.id, i);
             if !stored_env_entity_state.active {
                 unused_space = true;
                 break;

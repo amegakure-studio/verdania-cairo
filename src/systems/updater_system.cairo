@@ -85,7 +85,7 @@ mod world_config_system {
         let actual_timestamp = starknet::get_block_timestamp();
 
         let farm = store.get_player_farm_state(MAP_1_ID, player_id);
-        let mut farm_crop_states = store.get_crops_states(player_id, farm.farm_id);
+        let mut farm_crop_states = store.get_crops_states(player_id, farm.id);
         let mut new_farm_crops_len = 0;
         loop {
             if farm_crop_states.is_empty() {
@@ -99,7 +99,7 @@ mod world_config_system {
                 let map = store.get_map(MAP_1_ID);
 
                 let mut tile_state = store
-                    .get_tile_state(farm.farm_id, (map.width * crop_state.y) + crop_state.x);
+                    .get_tile_state(farm.id, (map.width * crop_state.y) + crop_state.x);
                 tile_state.entity_index = 0;
                 tile_state.entity_type = 0;
                 store.set_tile_state(tile_state);

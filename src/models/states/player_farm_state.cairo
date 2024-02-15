@@ -6,7 +6,7 @@ struct PlayerFarmState {
     map_id: u64,
     #[key]
     player: ContractAddress,
-    farm_id: u64,
+    id: u64,
     name: felt252,
     crops_len: u64,
     env_entities_len: u64,

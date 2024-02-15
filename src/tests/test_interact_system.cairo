@@ -105,11 +105,11 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
     store.set_player_state(player_state);
 
     let tile_state = TileState {
-        farm_id: farm.farm_id, id: interact_grid_id, entity_type: TS_CROP_ID, entity_index: 1000,
+        farm_id: farm.id, id: interact_grid_id, entity_type: TS_CROP_ID, entity_index: 1000,
     };
 
     let env_entity_state = EnvEntityState {
-        farm_id: farm.farm_id,
+        farm_id: farm.id,
         index: 1000,
         env_entity_id: ENV_PUMPKIN_ID,
         x: x - 1,
@@ -119,7 +119,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
 
     // Create a crop into (29, 13) 
     let crop_state = CropState {
-        farm_id: farm.farm_id,
+        farm_id: farm.id,
         index: 1000,
         crop_id: PUMPKIN_ID,
         x: x - 1,
@@ -144,7 +144,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
     assert(pumpkin_quantity == pumpkin_quantity_bf + 2, 'wrong pumpkin amount');
 
     // check the tile its free now
-    let new_ts = store.get_tile_state(farm.farm_id, interact_grid_id);
+    let new_ts = store.get_tile_state(farm.id, interact_grid_id);
     assert(new_ts.entity_type.is_zero(), 'entity type should be zero');
     assert(new_ts.entity_index.is_zero(), 'entity index should be zero');
 }
@@ -184,14 +184,14 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
 
 //     // Set tile suitable for crop into (x: 29, y: 13) 
 //     let tile_state = TileState {
-//         farm_id: farm.farm_id,
+//         farm_id: farm.id,
 //         id: interact_grid_id,
 //         entity_type: TS_ENVIROMENT_ID, 
 //         entity_index: 1000,
 //     };
 
 //     let env_entity_state = EnvEntityState {
-//         farm_id: farm.farm_id,
+//         farm_id: farm.id,
 //         index: 1000,
 //         env_entity_id: ENV_SUITABLE_FOR_CROP,
 //         x: x - 1,
@@ -207,12 +207,12 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
 //     assert(corn_seed_quantity_bf == corn_seed_quantity_af + 1, 'wrong seed quantity');
 
 //     // check that tile_state change to ENV_PUMPKIN_ID and CROP its placed on that tile
-//     let tile_state_af = store.get_tile_state(farm.farm_id, interact_grid_id);
+//     let tile_state_af = store.get_tile_state(farm.id, interact_grid_id);
 //     assert(tile_state_af.entity_type == TS_CROP_ID, 'entity type != TS_CROP_ID');
 //     assert(tile_state_af.entity_index == 1000, 'wrong entity index');
 //     assert(tile_state_af.id == interact_grid_id, 'wrong tile grid_id');
 
-//     let env_entity_state_af = store.get_env_entity_state(farm.farm_id, 1000);
+//     let env_entity_state_af = store.get_env_entity_state(farm.id, 1000);
 //     assert(env_entity_state_af.env_entity_id == ENV_PUMPKIN_ID, 'wrong env entity id');
 //     assert(env_entity_state_af.x == (x - 1), 'wrong env entity x');
 //     assert(env_entity_state_af.y == y, 'wrong env entity y');

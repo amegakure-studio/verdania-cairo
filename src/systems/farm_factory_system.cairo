@@ -34,7 +34,7 @@ mod farm_factory_system {
             let mut store: Store = StoreTrait::new(world);
 
             let player_farm_state = store.get_player_farm_state(MAP_1_ID, player);
-            assert(player_farm_state.farm_id == 0, 'Err: already own a farm');
+            assert(player_farm_state.id == 0, 'Err: already own a farm');
 
             let mut farm_count = store.get_farm_count(FARM_COUNT_KEY);
             farm_count.index += 1;
@@ -65,7 +65,7 @@ mod farm_factory_system {
                     PlayerFarmState {
                         player,
                         map_id: MAP_1_ID,
-                        farm_id: farm_count.index,
+                        id: farm_count.index,
                         name: player.into(),
                         crops_len: 0,
                         env_entities_len: env_entities_len.into(),
