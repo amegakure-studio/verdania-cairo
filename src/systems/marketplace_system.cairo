@@ -6,9 +6,9 @@ trait IMarketplace<TContractState> {
     fn init(ref self: TContractState);
     fn update_meta(ref self: TContractState, marketplace_meta: MarketplaceMeta);
     fn list_item(
-        ref self: TContractState, player: felt252, token_id: u256, token_amount: u256, price: u256
-    ) -> u256;
-    fn buy_item(ref self: TContractState, player: felt252, item_id: u256, token_amount: u256);
+        ref self: TContractState, player: felt252, token_id: u64, token_amount: u64, price: u64
+    ) -> u64;
+    fn buy_item(ref self: TContractState, player: felt252, item_id: u64, token_amount: u64);
 }
 
 #[dojo::contract]
@@ -56,10 +56,10 @@ mod Marketplace {
         fn list_item(
             ref self: ContractState,
             player: felt252,
-            token_id: u256,
-            token_amount: u256,
-            price: u256
-        ) -> u256 {
+            token_id: u64,
+            token_amount: u64,
+            price: u64
+        ) -> u64 {
             assert(token_amount > 0, 'Amount should be > 0');
             assert(price > 0, 'Price should be > 0');
 
@@ -100,7 +100,7 @@ mod Marketplace {
             item_id
         }
 
-        fn buy_item(ref self: ContractState, player: felt252, item_id: u256, token_amount: u256) {
+        fn buy_item(ref self: ContractState, player: felt252, item_id: u64, token_amount: u64) {
             let mut player: ContractAddress = player.try_into().unwrap();
             // [Setup] Datastore
             let world = self.world();

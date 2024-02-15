@@ -100,14 +100,14 @@ trait StoreTrait {
         ref self: Store, erc1155_operator_approval: ERC1155OperatorApproval
     );
     fn get_erc1155_balance(
-        ref self: Store, id_contract: felt252, account: ContractAddress, id: u256
+        ref self: Store, id_contract: felt252, account: ContractAddress, id: u64
     ) -> ERC1155Balance;
     fn set_erc1155_balance(ref self: Store, erc1155_balance: ERC1155Balance);
 
     // Marketplace
     fn get_marketplace_meta(ref self: Store, id: felt252) -> MarketplaceMeta;
     fn set_marketplace_meta(ref self: Store, marketplace_meta: MarketplaceMeta);
-    fn get_marketplace_item(ref self: Store, id: u256) -> MarketplaceItem;
+    fn get_marketplace_item(ref self: Store, id: u64) -> MarketplaceItem;
     fn set_marketplace_item(ref self: Store, marketplace_item: MarketplaceItem);
 
     // Interact
@@ -342,7 +342,7 @@ impl StoreImpl of StoreTrait {
     }
 
     fn get_erc1155_balance(
-        ref self: Store, id_contract: felt252, account: ContractAddress, id: u256
+        ref self: Store, id_contract: felt252, account: ContractAddress, id: u64
     ) -> ERC1155Balance {
         let erc1155_balance_key = (id_contract, account, id);
         get!(self.world, erc1155_balance_key.into(), (ERC1155Balance))
@@ -361,7 +361,7 @@ impl StoreImpl of StoreTrait {
         set!(self.world, (marketplace_meta));
     }
 
-    fn get_marketplace_item(ref self: Store, id: u256) -> MarketplaceItem {
+    fn get_marketplace_item(ref self: Store, id: u64) -> MarketplaceItem {
         get!(self.world, id, (MarketplaceItem))
     }
 

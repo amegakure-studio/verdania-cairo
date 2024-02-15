@@ -26,8 +26,8 @@ mod ERC1155 {
         operator: ContractAddress,
         from: ContractAddress,
         to: ContractAddress,
-        id: u256,
-        value: u256
+        id: u64,
+        value: u64
     }
 
     #[derive(Clone, Drop, starknet::Event)]
@@ -35,8 +35,8 @@ mod ERC1155 {
         operator: ContractAddress,
         from: ContractAddress,
         to: ContractAddress,
-        ids: Array<u256>,
-        values: Array<u256>
+        ids: Array<u64>,
+        values: Array<u64>
     }
 
     #[derive(Clone, Drop, starknet::Event)]
@@ -72,7 +72,7 @@ mod ERC1155 {
     //     self.get_meta().symbol
     // }
 
-    // fn uri(self: @ContractState, token_id: u256) -> felt252 {
+    // fn uri(self: @ContractState, token_id: u64) -> felt252 {
     //     self.get_uri(token_id)
     // }
     }
@@ -96,20 +96,20 @@ mod ERC1155 {
             self._mint(recipient, 12, BoundedInt::max());
         }
 
-        fn mint(ref self: ContractState, to: ContractAddress, id: u256, amount: u256) {
+        fn mint(ref self: ContractState, to: ContractAddress, id: u64, amount: u64) {
             let meta = self.get_meta();
             // assert(get_caller_address() == meta.owner, 'Caller is not the owner');
             self._mint(to, id, amount);
         }
 
-        fn balance_of(self: @ContractState, account: ContractAddress, id: u256) -> u256 {
+        fn balance_of(self: @ContractState, account: ContractAddress, id: u64) -> u64 {
             assert(account.is_non_zero(), Errors::INVALID_ACCOUNT);
             self.get_balance(account, id).amount
         }
 
         fn balance_of_batch(
-            self: @ContractState, accounts: Array<ContractAddress>, ids: Array<u256>
-        ) -> Array<u256> {
+            self: @ContractState, accounts: Array<ContractAddress>, ids: Array<u64>
+        ) -> Array<u64> {
             assert(ids.len() == accounts.len(), Errors::INVALID_ARRAY_LENGTH);
 
             let mut batch_balances = array![];
@@ -139,8 +139,8 @@ mod ERC1155 {
             ref self: ContractState,
             from: ContractAddress,
             to: ContractAddress,
-            id: u256,
-            amount: u256,
+            id: u64,
+            amount: u64,
             data: Array<u8>
         ) {
             assert(to.is_non_zero(), Errors::INVALID_RECEIVER);
@@ -156,8 +156,8 @@ mod ERC1155 {
             ref self: ContractState,
             from: ContractAddress,
             to: ContractAddress,
-            ids: Array<u256>,
-            amounts: Array<u256>,
+            ids: Array<u64>,
+            amounts: Array<u64>,
             data: Array<u8>
         ) {
             assert(to.is_non_zero(), Errors::INVALID_RECEIVER);
@@ -172,13 +172,13 @@ mod ERC1155 {
 
     #[abi(embed_v0)]
     impl ERC1155CamelOnlyImpl of IERC1155::IERC1155CamelOnly<ContractState> {
-        fn balanceOf(self: @ContractState, account: ContractAddress, id: u256) -> u256 {
+        fn balanceOf(self: @ContractState, account: ContractAddress, id: u64) -> u64 {
             ERC1155Impl::balance_of(self, account, id)
         }
 
         fn balanceOfBatch(
-            self: @ContractState, accounts: Array<ContractAddress>, ids: Array<u256>
-        ) -> Array<u256> {
+            self: @ContractState, accounts: Array<ContractAddress>, ids: Array<u64>
+        ) -> Array<u64> {
             ERC1155Impl::balance_of_batch(self, accounts, ids)
         }
 
@@ -194,8 +194,8 @@ mod ERC1155 {
             ref self: ContractState,
             from: ContractAddress,
             to: ContractAddress,
-            id: u256,
-            amount: u256,
+            id: u64,
+            amount: u64,
             data: Array<u8>
         ) {
             ERC1155Impl::safe_transfer_from(ref self, from, to, id, amount, data);
@@ -204,8 +204,8 @@ mod ERC1155 {
             ref self: ContractState,
             from: ContractAddress,
             to: ContractAddress,
-            ids: Array<u256>,
-            amounts: Array<u256>,
+            ids: Array<u64>,
+            amounts: Array<u64>,
             data: Array<u8>
         ) {
             ERC1155Impl::safe_batch_transfer_from(ref self, from, to, ids, amounts, data);
@@ -225,12 +225,12 @@ mod ERC1155 {
             store.get_erc1155_meta(ERC1155_CONTRACT_ID)
         }
 
-        // fn get_uri(self: @ContractState, token_id: u256) -> felt252 {
+        // fn get_uri(self: @ContractState, token_id: u64) -> felt252 {
         //     // TODO : concat with id when we have string type
         //     self.get_meta().base_uri
         // }
 
-        fn get_balance(self: @ContractState, account: ContractAddress, id: u256) -> ERC1155Balance {
+        fn get_balance(self: @ContractState, account: ContractAddress, id: u64) -> ERC1155Balance {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
@@ -262,7 +262,7 @@ mod ERC1155 {
             self.emit_event(ApprovalForAll { owner, operator, approved });
         }
 
-        fn set_balance(ref self: ContractState, account: ContractAddress, id: u256, amount: u256) {
+        fn set_balance(ref self: ContractState, account: ContractAddress, id: u64, amount: u64) {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
@@ -276,8 +276,8 @@ mod ERC1155 {
             ref self: ContractState,
             from: ContractAddress,
             to: ContractAddress,
-            id: u256,
-            amount: u256,
+            id: u64,
+            amount: u64,
         ) {
             self.set_balance(from, id, self.get_balance(from, id).amount - amount);
             self.set_balance(to, id, self.get_balance(to, id).amount + amount);
@@ -323,8 +323,8 @@ mod ERC1155 {
             ref self: ContractState,
             from: ContractAddress,
             to: ContractAddress,
-            id: u256,
-            amount: u256,
+            id: u64,
+            amount: u64,
             data: Array<u8>
         ) {
             self.update_balances(from, to, id, amount);
@@ -339,8 +339,8 @@ mod ERC1155 {
             ref self: ContractState,
             from: ContractAddress,
             to: ContractAddress,
-            ids: Array<u256>,
-            amounts: Array<u256>,
+            ids: Array<u64>,
+            amounts: Array<u64>,
             data: Array<u8>
         ) {
             assert(ids.len() == amounts.len(), Errors::INVALID_ARRAY_LENGTH);
@@ -363,7 +363,7 @@ mod ERC1155 {
                 );
         }
 
-        fn _mint(ref self: ContractState, to: ContractAddress, id: u256, amount: u256) {
+        fn _mint(ref self: ContractState, to: ContractAddress, id: u64, amount: u64) {
             assert(to.is_non_zero(), Errors::INVALID_RECEIVER);
 
             self.set_balance(to, id, self.get_balance(to, id).amount + amount);
@@ -380,7 +380,7 @@ mod ERC1155 {
                 );
         }
 
-        fn _burn(ref self: ContractState, id: u256, amount: u256) {
+        fn _burn(ref self: ContractState, id: u64, amount: u64) {
             let caller = get_caller_address();
             assert(self.get_balance(caller, id).amount >= amount, Errors::INSUFFICIENT_BALANCE);
 
@@ -401,8 +401,8 @@ mod ERC1155 {
         fn _safe_mint(
             ref self: ContractState,
             to: ContractAddress,
-            id: u256,
-            amount: u256,
+            id: u64,
+            amount: u64,
             data: Span<felt252>
         ) {
             self._mint(to, id, amount);

@@ -7,16 +7,16 @@ struct MarketplaceMeta {
     owner: ContractAddress,
     open: bool,
     spawn_time: u64,
-    item_list_len: u256
+    item_list_len: u64
 }
 
 #[derive(Model, Copy, Drop, Serde)]
 struct MarketplaceItem {
     #[key]
-    id: u256,
-    token_id: u256,
+    id: u64,
+    token_id: u64,
     seller: ContractAddress,
-    amount: u256,
-    remaining_amount: u256,
-    price: u256
+    amount: u64,
+    remaining_amount: u64,
+    price: u64
 }
