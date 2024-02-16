@@ -25,8 +25,8 @@ mod crop_system {
                     Crop {
                         id: CORN_ID,
                         name: 'Corn',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
+                        harvest_time: 259200,
+                        min_watering_time: 36000,
                         drop_item_id: CORN_ID,
                         quantity: 3,
                     }
@@ -37,8 +37,8 @@ mod crop_system {
                     Crop {
                         id: PUMPKIN_ID,
                         name: 'Pumpkin',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
+                        harvest_time: 259200,
+                        min_watering_time: 36000,
                         drop_item_id: PUMPKIN_ID,
                         quantity: 2,
                     }
@@ -49,8 +49,8 @@ mod crop_system {
                     Crop {
                         id: ONION_ID,
                         name: 'Onion',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
+                        harvest_time: 259200,
+                        min_watering_time: 36000,
                         drop_item_id: ONION_ID,
                         quantity: 3,
                     }
@@ -61,8 +61,8 @@ mod crop_system {
                     Crop {
                         id: CARROT_ID,
                         name: 'Carrot',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
+                        harvest_time: 259200,
+                        min_watering_time: 36000,
                         drop_item_id: CARROT_ID,
                         quantity: 3,
                     }
@@ -73,8 +73,8 @@ mod crop_system {
                     Crop {
                         id: MUSHROOM_ID,
                         name: 'Mushroom',
-                        harvest_time: 1000,
-                        min_watering_time: 200,
+                        harvest_time: 259200,
+                        min_watering_time: 36000,
                         drop_item_id: MUSHROOM_ID,
                         quantity: 2,
                     }

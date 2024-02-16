@@ -12,5 +12,6 @@ struct CropState {
     growing_progress: u64,
     planting_time: u64,
     last_watering_time: u64,
+    watered: bool,
     harvested: bool,
 }

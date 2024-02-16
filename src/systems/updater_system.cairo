@@ -109,6 +109,10 @@ mod world_config_system {
                     growing_percentage = 100;
                 }
 
+                if crop_state.last_watering_time + (crop_info.min_watering_time / 50) < actual_timestamp {
+                    crop_state.watered = false;
+                }
+
                 crop_state.index = new_farm_crops_len;
                 crop_state.growing_progress = growing_percentage;
 

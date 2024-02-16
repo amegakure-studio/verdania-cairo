@@ -101,15 +101,6 @@ mod interact_system {
                 if env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP {
                     remove_item(ref store, player, player_state.equipment_item_id, 1);
 
-                    let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
-                    let seed_balance = IERC1155Dispatcher { contract_address: erc1155.address }
-                        .balance_of(player, player_state.equipment_item_id);
-
-                    if seed_balance.is_zero() {
-                        player_state.equipment_item_id = 0;
-                        store.set_player_state(player_state);
-                    }
-
                     let (y, x) = integer::u64_safe_divmod(
                         grid_id, integer::u64_as_non_zero(map.width)
                     );
@@ -126,6 +117,7 @@ mod interact_system {
                         planting_time: current_timestamp,
                         last_watering_time: current_timestamp,
                         harvested: false,
+                        watered: true,
                     };
                     store.set_crop_state(new_crop_state);
 
@@ -152,6 +144,15 @@ mod interact_system {
                     farm.crops_len += 1;
                     store.set_player_farm_state(farm);
                     
+                    let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
+                    let seed_balance = IERC1155Dispatcher { contract_address: erc1155.address }
+                        .balance_of(player, player_state.equipment_item_id);
+
+                    if seed_balance.is_zero() {
+                        player_state.equipment_item_id = 0;
+                        store.set_player_state(player_state);
+                    }
+
                     update_player_activity(ref store, player, current_timestamp);
                     return;
                 }
@@ -242,6 +243,7 @@ mod interact_system {
                     }
                     let mut crop_state = store.get_crop_state(farm.id, tile_state.entity_index);
                     crop_state.last_watering_time = current_timestamp;
+                    crop_state.watered = true;
                     store.set_crop_state(crop_state);
                 }
             }
