@@ -16,11 +16,14 @@
 Welcome to Verdania! An onchain farm simulation game where you can escape the city routine and **build the farm of your dreams**. Plant and grow your own crops, manage your inventory with ease, buy and sell products in the store, and earn profits with the $VRD token! Additionally, you can share the experience with friends by inviting them to your farm, transferring $VRD and items to them.
 
 ## How to Play?
+<img alt="Verdania logo" width="500" src="https://github.com/amegakure-studio/verdania-cairo/assets/58611754/9d9a17a4-cbb7-4859-9742-a3a1cc113345">
+<img alt="Verdania logo" width="500" src="https://github.com/amegakure-studio/verdania-cairo/assets/58611754/bad7b0d5-0351-4aa3-b89a-686d7066d4c0">
+<img alt="Verdania logo" width="500" src="https://github.com/amegakure-studio/verdania-cairo/assets/58611754/c14439d9-ac81-4843-ae3f-c19c5ec78ce7">
+<img alt="Verdania logo" width="500" src="https://github.com/amegakure-studio/verdania-cairo/assets/58611754/690e2476-189c-4d07-ba78-11167b7112bf">
 
 ## Useful Links
 
-- [Trailer](https://www.youtube.com/)
-- [Gameplay](https://www.youtube.com/)
+- [Trailer](https://www.youtube.com/watch?v=pdD4FpU98pM)
 - [Verdania on Taikai](https://taikai.network/starkware/hackathons/starknet-winter-hackathon)
 - [Repository Verdania Unity](https://github.com/amegakure-studio/verdania-unity)
 
@@ -52,11 +55,15 @@ Enumerate the features provided by your project:
 ![Screenshot from 2024-02-15 18-43-37](https://github.com/amegakure-studio/verdania-cairo/assets/58611754/91e63ca0-8658-41b7-9cf7-c6abf1421404)
 ![Screenshot from 2024-02-15 18-44-15](https://github.com/amegakure-studio/verdania-cairo/assets/58611754/ecedc7b2-1f08-47bf-bcd2-f29d914138b4)
 
-## Current Development
+## Incompleted features
 
 The game features a frontend implemented in Unity, while the backend is built with Dojo on Starknet.
 
-Currently, JPS is implemented and working, but due to the algorithm's poor performance, we decided to remove it. Therefore, the game's pathfinding is being handled by Unity. However, player positions are being persisted by Dojo.
+- Currently, JPS is implemented and working, but due to the algorithm's poor performance, we decided to remove it. Therefore, the game's pathfinding is being handled by Unity. However, player positions are being persisted by Dojo.
+
+- The marketplace logic with ERC20, ER1155 is supported by Dojo, but the UI is missing in Unity.
+
+- The logic of inviting a friend to your farm (Untested) is supported by Dojo but the UI is missing in Unity.
 
 ## Used Libraries
 
