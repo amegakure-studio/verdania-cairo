@@ -62,6 +62,7 @@ fn test_interact_non_adjacent() {
         planting_time: 0,
         last_watering_time: 0,
         harvested: false,
+        watered: false,
     };
 
     let tile_state = TileState {
@@ -119,6 +120,7 @@ fn test_interact_its_a_crop_ready_to_be_harvest() {
         planting_time: 0,
         last_watering_time: 0,
         harvested: false,
+        watered: false
     };
     farm.crops_len += 1;
 
