@@ -13,7 +13,7 @@
 
 ## Introduction
 
-Welcome to Verdania! A full-onchain farm simulation game where you can escape the city routine and **build the farm of your dreams**. Plant and grow your own crops, manage your inventory with ease, buy and sell products in the store, and earn profits with the VRD token! Additionally, you can share the experience with friends by inviting them to your farm, transferring VRD and items to them. All while enjoying rural life! Get ready for a unique and exciting farming experience!
+Welcome to Verdania! An onchain farm simulation game where you can escape the city routine and **build the farm of your dreams**. Plant and grow your own crops, manage your inventory with ease, buy and sell products in the store, and earn profits with the $VRD token! Additionally, you can share the experience with friends by inviting them to your farm, transferring $VRD and items to them.
 
 ## How to Play?
 
@@ -80,6 +80,8 @@ To achieve this, we have implemented a pathfinding algorithm called JPS, which o
 
 ### Crop growth
 Our crops include details on the time needed for them to be ready for harvest and their maximum survival time without irrigation. Additionally, each plant has a growth level ranging from 0 to 100, where 0 indicates it has just been planted and 100 means it's ready to be harvested.
+
+The game's time is based on the blockchain's time, so the growth of the plants is determined by the time you spend caring for them.
 
 Our 'updater' system handles efficiently updating active users' crops, taking into account the specific state of each crop. This system is triggered periodically via a cronjob.
 
