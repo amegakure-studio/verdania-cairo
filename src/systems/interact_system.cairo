@@ -302,7 +302,7 @@ mod interact_system {
         if unused_space {
             i
         } else {
-            farm.crops_len + 1
+            farm.crops_len
         }
     }
 
