@@ -30,6 +30,7 @@ mod interact_system {
     use verdania::models::entities::map::Map;
     use verdania::models::states::active_players::{ActivePlayers, ActivePlayersLen};
     use verdania::store::{Store, StoreTrait};
+    use verdania::models::states::map_farm_player::MapFarmPlayer;
     use verdania::models::data::env_entity_id::{
         ENV_SUITABLE_FOR_CROP, ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID,
         ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID
@@ -58,7 +59,9 @@ mod interact_system {
 
             let mut player_state = store.get_player_state(player);
             let map = store.get_map(MAP_1_ID);
-            let mut farm = store.get_player_farm_state(MAP_1_ID, player);
+    
+            let farm_owner = store.get_map_farm_player(player_state.farm_id);
+            let mut farm = store.get_player_farm_state(MAP_1_ID, farm_owner.owner);
             let mut tile_state = store.get_tile_state(farm.id, grid_id);
 
             assert(player_is_adjacent(map, player_state, grid_id), Errors::NON_ADJACENT_ERROR);
@@ -133,7 +136,7 @@ mod interact_system {
 
                     let env_entity_state = EnvEntityState {
                         farm_id: farm.id,
-                        index: tile_state.entity_index,
+                        index: new_crop_index,
                         env_entity_id: ee_from_crop.into(),
                         x: x,
                         y: y,
@@ -142,6 +145,7 @@ mod interact_system {
                     store.set_env_entity_state(env_entity_state);
 
                     tile_state.entity_type = TS_CROP_ID;
+                    tile_state.entity_index = new_crop_index;
                     store.set_tile_state(tile_state);
 
                     // Add crop to farm

@@ -24,6 +24,7 @@ mod models {
         mod player_state;
         mod tile_state;
         mod active_players;
+        mod map_farm_player;
     }
 
     mod tokens {

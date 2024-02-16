@@ -18,6 +18,7 @@ mod farm_system {
     use verdania::models::entities::crop::Crop;
     use verdania::models::states::player_state::PlayerState;
     use verdania::models::states::player_farm_state::PlayerFarmState;
+    use verdania::models::states::map_farm_player::MapFarmPlayer;
     use verdania::constants::{tile_state_1, env_entity_state_1, MAP_1_ID};
     use verdania::store::{Store, StoreTrait};
     use verdania::constants::{ERC20_CONTRACT_ID, ERC1155_CONTRACT_ID, MARKETPLACE_CONTRACT_ID};
@@ -60,6 +61,15 @@ mod farm_system {
                     Option::None => { break; }
                 }
             };
+
+            // MapFarmPlayer
+            store
+                .set_map_farm_player(
+                    MapFarmPlayer {
+                        farm_id: farm_count.index, 
+                        owner: player
+                    }
+                );
 
             // PlayerFarmState
             store

@@ -22,6 +22,7 @@ use verdania::models::states::player_farm_state::PlayerFarmState;
 use verdania::models::states::player_state::PlayerState;
 use verdania::models::states::tile_state::TileState;
 use verdania::models::states::active_players::{ActivePlayers, ActivePlayersLen};
+use verdania::models::states::map_farm_player::MapFarmPlayer;
 
 use verdania::models::tokens::erc20::{ERC20Balance, ERC20Allowance, ERC20Meta};
 use verdania::models::tokens::erc1155::{ERC1155Meta, ERC1155OperatorApproval, ERC1155Balance};
@@ -81,6 +82,8 @@ trait StoreTrait {
     fn set_active_player(ref self: Store, active_player: ActivePlayers);
     fn set_active_players_len(ref self: Store, len: ActivePlayersLen);
     fn get_active_players_len(ref self: Store) -> ActivePlayersLen;
+    fn get_map_farm_player(ref self: Store, farm_id: u64) -> MapFarmPlayer;
+    fn set_map_farm_player(ref self: Store, map_farm_player: MapFarmPlayer);
 
     // ERC20
     fn get_erc20_balance(ref self: Store, id: felt252, account: ContractAddress) -> ERC20Balance;
@@ -298,6 +301,13 @@ impl StoreImpl of StoreTrait {
         set!(self.world, (len));
     }
 
+    fn get_map_farm_player(ref self: Store, farm_id: u64) -> MapFarmPlayer {
+        get!(self.world, (farm_id), (MapFarmPlayer))
+    }
+
+    fn set_map_farm_player(ref self: Store, map_farm_player: MapFarmPlayer) {
+        set!(self.world, (map_farm_player));
+    }
 
     // ERC20
     fn get_erc20_balance(ref self: Store, id: felt252, account: ContractAddress) -> ERC20Balance {

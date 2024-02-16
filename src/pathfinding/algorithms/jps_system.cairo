@@ -56,7 +56,6 @@ mod jps_system {
 
             let mut player_state = store.get_player_state(player);
             let map = store.get_map(MAP_1_ID);
-            let farm_state = store.get_player_farm_state(MAP_1_ID, player);
 
             let (sx, sy) = (player_state.x, player_state.y);
             let (gx, gy) = goal;
@@ -89,7 +88,7 @@ mod jps_system {
                     ref store,
                     ref tiles_info,
                     ref open_list,
-                    farm_state.id,
+                    player_state.farm_id,
                     map,
                     node_id,
                     node_x,
