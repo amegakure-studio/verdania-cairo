@@ -29,6 +29,8 @@ use verdania::models::entities::marketplace::{MarketplaceMeta, MarketplaceItem};
 
 use verdania::constants::{MAP_1_ID, ACTIVE_PLAYERS_LEN_ID};
 
+use verdania::pathfinding::data_structures::path::{Path, PathCount};
+
 use starknet::ContractAddress;
 
 /// Store struct.
@@ -113,6 +115,12 @@ trait StoreTrait {
     // Interact
     fn get_interact(ref self: Store, item_id: u64, env_id: u64) -> Interact;
     fn set_interact(ref self: Store, interact: Interact);
+
+    // Path
+    fn get_path(ref self: Store, player: ContractAddress, id: u64) -> Path;
+    fn set_path(ref self: Store, path: Path);
+    fn get_path_count(ref self: Store, player: ContractAddress) -> PathCount;
+    fn set_path_count(ref self: Store, path_count: PathCount);
 }
 
 /// Implementation of the `StoreTrait` trait for the `Store` struct.
@@ -370,6 +378,7 @@ impl StoreImpl of StoreTrait {
         set!(self.world, (marketplace_item));
     }
 
+    // Interact
     fn get_interact(ref self: Store, item_id: u64, env_id: u64) -> Interact {
         let interact_key = (item_id, env_id);
         get!(self.world, interact_key.into(), (Interact))
@@ -377,5 +386,23 @@ impl StoreImpl of StoreTrait {
 
     fn set_interact(ref self: Store, interact: Interact) {
         set!(self.world, (interact));
+    }
+
+    // Path
+    fn get_path(ref self: Store, player: ContractAddress, id: u64) -> Path {
+        let path_key = (player, id);
+        get!(self.world, path_key.into(), (Path))
+    }
+
+    fn set_path(ref self: Store, path: Path) {
+        set!(self.world, (path));
+    }
+
+    fn get_path_count(ref self: Store, player: ContractAddress) -> PathCount {
+        get!(self.world, player, (PathCount))
+    }
+
+    fn set_path_count(ref self: Store, path_count: PathCount) {
+        set!(self.world, (path_count));
     }
 }

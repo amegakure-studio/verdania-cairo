@@ -51,10 +51,12 @@ fn test_jps_happy_path() {
         }
     };
 
-    let start = (15,30);
-    let goal = (15, 35);
-    let path = systems.jps_system.find_path(PLAYER(), start, goal);
-    print_span(path);
+    let goal = (15, 59);
+    systems.jps_system.find_path(PLAYER(), goal);
+    let path_count = store.get_path_count(PLAYER());
+
+    let player_state = store.get_player_state(PLAYER());
+    assert((player_state.x, player_state.y) == goal, 'err player posicion');
 }
 
 fn print_span(span: Span<(u64, u64)>) {

@@ -61,6 +61,7 @@ mod pathfinding {
     mod data_structures {
         mod tile_info;
         mod min_heap;
+        mod path;
     }
 
     mod numbers {

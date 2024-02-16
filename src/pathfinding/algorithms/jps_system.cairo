@@ -2,12 +2,11 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 trait IJPSSystem<TContractState> {
-    fn find_path(self: @TContractState, player: ContractAddress, start: (u64, u64), goal: (u64, u64)) -> Span<(u64, u64)>;
+    fn find_path(self: @TContractState, player: ContractAddress, goal: (u64, u64));
 }
 
 #[dojo::contract]
 mod jps_system {
-
     use super::IJPSSystem;
     use starknet::{get_caller_address, ContractAddress};
     use verdania::store::{Store, StoreTrait};
@@ -17,19 +16,22 @@ mod jps_system {
     use core::nullable::{Nullable, NullableTrait};
     use core::option::OptionTrait;
     use verdania::pathfinding::data_structures::{
-        tile_info::{TilesInfo, TilesInfoTrait, InfoKey},
-        min_heap::{MinHeap, MinHeapTrait},
+        tile_info::{TilesInfo, TilesInfoTrait, InfoKey}, min_heap::{MinHeap, MinHeapTrait},
+        path::{Path, PathCount}
     };
     use verdania::pathfinding::numbers::i64::i64;
     use verdania::pathfinding::numbers::integer_trait::IntegerTrait;
     use verdania::pathfinding::utils::constants::{
-        PARENT_KEY, STATUS_KEY, DISTANCE_KEY, DISTANCE_TO_GOAL_KEY, ESTIMATED_TOTAL_PATH_DISTANCE_KEY
+        PARENT_KEY, STATUS_KEY, DISTANCE_KEY, DISTANCE_TO_GOAL_KEY,
+        ESTIMATED_TOTAL_PATH_DISTANCE_KEY
     };
     use verdania::pathfinding::utils::heuristics::manhattan;
     use verdania::pathfinding::utils::movement::get_movement_direction_coords;
-    use verdania::pathfinding::utils::map_utils::{convert_position_to_idx, convert_idx_to_position};
+    use verdania::pathfinding::utils::map_utils::{
+        convert_position_to_idx, convert_idx_to_position
+    };
     use verdania::constants::MAP_1_ID;
-    use verdania::models::entities::tile::{TileType, Tile, is_walkable};
+    use verdania::models::entities::tile::{Tile, is_walkable};
     use verdania::models::states::tile_state::{TS_ENVIROMENT_ID, TS_CROP_ID};
     use verdania::models::entities::env_entity::{
         EnvEntity, EnvEntityT, EnvEntityT::{Rock, Tree,}, is_crop
@@ -49,16 +51,14 @@ mod jps_system {
 
     #[abi(embed_v0)]
     impl JPSSystem of IJPSSystem<ContractState> {
-
-        fn find_path(self: @ContractState, player: ContractAddress, start: (u64, u64), goal: (u64, u64)) -> Span<(u64, u64)> {
-
+        fn find_path(self: @ContractState, player: ContractAddress, goal: (u64, u64)) {
             let mut store: Store = StoreTrait::new(self.world_dispatcher.read());
 
+            let mut player_state = store.get_player_state(player);
             let map = store.get_map(MAP_1_ID);
-
             let farm_state = store.get_player_farm_state(MAP_1_ID, player);
 
-            let (sx, sy) = start;
+            let (sx, sy) = (player_state.x, player_state.y);
             let (gx, gy) = goal;
             let mut tiles_info = TilesInfoTrait::new();
             let mut open_list: MinHeap<u64> = MinHeapTrait::new();
@@ -86,15 +86,28 @@ mod jps_system {
                     break;
                 }
                 identify_successors(
-                    ref store, ref tiles_info, ref open_list, farm_state.id, map, node_id, node_x, node_y, gx, gy
+                    ref store,
+                    ref tiles_info,
+                    ref open_list,
+                    farm_state.id,
+                    map,
+                    node_id,
+                    node_x,
+                    node_y,
+                    gx,
+                    gy
                 );
             };
 
             if goal_flag {
                 let (node_x, node_y) = convert_idx_to_position(map.width, node_id_flag);
-                return build_reverse_path_from(ref tiles_info, map, node_id_flag);
+                build_reverse_path_from(ref tiles_info, ref store, map, node_id_flag, player);
+                // update posicion player
+                player_state.x = gx;
+                player_state.y = gy;
+                store.set_player_state(player_state);
             } else {
-                array![].span()
+                store.set_path_count(PathCount { player, index: 0 });
             }
         }
     }
@@ -118,7 +131,9 @@ mod jps_system {
                 break;
             }
             let (nx, ny) = convert_idx_to_position(map.width, *neighbours.at(i));
-            let opt_jump_point = jump(ref store, farm_id, map, nx, ny, node_x, node_y, goal_x, goal_y);
+            let opt_jump_point = jump(
+                ref store, farm_id, map, nx, ny, node_x, node_y, goal_x, goal_y
+            );
 
             if opt_jump_point.is_some() {
                 let jump_point = opt_jump_point.unwrap();
@@ -130,8 +145,10 @@ mod jps_system {
                 }
 
                 let jd = manhattan(
-                    (IntegerTrait::<i64>::new(jx, false) - IntegerTrait::<i64>::new(node_x, false)).mag,
-                    (IntegerTrait::<i64>::new(jy, false) - IntegerTrait::<i64>::new(node_y, false)).mag
+                    (IntegerTrait::<i64>::new(jx, false) - IntegerTrait::<i64>::new(node_x, false))
+                        .mag,
+                    (IntegerTrait::<i64>::new(jy, false) - IntegerTrait::<i64>::new(node_y, false))
+                        .mag
                 );
                 let ng = tiles_info.read(node_id, InfoKey::CUMULATIVE_PATH_DISTANCE).deref() + jd;
 
@@ -154,13 +171,17 @@ mod jps_system {
                         );
                         tiles_info.write(jump_point, InfoKey::DISTANCE_TO_GOAL, jp_h_estimated);
                     }
-                    let jp_g = tiles_info.read(jump_point, InfoKey::CUMULATIVE_PATH_DISTANCE).deref();
-                    let jp_f = jp_g + tiles_info.read(jump_point, InfoKey::DISTANCE_TO_GOAL).deref();
+                    let jp_g = tiles_info
+                        .read(jump_point, InfoKey::CUMULATIVE_PATH_DISTANCE)
+                        .deref();
+                    let jp_f = jp_g
+                        + tiles_info.read(jump_point, InfoKey::DISTANCE_TO_GOAL).deref();
 
                     tiles_info.write(jump_point, InfoKey::ESTIMATIVE_TOTAL_COST, jp_f);
                     tiles_info.write(jump_point, InfoKey::PARENT, node_id);
 
-                    if jp_status.is_null() || (!jp_status.is_null() && jp_status.deref() != OPENED) {
+                    if jp_status.is_null()
+                        || (!jp_status.is_null() && jp_status.deref() != OPENED) {
                         open_list.add(jump_point, jp_f);
                         tiles_info.write(jump_point, InfoKey::STATUS, OPENED);
                     }
@@ -171,7 +192,15 @@ mod jps_system {
     }
 
     fn jump(
-        ref store: Store, farm_id: u64, map: Map, x: u64, y: u64, parent_x: u64, parent_y: u64, goal_x: u64, goal_y: u64
+        ref store: Store,
+        farm_id: u64,
+        map: Map,
+        x: u64,
+        y: u64,
+        parent_x: u64,
+        parent_y: u64,
+        goal_x: u64,
+        goal_y: u64
     ) -> Option<u64> {
         let iy = IntegerTrait::<i64>::new(y, false);
         let ix = IntegerTrait::<i64>::new(x, false);
@@ -198,7 +227,8 @@ mod jps_system {
             }
 
             if (jump(ref store, farm_id, map, (ix + dx).mag, y, x, y, goal_x, goal_y).is_some()
-                || jump(ref store, farm_id, map, x, (iy + dy).mag, x, y, goal_x, goal_y).is_some()) {
+                || jump(ref store, farm_id, map, x, (iy + dy).mag, x, y, goal_x, goal_y)
+                    .is_some()) {
                 return Option::Some(convert_position_to_idx(map.width, x, y));
             }
         } else {
@@ -223,14 +253,19 @@ mod jps_system {
             }
         }
 
-        if is_walkable_at(ref store, farm_id, map, ix + dx, iy) || is_walkable_at(ref store, farm_id, map, ix, iy + dy) {
-            return jump(ref store, farm_id, map, (ix + dx).mag, (iy + dy).mag, x, y, goal_x, goal_y);
+        if is_walkable_at(ref store, farm_id, map, ix + dx, iy)
+            || is_walkable_at(ref store, farm_id, map, ix, iy + dy) {
+            return jump(
+                ref store, farm_id, map, (ix + dx).mag, (iy + dy).mag, x, y, goal_x, goal_y
+            );
         } else {
             return Option::None(());
         }
     }
 
-    fn build_reverse_path_from(ref tiles_info: TilesInfo, map: Map, grid_id: u64) -> Span<(u64, u64)> {
+    fn build_reverse_path_from(
+        ref tiles_info: TilesInfo, ref store: Store, map: Map, grid_id: u64, player: ContractAddress
+    ) {
         let (x, y) = convert_idx_to_position(map.width, grid_id);
         let mut res = array![grid_id];
 
@@ -244,16 +279,20 @@ mod jps_system {
             parent_id = p.deref();
         };
 
+        store.set_path_count(PathCount { player, index: res.len() });
+        let mut idx = 0;
+
         let mut i = res.len() - 1;
-        let mut reverse = array![];
         loop {
-            reverse.append(convert_idx_to_position(map.width, *res.at(i)));
+            // save path
+            let (x, y) = convert_idx_to_position(map.width, *res.at(i));
+            store.set_path(Path { player, id: idx, x, y });
             if i == 0 {
                 break;
             }
             i -= 1;
+            idx += 1;
         };
-        reverse.span()
     }
 
     fn print_span(span: Span<u64>) {
@@ -273,7 +312,9 @@ mod jps_system {
         println!(" ] }}")
     }
 
-    fn get_neighbours(ref store: Store, ref tiles_info: TilesInfo, farm_id: u64, map: Map, grid_id: u64) -> Span<u64> {
+    fn get_neighbours(
+        ref store: Store, ref tiles_info: TilesInfo, farm_id: u64, map: Map, grid_id: u64
+    ) -> Span<u64> {
         let mut relevant_neighbours = array![];
         let parent_grid_id = tiles_info.read(grid_id, InfoKey::PARENT);
 
@@ -295,15 +336,18 @@ mod jps_system {
                     relevant_neighbours
                         .append(convert_position_to_idx(map.width, (ix + dx).mag, y));
                 }
-                if is_walkable_at(ref store, farm_id, map, ix, iy + dy) || is_walkable_at(ref store, farm_id, map, ix + dx, iy) {
+                if is_walkable_at(ref store, farm_id, map, ix, iy + dy)
+                    || is_walkable_at(ref store, farm_id, map, ix + dx, iy) {
                     relevant_neighbours
                         .append(convert_position_to_idx(map.width, (ix + dx).mag, (iy + dy).mag));
                 }
-                if !is_walkable_at(ref store, farm_id, map, ix - dx, iy) && is_walkable_at(ref store, farm_id, map, ix, iy + dy) {
+                if !is_walkable_at(ref store, farm_id, map, ix - dx, iy)
+                    && is_walkable_at(ref store, farm_id, map, ix, iy + dy) {
                     relevant_neighbours
                         .append(convert_position_to_idx(map.width, (ix - dx).mag, (iy + dy).mag));
                 }
-                if !is_walkable_at(ref store, farm_id, map, ix, iy - dy) && is_walkable_at(ref store, farm_id, map, ix + dx, iy) {
+                if !is_walkable_at(ref store, farm_id, map, ix, iy - dy)
+                    && is_walkable_at(ref store, farm_id, map, ix + dx, iy) {
                     relevant_neighbours
                         .append(convert_position_to_idx(map.width, (ix + dx).mag, (iy - dy).mag));
                 }
@@ -401,27 +445,19 @@ mod jps_system {
     }
 
     fn is_walkable_at(ref store: Store, farm_id: u64, map: Map, x: i64, y: i64) -> bool {
-        
         if !is_inside(x, y, map.width, map.height) {
             return false;
         }
-        
-        let tile_id = convert_position_to_idx(map.width, x.mag, y.mag);
-        println!("tile_id: {}, x: {}, y: {}", tile_id, x.mag, y.mag);
 
+        let tile_id = convert_position_to_idx(map.width, x.mag, y.mag);
         let tile_state = store.get_tile_state(farm_id, tile_id);
-        println!("tile_state.entity_type: {}", tile_state.entity_type);
         if tile_state.entity_type == TS_CROP_ID {
-            println!("TS_CROP_ID");
             true
         } else if tile_state.entity_type == TS_ENVIROMENT_ID {
-            println!("TS_ENVIROMENT_ID");
             let env_entity_state = store.get_env_entity_state(farm_id, tile_state.entity_index);
             env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP || 
             env_entity_state.env_entity_id == ENV_ROCK_ID 
         } else {
-            // Tile type
-            println!("store.get_tile");
             let tile = store.get_tile(map.id, tile_id);
             is_walkable(tile)
         }
