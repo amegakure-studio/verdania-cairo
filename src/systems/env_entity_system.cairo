@@ -13,7 +13,7 @@ mod env_entity_system {
     use verdania::store::{Store, StoreTrait};
     use verdania::models::data::env_entity_id::{
         ENV_SUITABLE_FOR_CROP, ENV_PUMPKIN_ID, ENV_ONION_ID, ENV_CARROT_ID, ENV_CORN_ID,
-        ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID, ENV_TRUNK_ID
+        ENV_MUSHROOM_ID, ENV_TREE_ID, ENV_ROCK_ID, ENV_TRUNK_ID, ENV_GRASS_ID
     };
     use verdania::models::data::items_id::{WOOD_ID, ROCK_ID};
 
