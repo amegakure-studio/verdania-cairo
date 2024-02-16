@@ -5,6 +5,7 @@ struct PathCount {
     #[key]
     player: ContractAddress,
     index: u32,
+    last_update: u64,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

@@ -67,6 +67,20 @@ mod jps_system {
             tiles_info.write(start_id, InfoKey::CUMULATIVE_PATH_DISTANCE, 0);
             open_list.add(start_id, 0);
 
+            if !is_walkable_at(
+                ref store,
+                player_state.farm_id,
+                map,
+                IntegerTrait::<i64>::new(gx, false),
+                IntegerTrait::<i64>::new(gy, false)
+            ) {
+                store
+                    .set_path_count(
+                        PathCount { player, index: 0, last_update: starknet::get_block_timestamp() }
+                    );
+                return;
+            }
+
             let mut goal_flag = false;
             let mut node_id_flag = 0;
             loop {
@@ -104,7 +118,10 @@ mod jps_system {
                 player_state.y = gy;
                 store.set_player_state(player_state);
             } else {
-                store.set_path_count(PathCount { player, index: 0 });
+                store
+                    .set_path_count(
+                        PathCount { player, index: 0, last_update: starknet::get_block_timestamp() }
+                    );
             }
         }
     }
@@ -276,7 +293,10 @@ mod jps_system {
             parent_id = p.deref();
         };
 
-        store.set_path_count(PathCount { player, index: res.len() });
+        store
+            .set_path_count(
+                PathCount { player, index: res.len(), last_update: starknet::get_block_timestamp() }
+            );
         let mut idx = 0;
 
         let mut i = res.len() - 1;
