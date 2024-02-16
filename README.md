@@ -1,19 +1,21 @@
 <p align="center">
+  <img alt="Verdania logo" width="500" src="https://github.com/amegakure-studio/verdania-cairo/assets/58611754/ece7df02-b1eb-4aed-a808-51f42c854c78">
+</p>
+
+<p align="center">
+    <img alt="Amegakure logo" width="360" src="https://github.com/amegakure-studio/verdania-cairo/assets/58611754/8de7db30-91ef-493f-8ce0-8c34e66209bb">
 </p>
 
 <div align="center">
+<a href=""><img src="https://img.shields.io/github/license/keep-starknet-strange/unruggable.meme.svg?style=for-the-badge" alt="Project license" height="30"></a>
+<a href="https://twitter.com/0xVerdania"><img src="https://img.shields.io/twitter/follow/0xVerdania?style=for-the-badge&logo=twitter" alt="Follow 0xVerdania on Twitter" height="30"></a>
 </div>
-
-<p align="center">
-</p>
 
 ## Introduction
 
 Welcome to Verdania! A full-onchain farm simulation game where you can escape the city routine and **build the farm of your dreams**. Plant and grow your own crops, manage your inventory with ease, buy and sell products in the store, and earn profits with the VRD token! Additionally, you can share the experience with friends by inviting them to your farm, transferring VRD and items to them. All while enjoying rural life! Get ready for a unique and exciting farming experience!
 
 ## How to Play?
-
-
 
 ## Useful Links
 
@@ -31,8 +33,6 @@ Enumerate the features provided by your project:
 
 - **Toolbar and inventory mechanism:** Interface facilitating access and management of stored tools and items.
 
-- **Pathfinding algorithm (JPS):** Implementation of an efficient pathfinding algorithm for character navigation.
-
 - **VRD token (ERC20):** Fungible token compatible with ERC20 for the in-game economy.
 
 - **Items (ERC1155):** Management system for non-fungible assets, utilizing ERC1155 standard.
@@ -45,11 +45,18 @@ Enumerate the features provided by your project:
 
 - **Friends invitation to the farm:** Mechanism to invite other players to visit and participate in the user's farm.
 
+- **Pathfinding algorithm (JPS):** Implementation of an efficient pathfinding algorithm for character navigation.
+
 ## Screenshots
+
+![Screenshot from 2024-02-15 18-43-37](https://github.com/amegakure-studio/verdania-cairo/assets/58611754/91e63ca0-8658-41b7-9cf7-c6abf1421404)
+![Screenshot from 2024-02-15 18-44-15](https://github.com/amegakure-studio/verdania-cairo/assets/58611754/ecedc7b2-1f08-47bf-bcd2-f29d914138b4)
 
 ## Current Development
 
-The game features a frontend implemented in Unity, while the backend is built with Dojo on Starknet (it's a game with 100% on-chain logic!).
+The game features a frontend implemented in Unity, while the backend is built with Dojo on Starknet.
+
+Currently, JPS is implemented and working, but due to the algorithm's poor performance, we decided to remove it. Therefore, the game's pathfinding is being handled by Unity. However, player positions are being persisted by Dojo.
 
 ## Used Libraries
 
