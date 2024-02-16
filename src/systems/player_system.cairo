@@ -69,7 +69,7 @@ mod player_system {
                     player_state.farm_id,
                     map,
                     IntegerTrait::<i64>::new(x, false),
-                    IntegerTrait::<i64>::new(x, false)
+                    IntegerTrait::<i64>::new(y, false)
                 ),
                 'That tile is not walkable'
             );
