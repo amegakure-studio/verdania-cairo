@@ -87,8 +87,6 @@ mod interact_system {
                     // Add crop to farm
                     farm.crops_len -= 1;
                     store.set_player_farm_state(farm);
-
-                    return;
                 }
             }
 
@@ -146,8 +144,6 @@ mod interact_system {
                     // Add crop to farm
                     farm.crops_len += 1;
                     store.set_player_farm_state(farm);
-
-                    return;
                 }
             }
 
@@ -171,9 +167,11 @@ mod interact_system {
                         let (y, x) = integer::u64_safe_divmod(
                             grid_id, integer::u64_as_non_zero(map.width)
                         );
+
+                        let new_tile_state_idx = get_env_entity_state_unused_id(ref store, farm);
                         let env_entity_state = EnvEntityState {
                             farm_id: farm.id,
-                            index: tile_state.entity_index,
+                            index: new_tile_state_idx,
                             env_entity_id: ENV_SUITABLE_FOR_CROP,
                             x: x,
                             y: y,
@@ -182,7 +180,11 @@ mod interact_system {
                         store.set_env_entity_state(env_entity_state);
 
                         tile_state.entity_type = TS_ENVIROMENT_ID;
+                        tile_state.entity_index = new_tile_state_idx;
                         store.set_tile_state(tile_state);
+                        
+                        farm.env_entities_len += 1;
+                        store.set_player_farm_state(farm);
                     }
                 },
                 // Tool::Pickaxe => {
@@ -323,7 +325,7 @@ mod interact_system {
         if unused_space {
             i
         } else {
-            farm.env_entities_len + 1
+            farm.env_entities_len
         }
     }
 }
