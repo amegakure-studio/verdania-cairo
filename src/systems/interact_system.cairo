@@ -87,6 +87,9 @@ mod interact_system {
                     // Add crop to farm
                     farm.crops_len -= 1;
                     store.set_player_farm_state(farm);
+
+                    update_player_activity(ref store, player, current_timestamp);
+                    return;
                 }
             }
 
@@ -144,6 +147,9 @@ mod interact_system {
                     // Add crop to farm
                     farm.crops_len += 1;
                     store.set_player_farm_state(farm);
+                    
+                    update_player_activity(ref store, player, current_timestamp);
+                    return;
                 }
             }
 
@@ -236,7 +242,12 @@ mod interact_system {
                 }
             }
             // TODO: we have to handle this in a better way
-            let mut active_players = store.get_verdania_active_players();
+            update_player_activity(ref store, player, current_timestamp);
+        }
+    }
+
+    fn update_player_activity(ref store: Store, player: ContractAddress, current_timestamp: u64) {
+        let mut active_players = store.get_verdania_active_players();
             loop {
                 if active_players.is_empty() {
                     break;
@@ -252,7 +263,6 @@ mod interact_system {
                     break;
                 }
             }
-        }
     }
 
     fn add_item(ref store: Store, player: ContractAddress, item_id: u64, quantity: u64) {
