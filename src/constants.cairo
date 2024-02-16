@@ -2057,7 +2057,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 17, env_entity_id: ENV_ROCK_ID, x: 2, y: 3, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 18, env_entity_id: ENV_TREE_ID, x: 2, y: 26, active: true
+            farm_id: farm_id, index: 18, env_entity_id: ENV_TRUNK_ID, x: 2, y: 26, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 19, env_entity_id: ENV_TREE_ID, x: 2, y: 34, active: true
@@ -2207,7 +2207,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 67, env_entity_id: ENV_TREE_ID, x: 8, y: 36, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 68, env_entity_id: ENV_TREE_ID, x: 8, y: 38, active: true
+            farm_id: farm_id, index: 68, env_entity_id: ENV_TRUNK_ID, x: 8, y: 38, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 69, env_entity_id: ENV_GRASS_ID, x: 8, y: 56, active: true
@@ -2222,7 +2222,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 72, env_entity_id: ENV_TREE_ID, x: 9, y: 54, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 73, env_entity_id: ENV_TREE_ID, x: 10, y: 21, active: true
+            farm_id: farm_id, index: 73, env_entity_id: ENV_TRUNK_ID, x: 10, y: 21, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 74, env_entity_id: ENV_GRASS_ID, x: 10, y: 34, active: true
@@ -2243,7 +2243,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 79, env_entity_id: ENV_TREE_ID, x: 11, y: 33, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 80, env_entity_id: ENV_TREE_ID, x: 11, y: 38, active: true
+            farm_id: farm_id, index: 80, env_entity_id: ENV_TRUNK_ID, x: 11, y: 38, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 81, env_entity_id: ENV_GRASS_ID, x: 11, y: 50, active: true
@@ -2255,7 +2255,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 83, env_entity_id: ENV_ROCK_ID, x: 11, y: 57, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 84, env_entity_id: ENV_TREE_ID, x: 12, y: 22, active: true
+            farm_id: farm_id, index: 84, env_entity_id: ENV_TRUNK_ID, x: 12, y: 22, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 85, env_entity_id: ENV_ROCK_ID, x: 12, y: 26, active: true
@@ -2306,7 +2306,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 100, env_entity_id: ENV_TREE_ID, x: 15, y: 49, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 101, env_entity_id: ENV_TREE_ID, x: 15, y: 54, active: true
+            farm_id: farm_id, index: 101, env_entity_id: ENV_TRUNK_ID, x: 15, y: 54, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 102, env_entity_id: ENV_ROCK_ID, x: 16, y: 22, active: true
@@ -2318,7 +2318,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 104, env_entity_id: ENV_GRASS_ID, x: 16, y: 52, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 105, env_entity_id: ENV_TREE_ID, x: 16, y: 54, active: true
+            farm_id: farm_id, index: 105, env_entity_id: ENV_TRUNK_ID, x: 16, y: 54, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 106, env_entity_id: ENV_GRASS_ID, x: 16, y: 56, active: true
@@ -2384,7 +2384,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 126, env_entity_id: ENV_GRASS_ID, x: 20, y: 38, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 127, env_entity_id: ENV_TREE_ID, x: 20, y: 41, active: true
+            farm_id: farm_id, index: 127, env_entity_id: ENV_TRUNK_ID, x: 20, y: 41, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 128, env_entity_id: ENV_TREE_ID, x: 20, y: 45, active: true
@@ -2396,10 +2396,10 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 130, env_entity_id: ENV_TREE_ID, x: 20, y: 50, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 131, env_entity_id: ENV_TREE_ID, x: 20, y: 55, active: true
+            farm_id: farm_id, index: 131, env_entity_id: ENV_TRUNK_ID, x: 20, y: 55, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 132, env_entity_id: ENV_TREE_ID, x: 21, y: 44, active: true
+            farm_id: farm_id, index: 132, env_entity_id: ENV_TRUNK_ID, x: 21, y: 44, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 133, env_entity_id: ENV_GRASS_ID, x: 21, y: 53, active: true
@@ -2432,7 +2432,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 142, env_entity_id: ENV_ROCK_ID, x: 22, y: 47, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 143, env_entity_id: ENV_TREE_ID, x: 22, y: 50, active: true
+            farm_id: farm_id, index: 143, env_entity_id: ENV_TRUNK_ID, x: 22, y: 50, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 144, env_entity_id: ENV_GRASS_ID, x: 22, y: 55, active: true
@@ -2444,7 +2444,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 146, env_entity_id: ENV_ROCK_ID, x: 23, y: 45, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 147, env_entity_id: ENV_TREE_ID, x: 24, y: 13, active: true
+            farm_id: farm_id, index: 147, env_entity_id: ENV_TRUNK_ID, x: 24, y: 13, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 148, env_entity_id: ENV_GRASS_ID, x: 24, y: 30, active: true
@@ -2465,13 +2465,13 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 153, env_entity_id: ENV_TREE_ID, x: 24, y: 53, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 154, env_entity_id: ENV_TREE_ID, x: 25, y: 13, active: true
+            farm_id: farm_id, index: 154, env_entity_id: ENV_TRUNK_ID, x: 25, y: 13, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 155, env_entity_id: ENV_TREE_ID, x: 25, y: 14, active: true
+            farm_id: farm_id, index: 155, env_entity_id: ENV_TRUNK_ID, x: 25, y: 14, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 156, env_entity_id: ENV_TREE_ID, x: 25, y: 24, active: true
+            farm_id: farm_id, index: 156, env_entity_id: ENV_TRUNK_ID, x: 25, y: 24, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 157, env_entity_id: ENV_GRASS_ID, x: 25, y: 39, active: true
@@ -2486,7 +2486,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 160, env_entity_id: ENV_ROCK_ID, x: 25, y: 55, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 161, env_entity_id: ENV_TREE_ID, x: 26, y: 32, active: true
+            farm_id: farm_id, index: 161, env_entity_id: ENV_TRUNK_ID, x: 26, y: 32, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 162, env_entity_id: ENV_TREE_ID, x: 26, y: 37, active: true
@@ -2507,7 +2507,7 @@ fn env_entity_state_1(farm_id: u64) -> Span<EnvEntityState> {
             farm_id: farm_id, index: 167, env_entity_id: ENV_ROCK_ID, x: 27, y: 51, active: true
         },
         EnvEntityState {
-            farm_id: farm_id, index: 168, env_entity_id: ENV_TREE_ID, x: 27, y: 53, active: true
+            farm_id: farm_id, index: 168, env_entity_id: ENV_TRUNK_ID, x: 27, y: 53, active: true
         },
         EnvEntityState {
             farm_id: farm_id, index: 169, env_entity_id: ENV_ROCK_ID, x: 28, y: 45, active: true

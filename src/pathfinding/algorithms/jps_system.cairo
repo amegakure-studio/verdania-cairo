@@ -27,9 +27,7 @@ mod jps_system {
     };
     use verdania::pathfinding::utils::heuristics::manhattan;
     use verdania::pathfinding::utils::movement::get_movement_direction_coords;
-    use verdania::pathfinding::utils::map_utils::{
-        convert_position_to_idx, convert_idx_to_position
-    };
+    use verdania::pathfinding::utils::map_utils::{convert_position_to_idx, convert_idx_to_position};
     use verdania::constants::MAP_1_ID;
     use verdania::models::entities::tile::{Tile, is_walkable};
     use verdania::models::states::tile_state::{TS_ENVIROMENT_ID, TS_CROP_ID};
@@ -454,8 +452,8 @@ mod jps_system {
             true
         } else if tile_state.entity_type == TS_ENVIROMENT_ID {
             let env_entity_state = store.get_env_entity_state(farm_id, tile_state.entity_index);
-            env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP || 
-            env_entity_state.env_entity_id == ENV_ROCK_ID 
+            env_entity_state.env_entity_id == ENV_SUITABLE_FOR_CROP
+                || env_entity_state.env_entity_id == ENV_ROCK_ID
         } else {
             let tile = store.get_tile(map.id, tile_id);
             is_walkable(tile)

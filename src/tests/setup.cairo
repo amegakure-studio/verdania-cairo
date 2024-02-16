@@ -128,9 +128,7 @@ mod setup {
             },
             farm_system: IFarmSystemDispatcher {
                 contract_address: world
-                    .deploy_contract(
-                        'salt', farm_system::TEST_CLASS_HASH.try_into().unwrap()
-                    )
+                    .deploy_contract('salt', farm_system::TEST_CLASS_HASH.try_into().unwrap())
             },
             item_system: IItemSystemDispatcher {
                 contract_address: world

@@ -5,8 +5,12 @@ use starknet::ContractAddress;
 #[starknet::interface]
 trait IFarmSystem<TContractState> {
     fn create_farm(ref self: TContractState, player: ContractAddress);
-    fn join_farm(ref self: TContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress);
-    fn leave_farm(ref self: TContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress);
+    fn join_farm(
+        ref self: TContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress
+    );
+    fn leave_farm(
+        ref self: TContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress
+    );
 }
 
 #[dojo::contract]
@@ -63,13 +67,7 @@ mod farm_system {
             };
 
             // MapFarmPlayer
-            store
-                .set_map_farm_player(
-                    MapFarmPlayer {
-                        farm_id: farm_count.index, 
-                        owner: player
-                    }
-                );
+            store.set_map_farm_player(MapFarmPlayer { farm_id: farm_count.index, owner: player });
 
             // PlayerFarmState
             store
@@ -124,7 +122,9 @@ mod farm_system {
         }
 
 
-        fn join_farm(ref self: ContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress) {
+        fn join_farm(
+            ref self: ContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress
+        ) {
             // [Setup] Datastore
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
@@ -139,7 +139,9 @@ mod farm_system {
             store.set_player_farm_state(owner_farm_state);
         }
 
-        fn leave_farm(ref self: ContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress) {
+        fn leave_farm(
+            ref self: ContractState, farm_id: u64, owner: ContractAddress, visitor: ContractAddress
+        ) {
             let world = self.world();
             let mut store: Store = StoreTrait::new(world);
 

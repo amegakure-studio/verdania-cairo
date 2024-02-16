@@ -30,7 +30,7 @@ enum Seed {
 
 fn its_a_valid_item(item_id: u64) -> bool {
     // item_id == PICKAXE_ID
-        item_id == HOE_ID
+    item_id == HOE_ID
         || item_id == WATERING_CAN_ID
         || item_id == PUMPKIN_SEED_ID
         || item_id == ONION_SEED_ID

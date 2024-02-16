@@ -54,11 +54,7 @@ mod Marketplace {
         }
 
         fn list_item(
-            ref self: ContractState,
-            player: felt252,
-            token_id: u64,
-            token_amount: u64,
-            price: u64
+            ref self: ContractState, player: felt252, token_id: u64, token_amount: u64, price: u64
         ) -> u64 {
             assert(token_amount > 0, 'Amount should be > 0');
             assert(price > 0, 'Price should be > 0');

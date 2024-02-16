@@ -12,7 +12,10 @@ mod ERC1155 {
     use verdania::store::{Store, StoreTrait};
     use integer::BoundedInt;
     use verdania::constants::ERC1155_CONTRACT_ID;
-    use verdania::models::data::items_id::{PUMPKIN_ID, ONION_ID, CARROT_ID, CORN_ID, MUSHROOM_ID, PUMPKIN_SEED_ID, ONION_SEED_ID, CARROT_SEED_ID, CORN_SEED_ID, MUSHROOM_SEED_ID,};
+    use verdania::models::data::items_id::{
+        PUMPKIN_ID, ONION_ID, CARROT_ID, CORN_ID, MUSHROOM_ID, PUMPKIN_SEED_ID, ONION_SEED_ID,
+        CARROT_SEED_ID, CORN_SEED_ID, MUSHROOM_SEED_ID,
+    };
 
     #[event]
     #[derive(Clone, Drop, starknet::Event)]
@@ -388,11 +391,7 @@ mod ERC1155 {
         }
 
         fn _safe_mint(
-            ref self: ContractState,
-            to: ContractAddress,
-            id: u64,
-            amount: u64,
-            data: Span<felt252>
+            ref self: ContractState, to: ContractAddress, id: u64, amount: u64, data: Span<felt252>
         ) {
             self._mint(to, id, amount);
         }

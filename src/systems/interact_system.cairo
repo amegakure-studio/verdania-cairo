@@ -59,7 +59,7 @@ mod interact_system {
 
             let mut player_state = store.get_player_state(player);
             let map = store.get_map(MAP_1_ID);
-    
+
             let farm_owner = store.get_map_farm_player(player_state.farm_id);
             let mut farm = store.get_player_farm_state(MAP_1_ID, farm_owner.owner);
             let mut tile_state = store.get_tile_state(farm.id, grid_id);
@@ -143,7 +143,7 @@ mod interact_system {
                     // Add crop to farm
                     farm.crops_len += 1;
                     store.set_player_farm_state(farm);
-                    
+
                     let erc1155 = store.get_global_contract(ERC1155_CONTRACT_ID);
                     let seed_balance = IERC1155Dispatcher { contract_address: erc1155.address }
                         .balance_of(player, player_state.equipment_item_id);
@@ -193,7 +193,7 @@ mod interact_system {
                         tile_state.entity_type = TS_ENVIROMENT_ID;
                         tile_state.entity_index = new_tile_state_idx;
                         store.set_tile_state(tile_state);
-                        
+
                         farm.env_entities_len += 1;
                         store.set_player_farm_state(farm);
                     }
@@ -254,21 +254,21 @@ mod interact_system {
 
     fn update_player_activity(ref store: Store, player: ContractAddress, current_timestamp: u64) {
         let mut active_players = store.get_verdania_active_players();
-            loop {
-                if active_players.is_empty() {
-                    break;
-                }
-                let aplayer = *(active_players.pop_front().unwrap());
-                if aplayer.player == player {
-                    store
-                        .set_active_player(
-                            ActivePlayers {
-                                idx: aplayer.idx, player, last_timestamp_activity: current_timestamp
-                            }
-                        );
-                    break;
-                }
+        loop {
+            if active_players.is_empty() {
+                break;
             }
+            let aplayer = *(active_players.pop_front().unwrap());
+            if aplayer.player == player {
+                store
+                    .set_active_player(
+                        ActivePlayers {
+                            idx: aplayer.idx, player, last_timestamp_activity: current_timestamp
+                        }
+                    );
+                break;
+            }
+        }
     }
 
     fn add_item(ref store: Store, player: ContractAddress, item_id: u64, quantity: u64) {
@@ -287,7 +287,7 @@ mod interact_system {
         let (gy, gx) = integer::u64_safe_divmod(grid_id, integer::u64_as_non_zero(map.width));
         if player_state.x == gx && player_state.y == gy {
             return true;
-        } 
+        }
         let px = player_state.x;
         let py = player_state.y;
         let dx = if px > gx {
