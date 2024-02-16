@@ -60,6 +60,17 @@ mod env_entity_system {
             store
                 .set_env_entity(
                     EnvEntity {
+                        id: ENV_GRASS_ID,
+                        name: 'Grass',
+                        drop_item_id: 0,
+                        quantity: 0,
+                        durability: 0
+                    }
+                );
+
+            store
+                .set_env_entity(
+                    EnvEntity {
                         id: ENV_SUITABLE_FOR_CROP,
                         name: 'Suitable for crop',
                         drop_item_id: 0,
