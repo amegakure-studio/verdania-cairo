@@ -49,8 +49,8 @@ mod crop_system {
                     Crop {
                         id: ONION_ID,
                         name: 'Onion',
-                        harvest_time: 259200,
-                        min_watering_time: 36000,
+                        harvest_time: 300,
+                        min_watering_time: 300,
                         drop_item_id: ONION_ID,
                         quantity: 3,
                     }

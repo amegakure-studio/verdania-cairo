@@ -104,10 +104,14 @@ mod world_config_system {
                 tile_state.entity_type = 0;
                 store.set_tile_state(tile_state);
             } else {
-                let mut growing_percentage = (actual_timestamp * 100) / crop_info.harvest_time;
+                let mut growing_percentage = (actual_timestamp - crop_state.planting_time) * 100 / crop_info.harvest_time;
                 if growing_percentage >= 100 {
                     growing_percentage = 100;
                 }
+
+                // tiempo de siembra total 10
+                // tiempo actual 7
+                // tiempo desde que la plante 5
 
                 if crop_state.last_watering_time
                     + (crop_info.min_watering_time / 50) < actual_timestamp {
